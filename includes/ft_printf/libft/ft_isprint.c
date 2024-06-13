@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishel.h                                         :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/11 15:04:16 by vivaccar         ###   ########.fr       */
+/*   Created: 2023/08/31 16:30:41 by mfassbin          #+#    #+#             */
+/*   Updated: 2023/10/07 17:17:54 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL
-#define MINISHELL
+int	ft_isprint(int c)
+{
+	if (c < 32 || c > 126)
+		return (0);
+	return (16384);
+}
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+/* #include <stdio.h>
+#include <ctype.h>
 
-#endif
+int	main(void)
+{
+	printf("%i\n", ft_isprint(0));
+	printf("%i\n", isprint(0));
+} */

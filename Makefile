@@ -8,14 +8,23 @@ CFLAGS =  -Wall -Werror -Wextra
 
 NAME = minishell
 
-all: $(NAME)
-$(NAME): $(OBJS)
-	$(CC) $(OBJS) $(CFLAGS) -lreadline -o $(NAME)
+PRINTFA = ./includes/ft_printf/libftprintf.a
+
+PRINTFD = ./includes/ft_printf
+
+all: $(NAME) 
+$(NAME): $(OBJS) $(PRINTFA)
+	$(CC) $(OBJS) $(PRINTFA) $(CFLAGS) -lreadline -o $(NAME)
+
+$(PRINTFA): $(PRINTFD)
+	make -C	$(PRINTFD)
 
 clean:
+	make clean -C $(PRINTFD)
 	rm -rf $(OBJS)
 
 fclean: clean
+	make fclean -C $(PRINTFD)
 	rm -rf $(NAME)
 
 re: fclean all
