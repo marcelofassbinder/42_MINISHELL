@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/13 13:35:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:06:05 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	main(void)
 	{
 		i = 0;
 		line = readline("minishell --> ");
-		printf("%s\n", line);
+		ft_printf(1, "%s\n", line);
 		tokens = ft_split(line, ' ');
 		while (tokens[i])
 		{
-			printf("%s\n", tokens[i]);
+			ft_printf(1, "%s\n", tokens[i]);
 			i++;
 		}
 		free(tokens);
