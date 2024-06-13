@@ -12,19 +12,19 @@ all: $(NAME)
 $(OBJS): $(CFILES)
 	$(CC) $(CFLAGS) -c $(CFILES)
 
-$(NAME): $(OBJS) $(LIBFTA)
+$(NAME): $(OBJS) $(LIBFTA) 
 	cp $(LIBFTA) $(NAME)
-	ar vrcs $(NAME) $(OBJS)
+	ar rcs $(NAME) $(OBJS)
 
 $(LIBFTA): $(LIBFTD)
-	make -C $(LIBFTD)
+	make -C $(LIBFTD) 
 
 clean:
 	$(RM) $(OBJS)
-	make clean -C $(LIBFTD)
+	make clean -C $(LIBFTD) 
 
 fclean: clean
 	$(RM) $(NAME)
-	make fclean -C $(LIBFTD)
+	make fclean -C $(LIBFTD) 
 
 re: fclean all

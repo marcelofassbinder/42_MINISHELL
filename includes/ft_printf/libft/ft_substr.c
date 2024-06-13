@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 12:54:43 by mfassbin          #+#    #+#             */
-/*   Updated: 2023/10/20 16:29:53 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/01/20 16:27:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, int start, int len)
 {
-	size_t	i;
+	int		i;
 	char	*substr;
 
 	if (start > ft_strlen(s))

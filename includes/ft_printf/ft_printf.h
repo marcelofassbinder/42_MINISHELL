@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 12:35:20 by mfassbin          #+#    #+#             */
-/*   Updated: 2023/10/28 19:19:27 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/01/20 14:28:30 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 # include "libft/libft.h"
 # include <stdarg.h>
 
-int	ft_printf(const char *s, ...);
-int	ft_print_format(char c, va_list args);
-int	ft_putchar(int c);
-int	ft_putstr(char *s);
-int	print_format(char c, va_list args);
-int	ft_putnbr_base(unsigned long nbr, char *base);
-int	ft_putmem(void *a);
-int	ft_putnbr_int(int nbr, char *base);
+int	ft_printf(int fd, const char *s, ...);
+int	ft_print_format(int fd, char c, va_list args);
+int	ft_putchar(int fd, int c);
+int	ft_putstr(int fd, char *s);
+int	print_format(int fd, char c, va_list args);
+int	ft_putnbr_base(int fd, unsigned long nbr, char *base);
+int	ft_putmem(int fd, void *a);
+int	ft_putnbr_int(int fd, int nbr, char *base);
 
 #endif
