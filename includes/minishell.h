@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/13 13:35:03 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/06/13 13:24:57 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int	main(void)
-{
-	char	*line;
-	char	**tokens;
-	int		i = 0;
+# include "./ft_printf/libft/libft.h"
+# include "./ft_printf/ft_printf.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <unistd.h>
+# include <sys/stat.h>
+# include <dirent.h>
 
-	while (1)
-	{
-		i = 0;
-		line = readline("minishell --> ");
-		printf("%s\n", line);
-		tokens = ft_split(line, ' ');
-		while (tokens[i])
-		{
-			printf("%s\n", tokens[i]);
-			i++;
-		}
-		free(tokens);
-	}
-	free(line);
-}
+#endif
