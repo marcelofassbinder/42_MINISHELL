@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/13 13:35:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:49:10 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,19 @@
 int	main(void)
 {
 	char	*line;
-	char	**tokens;
 	int		i = 0;
 
+	start_sigaction();
 	while (1)
 	{
 		i = 0;
 		line = readline("minishell --> ");
-		printf("%s\n", line);
-		tokens = ft_split(line, ' ');
-		while (tokens[i])
+		if (!line)
 		{
-			printf("%s\n", tokens[i]);
-			i++;
+			ft_printf("exit\n");
+			free(line);
+			exit(0);
 		}
-		free(tokens);
+		free(line);
 	}
-	free(line);
 }
