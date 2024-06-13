@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/13 13:24:57 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/13 19:20:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,8 @@
 # include <unistd.h>
 # include <sys/stat.h>
 # include <dirent.h>
+# include <signal.h>
+
+void	start_sigaction(void);
 
 #endif

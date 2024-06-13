@@ -1,4 +1,4 @@
-SRCS = main.c
+SRCS = main.c signals.c
 
 OBJS = $(SRCS:.c=.o) 
 
