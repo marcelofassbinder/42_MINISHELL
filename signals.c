@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/13 20:42:35 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/14 10:40:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	start_sigaction()
 	sa_quit.sa_handler = SIG_IGN;
 	sigaddset(&sa_int.sa_mask, SIGINT);
 	sigaddset(&sa_quit.sa_mask, SIGQUIT);
+	sigaddset(&sa_int.sa_mask, SIGQUIT);
+	sigaddset(&sa_quit.sa_mask, SIGINT);
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
