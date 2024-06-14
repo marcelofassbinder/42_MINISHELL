@@ -3,35 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_format.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 16:44:25 by mfassbin          #+#    #+#             */
-/*   Updated: 2023/10/28 19:20:28 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/03/27 14:31:11 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_format(char c, va_list args)
+int	ft_print_format(int fd, char c, va_list args)
 {
 	int	count;
 
 	count = 0;
 	if (c == 'c')
-		count += ft_putchar(va_arg(args, int));
+		count += ft_putchar(fd, va_arg(args, int));
 	if (c == 's')
-		count += ft_putstr(va_arg(args, char *));
+		count += ft_putstr(fd, va_arg(args, char *));
 	if (c == 'd' || c == 'i')
-		count += ft_putnbr_int(va_arg(args, int), "0123456789");
+		count += ft_putnbr_int(fd, va_arg(args, int), "0123456789");
 	if (c == 'x')
-		count += ft_putnbr_base(va_arg(args, unsigned int), "0123456789abcdef");
+		count += ft_putnbr_base(fd, va_arg(args, unsigned int), \
+		"0123456789abcdef");
 	if (c == 'X')
-		count += ft_putnbr_base(va_arg(args, unsigned int), "0123456789ABCDEF");
+		count += ft_putnbr_base(fd, va_arg(args, unsigned int), \
+		"0123456789ABCDEF");
 	if (c == 'p')
-		count += ft_putmem(va_arg(args, void *));
+		count += ft_putmem(fd, va_arg(args, void *));
 	if (c == 'u')
-		count += ft_putnbr_base(va_arg(args, unsigned int), "0123456789");
+		count += ft_putnbr_base(fd, va_arg(args, unsigned int), "0123456789");
 	if (c == '%')
-		count += ft_putchar('%');
+		count += ft_putchar(fd, '%');
 	return (count);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 12:38:36 by mfassbin          #+#    #+#             */
-/*   Updated: 2023/10/28 19:11:45 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/01/20 14:29:48 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_printf(const char *s, ...)
+int	ft_printf(int fd, const char *s, ...)
 {
 	va_list	args;
 	int		count;
@@ -22,9 +22,9 @@ int	ft_printf(const char *s, ...)
 	while (*s)
 	{
 		if (*s == '%')
-			count += ft_print_format(*(++s), args);
+			count += ft_print_format(fd, *(++s), args);
 		else
-			count += write(1, s, 1);
+			count += write(fd, s, 1);
 		s++;
 	}
 	va_end (args);
@@ -35,6 +35,6 @@ int	ft_printf(const char *s, ...)
 
 int main(void)
 {
-	ft_printf("%u\n", -34);
-	printf("%u\n", -34);
+	ft_printf("%x\n", -34);
+	printf("%x\n", -34);
 } */

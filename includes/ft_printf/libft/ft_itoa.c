@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 23:13:39 by mfassbin          #+#    #+#             */
-/*   Updated: 2023/10/20 18:11:39 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/03/19 17:11:19 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_itoa(int n)
 	result = (char *)ft_calloc(sizeof(char), len_n(n) + 1);
 	if (!result)
 		return (NULL);
-	result[len + 1] = 0;
+	result[len] = 0;
 	if (nb < 0)
 	{
 		result[0] = '-';

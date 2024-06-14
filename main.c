@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/13 20:49:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/14 10:48:42 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(void)
 		line = readline("minishell --> ");
 		if (!line)
 		{
-			ft_printf("exit\n");
+			ft_printf(1, "exit\n");
 			free(line);
 			exit(0);
 		}
