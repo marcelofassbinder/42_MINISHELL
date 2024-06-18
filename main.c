@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/14 10:48:42 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:31:35 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 int	main(void)
 {
 	char	*line;
-	int		i = 0;
 
 	start_sigaction();
 	while (1)
 	{
-		i = 0;
 		line = readline("minishell --> ");
 		if (!line)
 		{
@@ -28,6 +26,8 @@ int	main(void)
 			free(line);
 			exit(0);
 		}
-		free(line);
+		if (!check_syntax(line))
+			continue;
+		// tokens / parsing / exec
 	}
 }

@@ -6,12 +6,15 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/14 10:57:35 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/15 17:32:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
+
+/* Function to handle the received signal, during the execution of this function other received signals
+	are blocked if it is in the mask. */
 void	signal_handler(int signal, siginfo_t *info, void *content)
 {
 	(void)content;
@@ -23,8 +26,10 @@ void	signal_handler(int signal, siginfo_t *info, void *content)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}
+}	
 
+/* Initialize the signal handling structure (sigaction), 
+	define the masks (signals that are blocked if the signal handler is handling a signal).*/
 void	start_sigaction()
 {
 	struct sigaction sa_quit;
