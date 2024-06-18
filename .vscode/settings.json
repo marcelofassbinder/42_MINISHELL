@@ -1,7 +1,0 @@
-{
-	"files.associations": {
-		"libft.h": "c",
-		"minishell.h": "c",
-		"signal.h": "c"
-	}
-}

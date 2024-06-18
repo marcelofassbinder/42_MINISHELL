@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/14 10:48:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:03:26 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,29 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <signal.h>
+
+enum t_status{
+	GENERAL = 0,
+	IN_S_QUOTE,
+	IN_D_QUOTE
+};
+
+enum t_type{
+	W_SPACE = 0,
+	WORD = 1,
+	PIPE = '|',
+	ENV = '$',
+	REDIR_IN = '<',
+	REDIR_OUT = '>',
+	D_REDIR_OUT = 2,
+	HERE_DOC = 3,
+};
+
+typedef struct s_token{
+	enum t_status status;
+	enum t_type type;
+	char *data;
+}
 
 void	start_sigaction(void);
 
