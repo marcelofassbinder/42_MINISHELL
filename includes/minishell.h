@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/18 13:03:02 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/18 18:40:10 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,27 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <signal.h>
+# include <stdio.h>
 # include <stdbool.h>
 
+enum e_status {
+	GENERAL,
+	IN_S_QUOTE,
+	IN_D_QUOTE,
+};
+
+enum e_type {
+	W_SPACE = 0,
+	WORD = 1,
+	PIPE = '|',
+	ENV = '$',
+	REDIR_IN = '<',
+	REDIR_OUT = '>',
+	D_REDIR_OUT = 2,
+	HERE_DOC = 3,
+};
 
 void	start_sigaction(void);
-
 bool	check_syntax(char *line);
 
 #endif
