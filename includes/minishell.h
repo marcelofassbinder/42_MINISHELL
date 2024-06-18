@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/18 13:03:26 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/18 18:50:54 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,53 @@
 # include <dirent.h>
 # include <signal.h>
 
+#define PIPE '|'
+#define ENV '$'
+#define REDIR_IN '<'
+#define REDIR_OUT '>'
+
+#define S_QUOTE 39
+#define D_QUOTE 34
+
 enum t_status{
-	GENERAL = 0,
-	IN_S_QUOTE,
-	IN_D_QUOTE
+	general = 0,
+	in_s_quote,
+	in_d_quote
 };
 
 enum t_type{
-	W_SPACE = 0,
-	WORD = 1,
-	PIPE = '|',
-	ENV = '$',
-	REDIR_IN = '<',
-	REDIR_OUT = '>',
-	D_REDIR_OUT = 2,
-	HERE_DOC = 3,
+	w_space = 3,
+	word,
+	pipeline,
+	env,
+	redir_in,
+	redir_out,
+	d_redir_out,
+	here_doc
 };
 
-typedef struct s_token{
-	enum t_status status;
-	enum t_type type;
-	char *data;
-}
+typedef struct		s_token{
+	enum t_status	status;
+	enum t_type		type;
+	struct s_token	*prev;
+	struct s_token	*next;
+	char 			*data;
+}					t_token;
 
+typedef struct	s_token_list{
+	t_token 	*first;
+	t_token 	*last;
+}				t_token_list;
+
+
+// TOKENS.C
+void			tokenizer(char *line);
+t_token_list	*append_char_token(t_token_list *token_list, char c, int status, int type);
+t_token_list	*append_str_token(t_token_list *token_list, char *str, int status, int type);
+void 	print_token_list(t_token_list *token_list);
+
+
+//SIGNALS.C
 void	start_sigaction(void);
 
 #endif
