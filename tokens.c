@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/18 19:13:51 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/19 19:27:00 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	tokenizer(char *line)
 	old_status = 0;
 	while(*line)
 	{
-		if (!ft_isspace(*line) && *line != S_QUOTE && *line != D_QUOTE && *line != PIPE && *line != ENV && *line != REDIR_IN && *line != REDIR_OUT)
+		if ((!ft_isspace(*line) && *line != S_QUOTE && *line != D_QUOTE && *line != PIPE && *line != ENV && *line != REDIR_IN && *line != REDIR_OUT) || (*line == S_QUOTE && status == 2) || (*line == D_QUOTE && status == 1))
 		{
 			word = line;
 			word_len = 0;
-			while (!ft_isspace(*line) && *line != S_QUOTE && *line != D_QUOTE && *line != PIPE && *line != ENV && *line != REDIR_IN && *line != REDIR_OUT && *line)
+			while ((!ft_isspace(*line) && *line != S_QUOTE && *line != D_QUOTE && *line != PIPE && *line != ENV && *line != REDIR_IN && *line != REDIR_OUT && *line) || (*line == S_QUOTE && status == 2) || (*line == D_QUOTE && status == 1))
 			{
 				line++;
 				word_len++;
