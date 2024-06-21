@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 16:29:20 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:43:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ void	tokenizer(char *line)
 	while(*line)
 	{
 		if (is_type_word(*line, status))
-			line = append_word(token_list, line, status);	
+		{
+			line = append_word(token_list, line, status);
+			if (!line)
+				break;
+		}
 		status = change_status(*line, status);
 		if (ft_isspace(*line))
 			append_token(token_list, line, status, W_SPACE);
@@ -36,8 +40,6 @@ void	tokenizer(char *line)
 	}
 	print_token_list(token_list);
 }
-
-
 
 void print_token_list(t_token_list *token_list)
 {
@@ -62,7 +64,7 @@ int is_type_word(char c, enum t_status status)
 {
 	if ((!ft_isspace(c) && c != S_QUOTE && c != D_QUOTE && c != PIPE && 
 		c != DOLLAR && c != REDIRECT_IN && c != REDIRECT_OUT && c) || (c == S_QUOTE 
-			&& status == IN_D_QUOTE) || (c == D_QUOTE && status == IN_S_QUOTE))
+			&& status == IN_D_QUOTE && c) || (c == D_QUOTE && status == IN_S_QUOTE && c))
 				return (1);
 	return (0);
 }
