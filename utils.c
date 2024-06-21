@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 17:35:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:42:45 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,4 @@ void	free_token_list(t_token_list *token_list)
 			free (to_free->data);
 		free(to_free);
 	}
-	//free(token_list);
 }

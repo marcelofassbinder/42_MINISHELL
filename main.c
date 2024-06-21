@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 17:34:24 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:50:02 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 	t_token_list token_list;
 
-	token_list = (t_token_list){0};
 	(void) av;
 	(void) ac;
 	(void) env;
 	start_sigaction();
 	while (1)
 	{
+		token_list = (t_token_list){0};
 		line = readline("minishell --> ");
 		if (!line)
 		{
