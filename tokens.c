@@ -6,39 +6,40 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 16:43:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:35:18 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void	tokenizer(char *line)
+void	tokenizer(t_token_list *token_list, char *line)
 {
-	t_token_list *token_list;
 	enum t_status 	status;
+	int i;
 
-	token_list = ft_calloc(sizeof(t_token_list), 1);
 	status = GENERAL;
-	while(*line)
+	i = 0;
+	while(line[i])
 	{
-		if (is_type_word(*line, status))
+		if (is_type_word(line[i], status))
 		{
-			line = append_word(token_list, line, status);
-			if (!line)
+			i = append_word(token_list, &line[i], status, i);
+			if (!line[i])
 				break;
 		}
-		status = change_status(*line, status);
-		if (ft_isspace(*line))
-			append_token(token_list, line, status, W_SPACE);
-		if (*line == PIPE)
-			append_token(token_list, line, status, PIPELINE);
-		if (*line == DOLLAR)
-			append_token(token_list, line, status, ENV);
-		if (*line == REDIRECT_IN || *line == REDIRECT_OUT)
-			line = append_redir(token_list, line, status);
-		line++;
+		status = change_status(line[i], status);
+		if (ft_isspace(line[i]))
+			append_token(token_list, &line[i], status, W_SPACE);
+		if (line[i] == PIPE)
+			append_token(token_list, &line[i], status, PIPELINE);
+		if (line[i] == DOLLAR)
+			append_token(token_list, &line[i], status, ENV);
+		if (line[i] == REDIRECT_IN || line[i] == REDIRECT_OUT)
+			i = append_redir(token_list, &line[i], status, i);
+		i++;
 	}
 	print_token_list(token_list);
+	free_token_list(token_list);
 }
 
 void print_token_list(t_token_list *token_list)
