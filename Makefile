@@ -1,10 +1,10 @@
-SRCS = main.c signals.c syntax.c
+SRCS = main.c signals.c syntax.c tokens.c
 
 OBJS = $(SRCS:.c=.o) 
 
 CC = cc
 
-CFLAGS =  -g -Wall -Werror -Wextra
+CFLAGS =  -Wall -Werror -Wextra -g
 
 NAME = minishell
 

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 15:02:36 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:41:16 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int ac, char **av, char **env)
 
 	(void) av;
 	(void) ac;
-	test(env);
+	(void) env;
 	start_sigaction();
 	while (1)
 	{

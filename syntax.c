@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/18 18:55:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:22:56 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ bool	exceeded_token(char *str, int c)
 		if (*str == c)
 			return (true);
 		if (!(*str >= 9 || *str <= 13) || *str != 32)
-			break;
+			break ;
 		str++;
 	}
 	return (false);
@@ -76,7 +76,9 @@ bool	redir_error(char *str)
 				str++;
 			if (exceeded_token(str, redir_type) || empty_line(str))
 			{
-				ft_printf(STDERR_FILENO, "minishell: syntax error unexpected token '%c'\n", redir_type);
+				ft_printf(STDERR_FILENO,
+					"minishell: syntax error unexpected token '%c'\n",
+					redir_type);
 				return (true);
 			}
 		}
@@ -95,7 +97,8 @@ bool	pipe_error(char *str)
 			str++;
 			if (empty_line(str) || exceeded_token(str, '|'))
 			{
-				ft_printf(STDERR_FILENO, "minishell: syntax error unexpected token |\n");
+				ft_printf(STDERR_FILENO,
+					"minishell: syntax error unexpected token |\n");
 				return (true);
 			}
 		}
