@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 16:43:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:37:31 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	tokenizer(char *line)
 			line = append_word(token_list, line, status);
 			if (!line)
 				break;
-		}
+		}	
 		status = change_status(*line, status);
 		if (ft_isspace(*line))
 			append_token(token_list, line, status, W_SPACE);
@@ -58,6 +58,7 @@ void print_token_list(t_token_list *token_list)
 		ptr = ptr->next;
 		i++;
 	}
+	free_token_list(token_list);
 }
 
 int is_type_word(char c, enum t_status status)

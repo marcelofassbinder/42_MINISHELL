@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:23:49 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:02:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	free_token_list(t_token_list *token_list)
 	{
 		to_free = tmp;
 		tmp = tmp->next;
+		if (to_free->type != D_REDIR_OUT && to_free->type != HERE_DOC)
+			free(to_free->data);
 		free(to_free);
 	}
 	free(token_list);

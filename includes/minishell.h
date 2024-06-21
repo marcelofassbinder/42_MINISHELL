@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:27:49 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:41:29 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,6 @@ char 			*append_word(t_token_list *token_list, char *line, enum t_status status)
 void	start_sigaction(void);
 bool	check_syntax(char *line);
 
+//FREE
+void	free_token_list(t_token_list *token_list);
 #endif
