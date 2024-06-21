@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:05:21 by mfassbin          #+#    #+#             */
-/*   Updated: 2023/10/16 21:58:16 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 20:54:24 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*ft_strdup(const char *src)
 	char	*s;
 	int		size;
 
+	if (src == NULL)
+		return(ft_calloc(sizeof(char), 1));
 	s = (char *)src;
 	size = ft_strlen(s) + 1;
 	d = (char *) ft_calloc(sizeof(char), size);

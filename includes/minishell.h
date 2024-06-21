@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 17:41:00 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 21:40:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,10 @@ bool	check_syntax(char *line);
 
 //FREE 
 void	free_token_list(t_token_list *token_list);
+void	free_env(t_token *token);
+
+//EXPAND.C
+void expand(t_token_list *token_list);
+char *check_quotes(char *data);
 
 #endif
