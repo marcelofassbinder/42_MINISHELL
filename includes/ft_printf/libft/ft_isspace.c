@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:23:49 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/04/10 15:17:34 by mfassbin          #+#    #+#             */
+/*   Updated: 2024/06/19 19:23:58 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "libft.h"
 
-void	free_token_list(t_token_list *token_list)
+int	ft_isspace(int c)
 {
-	t_token	*tmp;
-	t_token	*to_free;
-
-	tmp = token_list->first;
-	while (tmp)
-	{
-		to_free = tmp;
-		tmp = tmp->next;
-		free(to_free);
-	}
-	free(token_list);
+	if (c == 32 ||( c >= 9 && c <= 13))
+		return (1);
+	return (0);
 }
