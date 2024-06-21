@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/18 18:40:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:19:17 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ enum e_type {
 	D_REDIR_OUT = 2,
 	HERE_DOC = 3,
 };
+
+typedef struct		s_token{
+	enum t_status	status;
+	enum t_type		type;
+	struct s_token	*prev;
+	struct s_token	*next;
+	char 			*data;
+}					t_token;
+
+typedef struct	s_token_list{
+	t_token 	*first;
+	t_token 	*last;
+}				t_token_list;
 
 void	start_sigaction(void);
 bool	check_syntax(char *line);
