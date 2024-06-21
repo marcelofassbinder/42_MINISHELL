@@ -1,4 +1,4 @@
-SRCS = main.c signals.c syntax.c tokens.c append.c
+SRCS = main.c signals.c syntax.c tokens.c append.c utils.c
 
 OBJS = $(SRCS:.c=.o) 
 
