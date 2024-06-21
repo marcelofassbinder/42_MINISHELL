@@ -1,10 +1,10 @@
-SRCS = main.c signals.c syntax.c tokens.c append.c utils.c
+SRCS = main.c signals.c syntax.c tokens.c append.c utils.c expand.c
 
 OBJS = $(SRCS:.c=.o) 
 
 CC = cc
 
-CFLAGS =  -Wall -Werror -Wextra -g -fsanitize=thread
+CFLAGS =  -Wall -Werror -Wextra -g
 
 NAME = minishell
 

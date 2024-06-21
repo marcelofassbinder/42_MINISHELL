@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 19:38:29 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 20:47:52 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,13 @@ void	free_token_list(t_token_list *token_list)
 			free (to_free->data);
 		free(to_free);
 	}
+}
+
+void	free_env(t_token *token)
+{
+	t_token *to_free;
+
+	to_free = token;
+	free(to_free->data);
+	free(to_free);
 }
