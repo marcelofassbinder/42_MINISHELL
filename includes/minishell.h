@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 17:34:24 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:41:00 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int append_redir(t_token_list *token_list, char *line, enum t_status status, int
 void	start_sigaction(void);
 bool	check_syntax(char *line);
 
-//UTILS.C
+//FREE 
 void	free_token_list(t_token_list *token_list);
 
 #endif

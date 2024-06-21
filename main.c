@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 17:50:02 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 19:38:02 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	main(int ac, char **av, char **env)
 {
-	char	*line;
+	char		*line;
 	t_token_list token_list;
 
 	(void) av;
