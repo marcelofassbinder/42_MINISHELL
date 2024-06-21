@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/18 18:50:54 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:48:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,28 @@
 # include <signal.h>
 
 #define PIPE '|'
-#define ENV '$'
-#define REDIR_IN '<'
-#define REDIR_OUT '>'
+#define DOLLAR '$'
+#define REDIRECT_IN '<'
+#define REDIRECT_OUT '>'
 
 #define S_QUOTE 39
 #define D_QUOTE 34
 
 enum t_status{
-	general = 0,
-	in_s_quote,
-	in_d_quote
+	GENERAL = 0,
+	IN_S_QUOTE,
+	IN_D_QUOTE
 };
 
 enum t_type{
-	w_space = 3,
-	word,
-	pipeline,
-	env,
-	redir_in,
-	redir_out,
-	d_redir_out,
-	here_doc
+	W_SPACE = 3,
+	WORD,
+	PIPELINE,
+	ENV,
+	REDIR_IN,
+	REDIR_OUT,
+	D_REDIR_OUT,
+	HERE_DOC
 };
 
 typedef struct		s_token{
@@ -64,9 +64,11 @@ typedef struct	s_token_list{
 
 // TOKENS.C
 void			tokenizer(char *line);
-t_token_list	*append_char_token(t_token_list *token_list, char c, int status, int type);
-t_token_list	*append_str_token(t_token_list *token_list, char *str, int status, int type);
+t_token_list *append_char_token(t_token_list *token_list, char c, enum t_status status, enum t_type type);
+t_token_list	*append_str_token(t_token_list *token_list, char *str, enum t_status status, enum t_type type);
 void 	print_token_list(t_token_list *token_list);
+int is_type_word(char c, enum t_status status);
+enum t_status change_status(char c, enum t_status status);
 
 
 //SIGNALS.C
