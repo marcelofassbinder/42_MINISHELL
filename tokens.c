@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 17:35:18 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 18:43:31 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void print_token_list(t_token_list *token_list)
 	{
 		printf("| %-3d | %-20s | %-3d | %-15s | %-15s |\n", i, ptr->data, ft_strlen(ptr->data), s[ptr->status], s[ptr->type]);
 		printf("|-----|----------------------|-----|-----------------|-----------------|\n");
-		ptr = ptr->next;
+		ptr = ptr->next;	
 		i++;
 	}
 }
