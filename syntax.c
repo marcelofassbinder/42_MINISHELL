@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:22:56 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 19:33:23 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,22 @@ bool	redir_error(char *str)
 	return (false);
 }
 
+bool	previous_is_redir(char *str)
+{
+	str = str - 2;
+	if (*str == '>' && *(str - 1) != '>')
+		return (false);
+	while (str)
+	{
+		if (*str == '>')
+			return (true);
+		else if ((*str  < 9 || *str > 13) && *str != 32)
+			return (false);
+		str--;
+	}
+	return (false);
+}
+
 bool	pipe_error(char *str)
 {
 	while (*str)
@@ -95,7 +111,7 @@ bool	pipe_error(char *str)
 		if (*str == '|')
 		{
 			str++;
-			if (empty_line(str) || exceeded_token(str, '|'))
+			if (empty_line(str) || exceeded_token(str, '|') || previous_is_redir(str))
 			{
 				ft_printf(STDERR_FILENO,
 					"minishell: syntax error unexpected token |\n");

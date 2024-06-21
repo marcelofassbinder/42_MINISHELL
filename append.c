@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:21:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 16:22:23 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:18:54 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void append_token(t_token_list *token_list, char *str, enum t_status status, enu
 	}
 }
 
-char *append_redir(t_token_list *token_list, char *line, enum t_status status)
+int append_redir(t_token_list *token_list, char *line, enum t_status status, int i)
 {
 	char next;
 
@@ -53,7 +53,7 @@ char *append_redir(t_token_list *token_list, char *line, enum t_status status)
 		else if (next == REDIRECT_IN)
 		{
 			append_token(token_list, "<<", status, HERE_DOC);
-			line ++;
+			i++;
 		}
 	}
 	else if (*line == REDIRECT_OUT)
@@ -63,13 +63,13 @@ char *append_redir(t_token_list *token_list, char *line, enum t_status status)
 		else if (next == REDIRECT_OUT)	
 		{
 			append_token(token_list, ">>", status, D_REDIR_OUT);
-			line ++;
+			i++;
 		}
 	}
-	return (line);
+	return (i);
 }
 
-char *append_word(t_token_list *token_list, char *line, enum t_status status)
+int append_word(t_token_list *token_list, char *line, enum t_status status, int i)
 {
 	char *word;
 	int word_len;
@@ -82,5 +82,5 @@ char *append_word(t_token_list *token_list, char *line, enum t_status status)
 		word_len++;
 	}
 	append_token(token_list, ft_substr(word, 0, word_len), status, WORD);
-	return (line);
+	return (i + word_len);
 }

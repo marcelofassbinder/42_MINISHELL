@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:41:29 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:41:00 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,22 @@ typedef struct	s_token_list{
 
 
 // TOKENS.C
-void			tokenizer(char *line);
+void			tokenizer(t_token_list *token_list, char *line);
 void 			print_token_list(t_token_list *token_list);
 int 			is_type_word(char c, enum t_status status);
 enum t_status	change_status(char c, enum t_status status);
 
 //APPEND.C
 void			append_token(t_token_list *token_list, char *str, enum t_status status, enum t_type type);
-char 			*append_redir(t_token_list *token_list, char *line, enum t_status status);
-char 			*append_word(t_token_list *token_list, char *line, enum t_status status);
+int append_word(t_token_list *token_list, char *line, enum t_status status, int i);
+int append_redir(t_token_list *token_list, char *line, enum t_status status, int i);
 
 
 //SIGNALS.C
 void	start_sigaction(void);
 bool	check_syntax(char *line);
 
-//FREE
+//FREE 
 void	free_token_list(t_token_list *token_list);
+
 #endif
