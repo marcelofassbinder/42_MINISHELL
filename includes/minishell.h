@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:22:23 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:27:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <signal.h>
+# include <stdbool.h>
 
 #define PIPE '|'
 #define DOLLAR '$'
@@ -31,10 +32,10 @@
 #define S_QUOTE 39
 #define D_QUOTE 34
 
-enum t_status{
-	GENERAL = 0,
+enum t_status {
+	GENERAL,
 	IN_S_QUOTE,
-	IN_D_QUOTE
+	IN_D_QUOTE,
 };
 
 enum t_type{
@@ -76,5 +77,6 @@ char 			*append_word(t_token_list *token_list, char *line, enum t_status status)
 
 //SIGNALS.C
 void	start_sigaction(void);
+bool	check_syntax(char *line);
 
 #endif
