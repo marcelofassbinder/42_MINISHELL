@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:33:07 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:57:06 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **env)
 		}
 		if (!check_syntax(line))
 			continue ;
-		//free(line);
 		tokenizer(line);
+		free(line);
 	}
 }
