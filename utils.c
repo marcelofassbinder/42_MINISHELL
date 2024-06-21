@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 16:33:07 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/06/21 16:23:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-
-int	main(int ac, char **av, char **env)
+void	free_token_list(t_token_list *token_list)
 {
-	char	*line;
+	t_token	*tmp;
+	t_token	*to_free;
 
-	(void) av;
-	(void) ac;
-	(void) env;
-	start_sigaction();
-	while (1)
+	tmp = token_list->first;
+	while (tmp)
 	{
-		line = readline("minishell --> ");
-		if (!line)
-		{
-			ft_printf(1, "exit\n");
-			free(line);
-			exit(0);
-		}
-		if (!check_syntax(line))
-			continue ;
-		//free(line);
-		tokenizer(line);
+		to_free = tmp;
+		tmp = tmp->next;
+		free(to_free);
 	}
+	free(token_list);
 }

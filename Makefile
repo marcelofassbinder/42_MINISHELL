@@ -1,4 +1,4 @@
-SRCS = main.c signals.c tokens.c append.c
+SRCS = main.c signals.c syntax.c tokens.c append.c
 
 OBJS = $(SRCS:.c=.o) 
 
@@ -28,4 +28,4 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
-	
+
