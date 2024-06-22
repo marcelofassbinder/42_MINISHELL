@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 14:34:38 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 17:19:48 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,60 +59,52 @@ char	find_special(char *data)
 	return (0);
 }
 
+int		count_special(char *data, char special)
+{
+	int	i;
+
+	i = 0;
+	while (data[i] != special && data[i])
+		i++;
+	return (i);
+}
+
+void	free_strings(char *s1, char *s2, char *s3, char *s4)
+{
+	free(s1);
+	free(s2);
+	free(s3);
+	free(s4);
+}
+
 char	*check_quotes(char *data)
 {
-	char	*to_expand = NULL;
+	char	*to_expand;
 	char	*to_free;
 	char	*rest;
 	char	*new;
 	int		i;
-	char	find;
 
-	find = find_special(data);
-	to_expand = find_quotes_special(data);
-	if (find)
-	{
-		i = 0;	
-		ft_printf(1, "data = %s\n", data);
-		while (data[i] != find && data[i])
-			i++;
-		to_expand = ft_substr(data, 0, i);
-		rest = ft_substr(data, i, ft_strlen(data) - i);
-		ft_printf(1, "to_expand = %s\n", to_expand);
-		ft_printf(1, "rest = %s\n", rest);
-		printf("finded %c\n", find);
-	}
-	else if (ft_strchr(data, S_QUOTE))
-	{	
-		i = 0;
-		ft_printf(1, "data = %s\n", data);
-		while (data[i] != S_QUOTE && data[i])
-			i++;
-		to_expand = ft_substr(data, 0, i);
-		rest = ft_substr(data, i, ft_strlen(data) - i);
-		ft_printf(1, "to_expand = %s\n", to_expand);
-		ft_printf(1, "rest = %s\n", rest);
-	}
-	else if (ft_strchr(data, D_QUOTE))
-	{	
-		i = 0;
-		ft_printf(1, "data = %s\n", data);
-		while (data[i] != D_QUOTE && data[i])
-			i++;
-		to_expand = ft_substr(data, 0, i);
-		rest = ft_substr(data, i, ft_strlen(data) - i);
-	}
+	if (find_special(data))
+		i = count_special(data, find_special(data));
+		else if (ft_strchr(data, S_QUOTE))
+			i = count_special(data, S_QUOTE);
+		else if (ft_strchr(data, D_QUOTE))
+			i = count_special(data, D_QUOTE);
 	else
 	{
+		printf("entrou\n");
+		printf("DATA = %s\n", data);
 		to_free = data;
 		to_expand = ft_strdup(getenv(data));
 		free(to_free);
 		return(to_expand);
 	}
-	new = ft_strjoin(ft_strdup(getenv(to_expand)), rest);
-	free(to_expand);
-	free(rest);
-	free(data);
-	ft_printf(1, "\nnew = %s\n", new);
+	to_expand = ft_substr(data, 0, i);
+	rest = ft_substr(data, i, ft_strlen(data) - i);
+	to_free = ft_strdup(getenv(to_expand));
+	printf("REST = %s\n TO_EXPAND = %s\n", rest, to_expand);
+	new = ft_strjoin(to_free, rest);
+	free_strings(to_expand, to_free, rest, data);
 	return(new);
 }
