@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 22:12:09 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/22 14:34:38 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void expand(t_token_list *token_list)
 	t_token *to_free;
 	
 	tmp = token_list->first;
-	while(tmp)
+	while(tmp->next)
 	{
 		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next->type == WORD)
 		{
@@ -37,15 +37,52 @@ void expand(t_token_list *token_list)
 	print_token_list(token_list);;
 }
 
-char *check_quotes(char *data)
+char	find_special(char *data)
 {
-	char *to_expand = NULL;
-	char *to_free;
-	char *rest;
-	char *new;
-	int i;
+	char	*specials;
+	int		i;
+	int		j;
 
-	if (ft_strchr(data, S_QUOTE))
+	i = 0;
+	specials = "~`!@#$%^&*()_-+={[\\;|:<,.>/?]}";
+	while (data[i])
+	{
+		j = 0;
+		while (specials[j])
+		{
+			if (data[i] == specials[j])
+				return (data[i]);
+			j++;	
+		}
+		i++;
+	}
+	return (0);
+}
+
+char	*check_quotes(char *data)
+{
+	char	*to_expand = NULL;
+	char	*to_free;
+	char	*rest;
+	char	*new;
+	int		i;
+	char	find;
+
+	find = find_special(data);
+	to_expand = find_quotes_special(data);
+	if (find)
+	{
+		i = 0;	
+		ft_printf(1, "data = %s\n", data);
+		while (data[i] != find && data[i])
+			i++;
+		to_expand = ft_substr(data, 0, i);
+		rest = ft_substr(data, i, ft_strlen(data) - i);
+		ft_printf(1, "to_expand = %s\n", to_expand);
+		ft_printf(1, "rest = %s\n", rest);
+		printf("finded %c\n", find);
+	}
+	else if (ft_strchr(data, S_QUOTE))
 	{	
 		i = 0;
 		ft_printf(1, "data = %s\n", data);
@@ -53,6 +90,7 @@ char *check_quotes(char *data)
 			i++;
 		to_expand = ft_substr(data, 0, i);
 		rest = ft_substr(data, i, ft_strlen(data) - i);
+		ft_printf(1, "to_expand = %s\n", to_expand);
 		ft_printf(1, "rest = %s\n", rest);
 	}
 	else if (ft_strchr(data, D_QUOTE))
@@ -71,7 +109,7 @@ char *check_quotes(char *data)
 		free(to_free);
 		return(to_expand);
 	}
-	new = ft_strjoin(ft_strdup(getenv(data)), rest);
+	new = ft_strjoin(ft_strdup(getenv(to_expand)), rest);
 	free(to_expand);
 	free(rest);
 	free(data);
