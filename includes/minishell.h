@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/21 21:40:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/22 17:23:45 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 #define REDIRECT_IN '<'
 #define REDIRECT_OUT '>'
 
-#define S_QUOTE 39
-#define D_QUOTE 34
+#define S_QTE 39
+#define D_QTE 34
 
 enum t_status {
 	GENERAL,
@@ -46,7 +46,9 @@ enum t_type{
 	REDIR_IN,
 	REDIR_OUT,
 	D_REDIR_OUT,
-	HERE_DOC
+	HERE_DOC,
+	S_QUOTE,
+	D_QUOTE
 };
 
 typedef struct		s_token{
@@ -66,8 +68,10 @@ typedef struct	s_token_list{
 // TOKENS.C
 void			tokenizer(t_token_list *token_list, char *line);
 void 			print_token_list(t_token_list *token_list);
-int 			is_type_word(char c, enum t_status status);
-enum t_status	change_status(char c, enum t_status status);
+int 			is_type_word(char c);
+enum t_status	append_quotes(t_token_list *token_list, char c, enum t_status status);
+enum t_status change_status(t_token_list *token_list, char c, enum t_status status, enum t_type type);
+
 
 //APPEND.C
 void			append_token(t_token_list *token_list, char *str, enum t_status status, enum t_type type);
