@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 14:34:38 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 15:41:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ char	*check_quotes(char *data)
 	char	find;
 
 	find = find_special(data);
-	to_expand = find_quotes_special(data);
 	if (find)
 	{
 		i = 0;	
@@ -109,7 +108,9 @@ char	*check_quotes(char *data)
 		free(to_free);
 		return(to_expand);
 	}
-	new = ft_strjoin(ft_strdup(getenv(to_expand)), rest);
+	to_free = ft_strdup(getenv(to_expand));
+	new = ft_strjoin(to_free, rest);
+	free(to_free);
 	free(to_expand);
 	free(rest);
 	free(data);
