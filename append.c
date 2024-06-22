@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:21:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/21 21:23:50 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/22 16:52:15 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void append_token(t_token_list *token_list, char *str, enum t_status status, enu
 	
 	token = ft_calloc(sizeof(t_token), 1);
 	if (type == W_SPACE || type == PIPELINE || type == ENV ||
-		type == REDIR_IN || type == REDIR_OUT)
+		type == REDIR_IN || type == REDIR_OUT || type == S_QUOTE || type == D_QUOTE)
 	{
 		token->data = ft_calloc(sizeof(char), 2);
 		token->data[0] = *str;
@@ -76,7 +76,7 @@ int append_word(t_token_list *token_list, char *line, enum t_status status, int 
 
 	word = line;
 	word_len = 0;
-	while (is_type_word(*line, status))
+	while (is_type_word(*line))
 	{
 		line++;
 		word_len++;

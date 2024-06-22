@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 17:27:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 18:25:29 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	tokenizer(t_token_list *token_list, char *line)
 	i = 0;
 	while(line[i])
 	{
-		if (is_type_word(line[i], status))
+		if (is_type_word(line[i]))
 		{
 			i = append_word(token_list, &line[i], status, i);
 			if (!line[i])
 				break;
 		}
-		status = change_status(line[i], status);
+		status = append_quotes(token_list, line[i], status);
 		if (ft_isspace(line[i]))
 			append_token(token_list, &line[i], status, W_SPACE);
 		if (line[i] == PIPE)
@@ -39,7 +39,7 @@ void	tokenizer(t_token_list *token_list, char *line)
 		i++;
 	}
 	print_token_list(token_list);
-	expand(token_list);
+	check_dollar(token_list);
 	free_token_list(token_list);
 }
 
@@ -47,7 +47,7 @@ void print_token_list(t_token_list *token_list)
 {
 	int i;
 	t_token *ptr;
-	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC"};
+	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE"};
 
 	ptr = token_list->first;
 	i = 1;
@@ -62,24 +62,42 @@ void print_token_list(t_token_list *token_list)
 	}
 }
 
-int is_type_word(char c, enum t_status status)
+int is_type_word(char c)
 {
-	if ((!ft_isspace(c) && c != S_QUOTE && c != D_QUOTE && c != PIPE && 
-		c != DOLLAR && c != REDIRECT_IN && c != REDIRECT_OUT && c) || (c == S_QUOTE 
-			&& status == IN_D_QUOTE && c) || (c == D_QUOTE && status == IN_S_QUOTE && c))
+	if (!ft_isspace(c) && c != S_QTE && c != D_QTE && c != PIPE && 
+		c != DOLLAR && c != REDIRECT_IN && c != REDIRECT_OUT && c)
 				return (1);
 	return (0);
 }
 
-enum t_status change_status(char c, enum t_status status)
+enum t_status append_quotes(t_token_list *token_list, char c, enum t_status status)
 {
-	if (c == S_QUOTE && status != IN_S_QUOTE)
-		status = IN_S_QUOTE;
-	else if (c == S_QUOTE && status == IN_S_QUOTE)
-		status = GENERAL;
-	if (c == D_QUOTE && status != IN_D_QUOTE)
-		status = IN_D_QUOTE;
-	else if (c == D_QUOTE && status == IN_D_QUOTE)
-		status = GENERAL;
+	if (c == S_QTE)
+		status = change_status(token_list, c, status, S_QUOTE);
+	else if (c == D_QTE)
+		status = change_status(token_list, c, status, D_QUOTE);
 	return (status);
+}
+
+enum t_status change_status(t_token_list *token_list, char c, enum t_status status, enum t_type type)
+{
+	enum t_status new_status;
+
+	if (type == S_QUOTE)
+		new_status = IN_S_QUOTE;
+	else if (type == D_QUOTE)
+		new_status = IN_D_QUOTE;
+	if (status == GENERAL)
+	{
+		append_token(token_list, &c, status, type);
+		status = new_status;
+	}
+	else if (status == new_status)
+	{
+		status = GENERAL;
+		append_token(token_list, &c, status, type);
+	}
+	else
+		append_token(token_list, &c, status, type);
+	return (status);	
 }
