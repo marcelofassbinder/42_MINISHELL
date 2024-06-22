@@ -6,11 +6,12 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 18:30:09 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 20:02:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
 
 t_token	*is_expansible(t_token *tmp, t_token_list *token_list)
 {
@@ -32,22 +33,21 @@ void	check_dollar(t_token_list *token_list)
 {
 	t_token *tmp;
 	t_token *to_free;
-	
+
 	tmp = token_list->first;
-	while(tmp->next)
+	while(tmp)
 	{
-		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next->type == WORD)
+		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next &&
+			tmp->next->type == WORD)
 		{	
 			to_free = is_expansible(tmp, token_list);
 			tmp = tmp->next;
 			free(to_free->data);
 			free(to_free);
 		}
-		else
+		else	
 			tmp = tmp->next;
 	}
-	ft_printf(1, "\n----EXPANDED ----\n");
-	print_token_list(token_list);;
 }
 
 char	find_special(char *data)

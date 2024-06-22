@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/22 12:24:20 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 19:23:19 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	main(int ac, char **av, char **env)
 		if (!check_syntax(line))
 			continue ;
 		tokenizer(&token_list, line);
+		//printf("FIRST: %s\n", token_list.first->data);
+		//printf("LAST: %s\n", token_list.last->data);
 		add_history(line);
 		free(line);
 	}
