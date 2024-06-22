@@ -6,11 +6,36 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 18:25:29 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 19:55:36 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
+void join_spaces(t_token_list *token_list)
+{
+    t_token *tmp;
+    t_token *to_free;
+
+    tmp = token_list->first;
+    while (tmp)
+    {
+        if (tmp->type == W_SPACE && tmp->status == GENERAL)
+        {
+            while (tmp->next && tmp->next->type == W_SPACE)
+            {
+                to_free = tmp->next;
+                tmp->next = tmp->next->next;
+                if (tmp->next)
+                {
+                    tmp->next->prev = tmp;
+                }
+                free(to_free);
+            }
+        }
+        tmp = tmp->next;
+    }
+}
 
 void	tokenizer(t_token_list *token_list, char *line)
 {
@@ -40,6 +65,11 @@ void	tokenizer(t_token_list *token_list, char *line)
 	}
 	print_token_list(token_list);
 	check_dollar(token_list);
+	join_spaces(token_list);
+	ft_printf(1, "\n----EXPANDED ----\n");
+	print_token_list(token_list);
+	//printf("FIRST: %s\n", token_list->first->data);
+	//printf("LAST: %s\n", token_list->last->data);
 	free_token_list(token_list);
 }
 
