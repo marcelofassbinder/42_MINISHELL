@@ -6,13 +6,29 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 17:19:48 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 18:30:09 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void expand(t_token_list *token_list)
+t_token	*is_expansible(t_token *tmp, t_token_list *token_list)
+{
+	tmp->next->data = expand(tmp->next->data);
+	if (tmp->prev)
+	{
+		tmp->prev->next = tmp->next;
+		tmp->next->prev = tmp->prev;
+	}
+	else
+	{
+		token_list->first = tmp->next;
+		tmp->next->prev = NULL;
+	}
+	return (tmp);
+}
+
+void	check_dollar(t_token_list *token_list)
 {
 	t_token *tmp;
 	t_token *to_free;
@@ -21,11 +37,8 @@ void expand(t_token_list *token_list)
 	while(tmp->next)
 	{
 		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next->type == WORD)
-		{
-			tmp->next->data = check_quotes(tmp->next->data);
-			tmp->prev->next = tmp->next;
-			tmp->next->prev = tmp->prev;
-			to_free = tmp;
+		{	
+			to_free = is_expansible(tmp, token_list);
 			tmp = tmp->next;
 			free(to_free->data);
 			free(to_free);
@@ -77,7 +90,7 @@ void	free_strings(char *s1, char *s2, char *s3, char *s4)
 	free(s4);
 }
 
-char	*check_quotes(char *data)
+char	*expand(char *data)
 {
 	char	*to_expand;
 	char	*to_free;
@@ -86,24 +99,19 @@ char	*check_quotes(char *data)
 	int		i;
 
 	if (find_special(data))
+	{
 		i = count_special(data, find_special(data));
-		else if (ft_strchr(data, S_QUOTE))
-			i = count_special(data, S_QUOTE);
-		else if (ft_strchr(data, D_QUOTE))
-			i = count_special(data, D_QUOTE);
+		to_expand = ft_substr(data, 0, i);
+		rest = ft_substr(data, i, ft_strlen(data) - i);
+	}
 	else
 	{
-		printf("entrou\n");
-		printf("DATA = %s\n", data);
 		to_free = data;
 		to_expand = ft_strdup(getenv(data));
 		free(to_free);
 		return(to_expand);
 	}
-	to_expand = ft_substr(data, 0, i);
-	rest = ft_substr(data, i, ft_strlen(data) - i);
 	to_free = ft_strdup(getenv(to_expand));
-	printf("REST = %s\n TO_EXPAND = %s\n", rest, to_expand);
 	new = ft_strjoin(to_free, rest);
 	free_strings(to_expand, to_free, rest, data);
 	return(new);
