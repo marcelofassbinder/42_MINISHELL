@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 18:25:29 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 18:55:01 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	tokenizer(t_token_list *token_list, char *line)
 		i++;
 	}
 	print_token_list(token_list);
-	check_dollar(token_list);
-	free_token_list(token_list);
 }
 
 void print_token_list(t_token_list *token_list)

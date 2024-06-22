@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/22 12:24:20 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 20:17:41 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int	main(int ac, char **av, char **env)
 		if (!check_syntax(line))
 			continue ;
 		tokenizer(&token_list, line);
+		check_dollar(&token_list);
+		join_tokens(with_same_status(&token_list), &token_list);
+		free_token_list(&token_list);
 		add_history(line);
 		free(line);
 	}
