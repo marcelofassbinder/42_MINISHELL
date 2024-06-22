@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/22 18:36:01 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/22 20:16:58 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,12 @@ void	check_dollar(t_token_list *token_list);
 char	*expand(char *data);
 t_token	*is_expansible(t_token *tmp, t_token_list *token_list);
 char	find_special(char *data);
+
+//JOIN.C
+t_token	**with_same_status(t_token_list *token_list);
+void	join_tokens(t_token **array, t_token_list *token_list);
+t_token *joined_token(t_token **array, t_token *actual);
+
+
 
 #endif
