@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/22 18:36:01 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:36:26 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,11 @@ void	check_dollar(t_token_list *token_list);
 char	*expand(char *data);
 t_token	*is_expansible(t_token *tmp, t_token_list *token_list);
 char	find_special(char *data);
+
+//JOIN
+void	join_spaces(t_token_list *token_list);
+void	delete_node(t_token_list *token_list, t_token *tmp);
+t_token	*join_nodes(t_token_list *token_list, t_token *token);
+void	join_quotes(t_token_list *token_list);
 
 #endif
