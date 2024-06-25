@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 12:37:34 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:40:21 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,7 @@ t_token			*join_nodes(t_token_list *token_list, t_token *token);
 void			join_quotes(t_token_list *token_list);
 
 //JOIN.C
-t_token	**with_same_status(t_token_list *token_list);
-void	join_tokens(t_token **array, t_token_list *token_list);
-t_token *joined_token(t_token **array, t_token *actual);
+
 
 
 
