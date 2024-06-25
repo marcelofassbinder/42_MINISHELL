@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 15:38:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/25 18:47:30 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,27 +80,25 @@ bool			empty_line(char *str);
 bool			exceeded_token(char *str, int c);
 
 //	PARSING STRUCTS
-/* typedef struct		s_parse_tree
-{
-	void			*parse_struct;
-}					t_parse_tree;
-
-typedef struct		s_parse_exec{
+typedef struct		s_exec{
 	enum e_type		type;
-	char			**cmd_args;	
-}					t_parse_exec;
+	char			**cmd_args;
+	bool			is_builtin;
+}					t_exec;
 
-typedef struct		s_parse_redir{
+typedef struct		s_redir{
 	enum e_type		type;
-	void			*next;
-}					t_parse_redir;
+	char			*file;
+	t_exec			*exec;
+}					t_redir;
 
-typedef struct		s_parse_pipe{
+typedef struct		s_pipe{
 	enum e_type		type;
+	void			*left;
+	void			*right;
+}					t_pipe;
 
 
-}					t_parse_pipe;
- */
 //	TOKENS.C
 void			tokenizer(t_token_list *token_list, char *line);
 void			print_token_list(t_token_list *token_list);
@@ -135,5 +133,11 @@ void			join_spaces(t_token_list *token_list);
 t_token			*join_nodes(t_token_list *token_list, t_token *token);
 void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
+
+//PARSE.C
+t_exec			*build_exec(t_token *token);
+int				command_args(t_token *token);
+void 			test_redir(t_token_list *token_list);
+
 
 #endif

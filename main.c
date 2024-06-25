@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/25 15:38:38 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/25 18:47:30 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		tokenizer(&token_list, line);
+		test_redir(&token_list);
 		free(line);
 		free_token_list(&token_list);
 	}
