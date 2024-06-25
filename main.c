@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 11:55:16 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:43:04 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		tokenizer(&token_list, line);
 		add_history(line);
+		
 		free(line);
 		free_token_list(&token_list);
 	}
