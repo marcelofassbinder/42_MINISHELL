@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 14:48:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:32:34 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	unclosed_quotes(char *str)
 	flag = false;
 	while (*str)
 	{
-		if (*str == 34 || *str == 39)
+		if (*str == S_QTE || *str == D_QTE)
 		{
 			to_find = *str;
 			str++;
@@ -41,13 +41,13 @@ bool	unclosed_quotes(char *str)
 bool	previous_is_redir(char *str)
 {
 	str = str - 2;
-	if (*str == '>' && *(str - 1) != '>')
+	if (*str == R_OUT && *(str - 1) != R_OUT)
 		return (false);
 	while (str)
 	{
-		if (*str == '>')
+		if (*str == R_OUT)
 			return (true);
-		else if ((*str  < 9 || *str > 13) && *str != 32)
+		else if (!ft_isspace(*str))
 			return (false);
 		str--;
 	}
@@ -58,7 +58,7 @@ bool	empty_line(char *str)
 {
 	while (*str)
 	{
-		if (!(*str >= 9 || *str <= 13) || *str != 32)
+		if (!ft_isspace(*str))
 			return (false);
 		str++;
 	}
@@ -71,7 +71,7 @@ bool	exceeded_token(char *str, int c)
 	{
 		if (*str == c)
 			return (true);
-		if (!(*str >= 9 || *str <= 13) || *str != 32)
+		if (!ft_isspace(*str))
 			break ;
 		str++;
 	}
