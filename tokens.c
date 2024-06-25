@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/25 15:24:48 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:30:02 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	tokenizer(t_token_list *token_list, char *line)
 			append_token(token_list, &line[i], status, PIPELINE);
 		if (line[i] == DOLLAR)
 			append_token(token_list, &line[i], status, ENV);
-		if (line[i] == REDIRECT_IN || line[i] == REDIRECT_OUT)
+		if (line[i] == R_IN || line[i] == R_OUT)
 			i = append_redir(token_list, &line[i], status, i);
 		i++;
 	}
@@ -75,7 +75,7 @@ void print_token_list(t_token_list *token_list)
 int is_type_word(char c)
 {
 	if (!ft_isspace(c) && c != S_QTE && c != D_QTE && c != PIPE && 
-		c != DOLLAR && c != REDIRECT_IN && c != REDIRECT_OUT && c)
+		c != DOLLAR && c != R_IN && c != R_OUT && c)
 				return (1);
 	return (0);
 }

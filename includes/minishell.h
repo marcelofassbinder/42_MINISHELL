@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 15:25:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:29:50 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,21 @@
 
 # define PIPE '|'
 # define DOLLAR '$'
-# define REDIRECT_IN '<'
-# define REDIRECT_OUT '>'
+# define R_IN '<'
+# define R_OUT '>'
 
 # define S_QTE 39
 # define D_QTE 34
 
+
+//	STATUS
 enum e_status{
 	GENERAL,
 	IN_S_QUOTE,
 	IN_D_QUOTE,
 };
 
+//	TOKEN TYPES
 enum e_type{
 	W_SPACE = 3,
 	WORD,
@@ -51,7 +54,8 @@ enum e_type{
 	D_QUOTE
 };
 
-typedef struct s_token{
+//	TOKEN STRUCTS
+typedef struct		s_token{
 	enum e_status	status;
 	enum e_type		type;
 	struct s_token	*prev;
@@ -75,7 +79,29 @@ bool			unclosed_quotes(char *str);
 bool			empty_line(char *str);
 bool			exceeded_token(char *str, int c);
 
-// TOKENS.C
+//	PARSING STRUCTS
+/* typedef struct		s_parse_tree
+{
+	void			*parse_struct;
+}					t_parse_tree;
+
+typedef struct		s_parse_exec{
+	enum e_type		type;
+	char			**cmd_args;	
+}					t_parse_exec;
+
+typedef struct		s_parse_redir{
+	enum e_type		type;
+	void			*next;
+}					t_parse_redir;
+
+typedef struct		s_parse_pipe{
+	enum e_type		type;
+
+
+}					t_parse_pipe;
+ */
+//	TOKENS.C
 void			tokenizer(t_token_list *token_list, char *line);
 void			print_token_list(t_token_list *token_list);
 int				is_type_word(char c);
@@ -91,7 +117,7 @@ int				append_redir(t_token_list *token_list, char *line, enum e_status status, 
 void			start_sigaction(void);
 bool			check_syntax(char *line);
 
-//FREE 
+//FREE.C
 void			free_token_list(t_token_list *token_list);
 void			free_env(t_token *token);
 void			exit_line(char *line);
@@ -100,10 +126,10 @@ void			free_strings(char *s1, char *s2, char *s3);
 //EXPAND.C
 void			check_dollar(t_token_list *token_list);
 char			*expand(char *data);
-t_token			*is_expansible(t_token *tmp, t_token_list *token_list);
 char			find_special(char *data);
+int				count_special(char *data, char special);
 
-//JOIN
+//JOIN.C
 void			join_spaces(t_token_list *token_list);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 t_token			*join_nodes(t_token_list *token_list, t_token *token);

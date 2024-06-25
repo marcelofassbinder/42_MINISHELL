@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   append.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:21:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/25 12:18:06 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:10:42 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,21 @@ int	append_redir(t_token_list *token_list, char *line,
 	char	next;
 
 	next = *(line + 1);
-	if (*line == REDIRECT_IN)
+	if (*line == R_IN)
 	{
-		if (next != REDIRECT_IN)
+		if (next != R_IN)
 			append_token(token_list, line, status, REDIR_IN);
-		else if (next == REDIRECT_IN)
+		else if (next == R_IN)
 		{
 			append_token(token_list, ft_strdup("<<"), status, HERE_DOC);
 			i++;
 		}
 	}
-	else if (*line == REDIRECT_OUT)
+	else if (*line == R_OUT)
 	{
-		if (next != REDIRECT_OUT)
+		if (next != R_OUT)
 			append_token(token_list, line, status, REDIR_OUT);
-		else if (next == REDIRECT_OUT)
+		else if (next == R_OUT)
 		{
 			append_token(token_list, ft_strdup(">>"), status, D_REDIR_OUT);
 			i++;
