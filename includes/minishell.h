@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 15:29:50 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:38:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void			free_token_list(t_token_list *token_list);
 void			free_env(t_token *token);
 void			exit_line(char *line);
 void			free_strings(char *s1, char *s2, char *s3);
+void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //EXPAND.C
 void			check_dollar(t_token_list *token_list);
@@ -131,7 +132,6 @@ int				count_special(char *data, char special);
 
 //JOIN.C
 void			join_spaces(t_token_list *token_list);
-void			delete_node(t_token_list *token_list, t_token *tmp);
 t_token			*join_nodes(t_token_list *token_list, t_token *token);
 void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
