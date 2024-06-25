@@ -5,103 +5,113 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/22 18:43:36 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 20:23:41 by mfassbin         ###   ########.fr       */
+/*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/06/25 12:31:29 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-/* 
-void	join_tokens(t_token_list *token_list)
+
+void	join_spaces(t_token_list *token_list)
 {
-	t_token *tmp;
+	t_token	*tmp;
+	t_token	*to_free;
 
 	tmp = token_list->first;
-	while(tmp->next)
+	while (tmp)
 	{
-		while (tmp->status == IN_S_QUOTE && tmp->next->status == IN_S_QUOTE)
+		if (tmp->type == W_SPACE && tmp->status == GENERAL)
 		{
-			//FUNCAO QUE JUNTA OS TOKENS E DA FREE;
-			
+			while (tmp->next && tmp->next->type == W_SPACE)
+			{
+				to_free = tmp->next;
+				tmp->next = tmp->next->next;
+				if (tmp->next)
+				{
+					tmp->next->prev = tmp;
+				}
+				free(to_free->data);
+				free(to_free);
+			}
 		}
 		tmp = tmp->next;
 	}
-} */
-
-t_token *joined_token(t_token **array, t_token *actual)
-{
-	int i;
-
-	i = 0;
-	while (array[i + 1])
-	{
-		actual->data = ft_strjoin(actual->data, array[i + 1]->data);
-		free(array[i + 1]);
-		i++;
-	}
-	printf("actual token = %s\n", actual->data);
-	return(actual);
 }
 
-void	join_tokens(t_token **array, t_token_list *token_list)
+void	delete_node(t_token_list *token_list, t_token *tmp)
 {
-	t_token *tmp;
-	t_token *list;
-
-	tmp = *array;
-	list = token_list->first;
-	while (list)
+	if (tmp->prev && tmp->next)
 	{
-		if (list == tmp)
+		tmp->prev->next = tmp->next;
+		tmp->next->prev = tmp->prev;
+	}
+	else if (tmp->prev)
+	{
+		tmp->prev->next = NULL;
+		token_list->last = tmp->prev;
+	}
+	else if (tmp->next)
+	{
+		tmp->next->prev = NULL;
+		token_list->first = tmp->next;
+	}
+	else if (!tmp->next && !tmp->prev)
+		token_list->first = NULL;
+	free(tmp->data);
+	free(tmp);
+}
+
+t_token	*join_nodes(t_token_list *token_list, t_token *token)
+{
+	t_token	*to_delete;
+
+	to_delete = token;
+	token = token->next;
+	if (token->type == token->prev->type)
+	{
+		delete_node(token_list, to_delete);
+		delete_node(token_list, token);
+		return (NULL);
+	}
+	delete_node(token_list, to_delete);
+	while (token)
+	{
+		if (token->next->status != GENERAL)
 		{
-			tmp = joined_token(array, tmp);
+			token->data = ft_strjoin(token->data, token->next->data);
+			to_delete = token->next;
+			delete_node(token_list, to_delete);
 		}
-		list = list->next;
+		if (!token->next || token->next->status == GENERAL)
+			break ;
 	}
+	token->type = WORD;
+	token = token->next;
+	return (token);
 }
 
-int in_same_status(t_token *token)
+void	join_quotes(t_token_list *token_list)
 {
-	int same_status;
+	t_token	*tmp;
+	t_token	*to_delete;
 
-	same_status = 1;
-	while(token->status == token->next->status)
-	{
-		token = token->next;
-		same_status ++;
-	}
-	return (same_status);
-}
-
-t_token	**with_same_status(t_token_list *token_list)
-{
-	t_token *tmp;
-	t_token **array;
-	int i;
-
-	ft_printf(1, "entrou na join\n");
 	tmp = token_list->first;
-	i = 0;
+	ft_printf(1, "\n----BEFORE JOIN ----\n");
+	print_token_list(token_list);
 	while (tmp)
 	{
-		if (tmp->status == IN_S_QUOTE && tmp->next->status == IN_S_QUOTE)
+		if (tmp->status == GENERAL
+			&& (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
 		{
-			array = ft_calloc(sizeof(t_token), in_same_status(tmp));
-			while (tmp->status == IN_S_QUOTE)
+			tmp = join_nodes(token_list, tmp);
+			if (tmp)
 			{
-				array[i] = tmp;
-				i++;
+				to_delete = tmp;
 				tmp = tmp->next;
+				delete_node(token_list, to_delete);
 			}
 		}
 		else
 			tmp = tmp->next;
 	}
-	i = 0;
-	while (array[i])
-	{
-		ft_printf(1, " array[%i] = %s\n", i, array[i]->data);
-		i++;
-	}
-	return (array);
 }

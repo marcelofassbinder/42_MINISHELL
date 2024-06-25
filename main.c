@@ -6,12 +6,11 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/22 20:17:41 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:37:02 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
 
 int	main(int ac, char **av, char **env)
 {
@@ -27,11 +26,7 @@ int	main(int ac, char **av, char **env)
 		token_list = (t_token_list){0};
 		line = readline("minishell --> ");
 		if (!line)
-		{
-			ft_printf(1, "exit\n");
-			free(line);
-			exit(0);
-		}
+			exit_line(line);
 		if (!check_syntax(line))
 			continue ;
 		tokenizer(&token_list, line);
@@ -40,5 +35,6 @@ int	main(int ac, char **av, char **env)
 		free_token_list(&token_list);
 		add_history(line);
 		free(line);
+		free_token_list(&token_list);
 	}
 }
