@@ -6,15 +6,26 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/24 18:41:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:49:59 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
+void	prepare_tokens(t_token_list *token_list)
+{
+	check_dollar(token_list);
+	printf("-------BEFORE JOIN-------\n");
+	print_token_list(token_list);
+	join_spaces(token_list);
+	join_quotes(token_list);
+	printf("-------JOINED-------\n");
+	print_token_list(token_list);
+}
+
 void	tokenizer(t_token_list *token_list, char *line)
 {
-	enum t_status 	status;
+	enum e_status 	status;
 	int i;
 
 	status = GENERAL;
@@ -38,15 +49,7 @@ void	tokenizer(t_token_list *token_list, char *line)
 			i = append_redir(token_list, &line[i], status, i);
 		i++;
 	}
-	print_token_list(token_list);
-	check_dollar(token_list);
-	join_spaces(token_list);
-	join_quotes(token_list);
-	ft_printf(1, "\n---- JOINED ----\n");
-	print_token_list(token_list);
-	//printf("FIRST: %s\n", token_list->first->data);
-	//printf("LAST: %s\n", token_list->last->data);
-	free_token_list(token_list);
+	prepare_tokens(token_list);
 }
 
 void print_token_list(t_token_list *token_list)
@@ -76,7 +79,7 @@ int is_type_word(char c)
 	return (0);
 }
 
-enum t_status append_quotes(t_token_list *token_list, char c, enum t_status status)
+enum e_status append_quotes(t_token_list *token_list, char c, enum e_status status)
 {
 	if (c == S_QTE)
 		status = change_status(token_list, c, status, S_QUOTE);
@@ -85,9 +88,9 @@ enum t_status append_quotes(t_token_list *token_list, char c, enum t_status stat
 	return (status);
 }
 
-enum t_status change_status(t_token_list *token_list, char c, enum t_status status, enum t_type type)
+enum e_status change_status(t_token_list *token_list, char c, enum e_status status, enum e_type type)
 {
-	enum t_status new_status;
+	enum e_status new_status;
 
 	if (type == S_QUOTE)
 		new_status = IN_S_QUOTE;

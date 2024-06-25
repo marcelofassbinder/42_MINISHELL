@@ -6,12 +6,11 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/22 20:02:15 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:05:53 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
 
 t_token	*is_expansible(t_token *tmp, t_token_list *token_list)
 {
@@ -31,21 +30,21 @@ t_token	*is_expansible(t_token *tmp, t_token_list *token_list)
 
 void	check_dollar(t_token_list *token_list)
 {
-	t_token *tmp;
-	t_token *to_free;
+	t_token	*tmp;
+	t_token	*to_free;
 
 	tmp = token_list->first;
-	while(tmp)
+	while (tmp)
 	{
-		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next &&
-			tmp->next->type == WORD)
-		{	
+		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next
+			&& tmp->next->type == WORD)
+		{
 			to_free = is_expansible(tmp, token_list);
 			tmp = tmp->next;
 			free(to_free->data);
 			free(to_free);
 		}
-		else	
+		else
 			tmp = tmp->next;
 	}
 }
@@ -65,14 +64,14 @@ char	find_special(char *data)
 		{
 			if (data[i] == specials[j])
 				return (data[i]);
-			j++;	
+			j++;
 		}
 		i++;
 	}
 	return (0);
 }
 
-int		count_special(char *data, char special)
+int	count_special(char *data, char special)
 {
 	int	i;
 
@@ -80,14 +79,6 @@ int		count_special(char *data, char special)
 	while (data[i] != special && data[i])
 		i++;
 	return (i);
-}
-
-void	free_strings(char *s1, char *s2, char *s3, char *s4)
-{
-	free(s1);
-	free(s2);
-	free(s3);
-	free(s4);
 }
 
 char	*expand(char *data)
@@ -109,10 +100,10 @@ char	*expand(char *data)
 		to_free = data;
 		to_expand = ft_strdup(getenv(data));
 		free(to_free);
-		return(to_expand);
+		return (to_expand);
 	}
 	to_free = ft_strdup(getenv(to_expand));
 	new = ft_strjoin(to_free, rest);
-	free_strings(to_expand, to_free, rest, data);
-	return(new);
+	free_strings(to_expand, rest, data);
+	return (new);
 }
