@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 14:38:50 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 12:37:02 by mfassbin         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/06/25 14:30:21 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "includes/minishell.h"
 
@@ -25,15 +26,15 @@ int	main(int ac, char **av, char **env)
 	{
 		token_list = (t_token_list){0};
 		line = readline("minishell --> ");
+		add_history(line);
 		if (!line)
 			exit_line(line);
 		if (!check_syntax(line))
+		{
+			free(line);
 			continue ;
+		}
 		tokenizer(&token_list, line);
-		check_dollar(&token_list);
-		join_tokens(with_same_status(&token_list), &token_list);
-		free_token_list(&token_list);
-		add_history(line);
 		free(line);
 		free_token_list(&token_list);
 	}

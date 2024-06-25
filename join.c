@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 12:31:29 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:53:57 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,6 @@ void	join_quotes(t_token_list *token_list)
 	t_token	*to_delete;
 
 	tmp = token_list->first;
-	ft_printf(1, "\n----BEFORE JOIN ----\n");
-	print_token_list(token_list);
 	while (tmp)
 	{
 		if (tmp->status == GENERAL
