@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 12:18:26 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:38:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,27 @@ void	free_strings(char *s1, char *s2, char *s3)
 	free(s1);
 	free(s2);
 	free(s3);
+}
+
+void	delete_node(t_token_list *token_list, t_token *tmp)
+{
+	if (tmp->prev && tmp->next)
+	{
+		tmp->prev->next = tmp->next;
+		tmp->next->prev = tmp->prev;
+	}
+	else if (tmp->prev)
+	{
+		tmp->prev->next = NULL;
+		token_list->last = tmp->prev;
+	}
+	else if (tmp->next)
+	{
+		tmp->next->prev = NULL;
+		token_list->first = tmp->next;
+	}
+	else if (!tmp->next && !tmp->prev)
+		token_list->first = NULL;
+	free(tmp->data);
+	free(tmp);
 }
