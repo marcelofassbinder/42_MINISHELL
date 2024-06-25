@@ -6,35 +6,36 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/24 18:53:07 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:12:44 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void join_spaces(t_token_list *token_list)
+void	join_spaces(t_token_list *token_list)
 {
-    t_token *tmp;
-    t_token *to_free;
+	t_token	*tmp;
+	t_token	*to_free;
 
-    tmp = token_list->first;
-    while (tmp)
-    {
-        if (tmp->type == W_SPACE && tmp->status == GENERAL)
-        {
-            while (tmp->next && tmp->next->type == W_SPACE)
-            {
-                to_free = tmp->next;
-                tmp->next = tmp->next->next;
-                if (tmp->next)
-                {
-                    tmp->next->prev = tmp;
-                }
-                free(to_free);
-            }
-        }
-        tmp = tmp->next;
-    }
+	tmp = token_list->first;
+	while (tmp)
+	{
+		if (tmp->type == W_SPACE && tmp->status == GENERAL)
+		{
+			while (tmp->next && tmp->next->type == W_SPACE)
+			{
+				to_free = tmp->next;
+				tmp->next = tmp->next->next;
+				if (tmp->next)
+				{
+					tmp->next->prev = tmp;
+				}
+				free(to_free->data);
+				free(to_free);
+			}
+		}
+		tmp = tmp->next;
+	}
 }
 
 void	delete_node(t_token_list *token_list, t_token *tmp)
@@ -56,19 +57,20 @@ void	delete_node(t_token_list *token_list, t_token *tmp)
 	}
 	else if (!tmp->next && !tmp->prev)
 		token_list->first = NULL;
+	free(tmp->data);
 	free(tmp);
 }
 
 t_token	*join_nodes(t_token_list *token_list, t_token *token)
 {
-	t_token			*to_delete;
-	
+	t_token	*to_delete;
+
 	to_delete = token;
 	token = token->next;
 	if (token->type == token->prev->type)
 	{
 		delete_node(token_list, to_delete);
-		delete_node(token_list, to_delete->next);
+		delete_node(token_list, token);
 		return (NULL);
 	}
 	delete_node(token_list, to_delete);
@@ -81,10 +83,9 @@ t_token	*join_nodes(t_token_list *token_list, t_token *token)
 			delete_node(token_list, to_delete);
 		}
 		if (!token->next || token->next->status == GENERAL)
-			break;
+			break ;
 	}
 	token->type = WORD;
-	printf("JOINED TOKEN: %s\n", token->data);
 	token = token->next;
 	return (token);
 }
@@ -99,7 +100,8 @@ void	join_quotes(t_token_list *token_list)
 	print_token_list(token_list);
 	while (tmp)
 	{
-		if(tmp->status == GENERAL && (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
+		if (tmp->status == GENERAL
+			&& (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
 		{
 			tmp = join_nodes(token_list, tmp);
 			if (tmp)
