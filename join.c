@@ -6,11 +6,30 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 12:12:44 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:23:05 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
+void	join_words(t_token_list *token_list)
+{
+	t_token	*tmp;
+	t_token	*to_free;
+
+	tmp = token_list->first;
+	while (tmp && tmp->next)
+	{
+		if (tmp->type == WORD && tmp->next->type == WORD)
+		{
+			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
+			to_free = tmp->next;
+			delete_node(token_list, to_free);
+		}
+		else
+			tmp = tmp->next;
+	}
+}
 
 void	join_spaces(t_token_list *token_list)
 {
@@ -27,9 +46,7 @@ void	join_spaces(t_token_list *token_list)
 				to_free = tmp->next;
 				tmp->next = tmp->next->next;
 				if (tmp->next)
-				{
 					tmp->next->prev = tmp;
-				}
 				free(to_free->data);
 				free(to_free);
 			}
@@ -96,8 +113,6 @@ void	join_quotes(t_token_list *token_list)
 	t_token	*to_delete;
 
 	tmp = token_list->first;
-	ft_printf(1, "\n----BEFORE JOIN ----\n");
-	print_token_list(token_list);
 	while (tmp)
 	{
 		if (tmp->status == GENERAL

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 12:06:07 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:23:05 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,17 @@ typedef struct s_token_list{
 	t_token		*last;
 }				t_token_list;
 
+//SYNTAX
+bool			check_redir(char *str);
+bool			check_pipe(char *str);
+bool			redir_error(char *str);
+bool			pipe_error(char *str);
+bool			check_syntax(char *line);
+bool			previous_is_redir(char *str);
+bool			unclosed_quotes(char *str);
+bool			empty_line(char *str);
+bool			exceeded_token(char *str, int c);
+
 // TOKENS.C
 void			tokenizer(t_token_list *token_list, char *line);
 void			print_token_list(t_token_list *token_list);
@@ -97,5 +108,6 @@ void			join_spaces(t_token_list *token_list);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 t_token			*join_nodes(t_token_list *token_list, t_token *token);
 void			join_quotes(t_token_list *token_list);
+void			join_words(t_token_list *token_list);
 
 #endif
