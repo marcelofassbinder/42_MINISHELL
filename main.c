@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/25 18:47:30 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/27 15:29:12 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ int	main(int ac, char **av, char **env)
 {
 	char		*line;
 	t_token_list token_list;
+	void		*root;
 
-	(void) av;
+	root = NULL;
+	(void) av;	
 	(void) ac;
 	(void) env;
 	start_sigaction();
@@ -34,7 +36,9 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		tokenizer(&token_list, line);
-		test_redir(&token_list);
+		//root = parse(token_list.first);
+		//test_redir(&token_list);
+		printf("LIST FIRST %s\n", token_list.first->data);
 		free(line);
 		free_token_list(&token_list);
 	}
