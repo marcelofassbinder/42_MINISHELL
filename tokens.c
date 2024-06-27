@@ -6,11 +6,41 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/25 15:30:02 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/27 17:18:35 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
+bool	is_redir(t_token *token)
+{
+	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT)
+		return (true);
+	return (false);
+}	
+
+void	find_files(t_token_list *token_list)
+{
+	t_token	*tmp;
+
+	tmp = token_list->first;
+	while (tmp)
+	{
+		if (tmp->type == WORD)
+		{
+			if (tmp->prev && is_redir(tmp->prev))
+				tmp->type = T_FILE;
+			else if (!tmp->prev)
+			{
+				tmp = tmp->next;
+				continue ;
+			}
+			else if (tmp->prev->prev && is_redir(tmp->prev->prev))
+				tmp->type = T_FILE;
+		}
+		tmp = tmp->next;
+	}
+}
 
 void	prepare_tokens(t_token_list *token_list)
 {
@@ -20,6 +50,7 @@ void	prepare_tokens(t_token_list *token_list)
 	join_spaces(token_list);
 	join_quotes(token_list);
 	join_words(token_list);
+	find_files(token_list);
 	printf("-------JOINED-------\n");
 	print_token_list(token_list);
 }
@@ -57,7 +88,7 @@ void print_token_list(t_token_list *token_list)
 {
 	int i;
 	t_token *ptr;
-	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE"};
+	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE", "FILE"};
 
 	ptr = token_list->first;
 	i = 1;
