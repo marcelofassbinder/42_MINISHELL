@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/25 18:47:30 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/27 19:53:31 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@ int	main(int ac, char **av, char **env)
 {
 	char		*line;
 	t_token_list token_list;
+	void		*root;
 
-	(void) av;
+	root = NULL;
+	(void) av;	
 	(void) ac;
 	(void) env;
 	start_sigaction();
 	while (1)
 	{
 		token_list = (t_token_list){0};
-		line = readline("minishell --> ");
+		line = readline(GREEN"GAU"RED"SHE"YELLOW"LL-->"RESET);
 		add_history(line);
 		if (!line)
 			exit_line(line);
@@ -34,7 +36,9 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		tokenizer(&token_list, line);
-		test_redir(&token_list);
+		//root = parse(token_list.first);
+		//test_redir(&token_list);
+		printf("LIST FIRST %s\n", token_list.first->data);
 		free(line);
 		free_token_list(&token_list);
 	}

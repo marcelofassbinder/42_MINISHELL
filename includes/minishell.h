@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 18:47:30 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/27 19:53:31 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@
 # define D_QTE 34
 
 
+//	COLORS
+# define RESET "\033[0m"
+# define RED "\033[1;3;31m"
+# define GREEN "\033[1;3;32m"
+# define YELLOW "\033[1;3;93m"
+
 //	STATUS
 enum e_status{
 	GENERAL,
@@ -51,7 +57,8 @@ enum e_type{
 	D_REDIR_OUT,
 	HERE_DOC,
 	S_QUOTE,
-	D_QUOTE
+	D_QUOTE,
+	T_FILE
 };
 
 //	TOKEN STRUCTS
@@ -67,6 +74,11 @@ typedef struct s_token_list{
 	t_token		*first;
 	t_token		*last;
 }				t_token_list;
+
+typedef struct cmd {
+	enum e_type		type;
+	void			*stc;
+}					t_cmd;
 
 //SYNTAX
 bool			check_redir(char *str);
@@ -89,7 +101,7 @@ typedef struct		s_exec{
 typedef struct		s_redir{
 	enum e_type		type;
 	char			*file;
-	t_exec			*exec;
+	void			*down;
 }					t_redir;
 
 typedef struct		s_pipe{
@@ -138,6 +150,6 @@ void			join_words(t_token_list *token_list);
 t_exec			*build_exec(t_token *token);
 int				command_args(t_token *token);
 void 			test_redir(t_token_list *token_list);
-
+bool			is_redir(t_token *token);
 
 #endif
