@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/25 19:08:46 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:05:36 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ t_pipe	*build_pipe(t_token *token)
 	return (pipe_struct);
 } */
 
-
 t_redir	*build_redir(t_token *token)
 {
 	t_redir	*redir;
@@ -96,7 +95,7 @@ t_redir	*build_redir(t_token *token)
 			find_cmd = find_cmd->prev;
 		redir->exec = build_exec(find_cmd);
 	}
-	else if (redir->type == REDIR_IN || redir->type == HERE_DOC)
+	else if (redir->type == REDIR_IN)
 	{
 		find_cmd = find_cmd->next;
 		if (find_cmd && find_cmd->type == W_SPACE)
@@ -105,9 +104,12 @@ t_redir	*build_redir(t_token *token)
 		ft_printf(1, "token enviado: %s\n", find_cmd->data);
 		redir->exec = build_exec(find_cmd);		
 	}
+	/* else if (redir->type == HERE_DOC)
+		//FUNCAO DO HERE_DOC */
 	ft_printf(1, "\nfile do redir -> %s\n", redir->file);
 	return (redir);
 }
+
 void test_redir(t_token_list *token_list)
 {
 	t_token *tmp;
