@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/27 19:53:31 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/28 14:53:35 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,9 +147,10 @@ void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
 
 //PARSE.C
-t_exec			*build_exec(t_token *token);
+void			*build_exec(t_token *token);
 int				command_args(t_token *token);
 void 			test_redir(t_token_list *token_list);
 bool			is_redir(t_token *token);
+char			**define_cmd_args(t_token *token);
 
 #endif

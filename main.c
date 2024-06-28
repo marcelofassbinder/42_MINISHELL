@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/27 19:53:31 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/28 15:13:04 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int ac, char **av, char **env)
 		tokenizer(&token_list, line);
 		//root = parse(token_list.first);
 		//test_redir(&token_list);
-		printf("LIST FIRST %s\n", token_list.first->data);
+		build_exec(token_list.first);
 		free(line);
 		free_token_list(&token_list);
 	}
