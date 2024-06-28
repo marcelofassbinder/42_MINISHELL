@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/27 17:02:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/28 17:44:50 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 # define S_QTE 39
 # define D_QTE 34
 
+
+//	COLORS
+# define RESET "\033[0m"
+# define RED "\033[1;3;31m"
+# define GREEN "\033[1;3;32m"
+# define YELLOW "\033[1;3;93m"
 
 //	STATUS
 enum e_status{
@@ -69,21 +75,6 @@ typedef struct s_token_list{
 	t_token		*last;
 }				t_token_list;
 
-typedef struct cmd {
-	enum e_type		type;
-	void			*stc;
-}					t_cmd;
-
-//SYNTAX
-bool			check_redir(char *str);
-bool			check_pipe(char *str);
-bool			redir_error(char *str);
-bool			pipe_error(char *str);
-bool			check_syntax(char *line);
-bool			previous_is_redir(char *str);
-bool			unclosed_quotes(char *str);
-bool			empty_line(char *str);
-bool			exceeded_token(char *str, int c);
 
 //	PARSING STRUCTS
 typedef struct		s_exec{
@@ -104,6 +95,18 @@ typedef struct		s_pipe{
 	void			*right;
 }					t_pipe;
 
+void 	print_tree(void *node, int level);
+
+//SYNTAX
+bool			check_redir(char *str);
+bool			check_pipe(char *str);
+bool			redir_error(char *str);
+bool			pipe_error(char *str);
+bool			check_syntax(char *line);
+bool			previous_is_redir(char *str);
+bool			unclosed_quotes(char *str);
+bool			empty_line(char *str);
+bool			exceeded_token(char *str, int c);
 
 //	TOKENS.C
 void			tokenizer(t_token_list *token_list, char *line);
@@ -141,9 +144,14 @@ void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
 
 //PARSE.C
-t_exec			*build_exec(t_token *token);
+void			*build_exec(t_token *token);
+void			*build_redir(void *down, t_token *token);
 int				command_args(t_token *token);
 void 			test_redir(t_token_list *token_list);
 bool			is_redir(t_token *token);
+char			**define_cmd_args(t_token *token);
+t_token			*find_last_or_pipe(t_token *token, int flag);
+void			*parse(t_token *token);
+
 
 #endif
