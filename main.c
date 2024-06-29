@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/29 16:22:32 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 17:37:52 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ void	run_exec(t_exec *exec)
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen(exec->cmd_args[0])))
 		echo(exec->cmd_args);
 }
+void	run_redir(t_redir *redir)
+{
+	int	fd;
+
+	fd = open(redir->file, O_CREAT, O_WRONLY);
+	dup2(fd, STDOUT_FILENO);
+	run((void *)redir->down);
+	close(fd);
+}
 
 void	run(void *root)
 {
@@ -89,6 +98,7 @@ void	run(void *root)
 	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT)
 	{
 		redir = (t_redir *)root;
+		run_redir(redir);
 		//printf("%s", redir->file);
 	}
 	else if (node_type == PIPELINE)
