@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   append.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:21:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/25 14:10:42 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:00:24 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 void	append_token(t_token_list *token_list,
 	char *str, enum e_status status, enum e_type type)

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/28 17:44:50 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 15:33:51 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <dirent.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <sys/wait.h>
 
 # define PIPE '|'
 # define DOLLAR '$'
@@ -95,7 +96,7 @@ typedef struct		s_pipe{
 	void			*right;
 }					t_pipe;
 
-void 	print_tree(void *node, int level);
+void 	print_tree(void *node, const char *prefix, bool isLeft);
 
 //SYNTAX
 bool			check_redir(char *str);
@@ -114,6 +115,8 @@ void			print_token_list(t_token_list *token_list);
 int				is_type_word(char c);
 enum e_status	append_quotes(t_token_list *token_list, char c, enum e_status status);
 enum e_status	change_status(t_token_list *token_list, char c, enum e_status status, enum e_type type);
+bool			is_redir(t_token *token);
+void			find_files(t_token_list *token_list);
 
 //APPEND.C
 void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
@@ -144,14 +147,19 @@ void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
 
 //PARSE.C
+void			*parse(t_token *token);
 void			*build_exec(t_token *token);
 void			*build_redir(void *down, t_token *token);
-int				command_args(t_token *token);
-void 			test_redir(t_token_list *token_list);
-bool			is_redir(t_token *token);
-char			**define_cmd_args(t_token *token);
+t_pipe			*build_pipe(void *left, void *right);
+t_token			*get_next_redir(t_token *token);
+bool			last_redir(t_token *token);
 t_token			*find_last_or_pipe(t_token *token, int flag);
-void			*parse(t_token *token);
-
+t_token			*get_previous_redir(t_token *token);
+int				command_args(t_token *token);
+bool			is_builtin(char *str);
+t_redir 		*create_new_redir_e(t_exec *down, t_token *token);
+t_redir 		*create_new_redir_r(t_redir *down, t_token *token);
+int				count_args(t_token *token);
+char			**define_cmd_args(t_token *token);
 
 #endif
