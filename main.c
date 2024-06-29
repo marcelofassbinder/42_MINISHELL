@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/29 17:37:52 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 19:25:44 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	run_exec(t_exec *exec)
 void	run_redir(t_redir *redir)
 {
 	int	fd;
-
-	fd = open(redir->file, O_CREAT, O_WRONLY);
+	
+	fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	dup2(fd, STDOUT_FILENO);
 	run((void *)redir->down);
 	close(fd);
