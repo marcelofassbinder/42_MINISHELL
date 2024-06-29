@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 15:52:34 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 16:54:36 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ t_redir *create_new_redir_e(t_exec *down, t_token *token)
 	else
 		redir->file = token->next->data;
 	redir->down = down;
-	ft_printf(1, "\n--- NODE REDIR ---\n");
+/* 	ft_printf(1, "\n--- NODE REDIR ---\n");
 	ft_printf(1, "ENDERECO = %x\n", redir);
 	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE", "FILE"};
 	ft_printf(1, "redir->type = %s\n", s[redir->type]);
 	t_exec *print = redir->down;
 	ft_printf(1, "aponta para exec cmd = %s\n", print->cmd_args[0]);
-	ft_printf(1, "redir->file = %s\n", redir->file);
+	ft_printf(1, "redir->file = %s\n", redir->file); */
 	return (redir);
 }
 
@@ -63,13 +63,13 @@ t_redir *create_new_redir_r(t_redir *down, t_token *token)
 	else
 		redir->file = token->next->data;
 	redir->down = down;
-	ft_printf(1, "\n--- NODE REDIR ---\n");
+/* 	ft_printf(1, "\n--- NODE REDIR ---\n");
 	ft_printf(1, "ENDERECO = %x\n", redir);
 	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE", "FILE"};
 	ft_printf(1, "redir->type = %s\n", s[redir->type]);
 	t_redir *print = redir->down;
 	ft_printf(1, "aponta para node->type = %s\n", print->file);
-	ft_printf(1, "redir->file = %s\n", redir->file);
+	ft_printf(1, "redir->file = %s\n", redir->file); */
 	return (redir);
 }
 

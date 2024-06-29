@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 15:33:51 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 17:06:36 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <stdbool.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 
 # define PIPE '|'
 # define DOLLAR '$'
@@ -161,5 +162,8 @@ t_redir 		*create_new_redir_e(t_exec *down, t_token *token);
 t_redir 		*create_new_redir_r(t_redir *down, t_token *token);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
+
+//RUN
+void			run(void *root);
 
 #endif
