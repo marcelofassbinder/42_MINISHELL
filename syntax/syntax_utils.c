@@ -6,11 +6,11 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 15:32:34 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:02:09 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 bool	unclosed_quotes(char *str)
 {

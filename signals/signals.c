@@ -6,11 +6,11 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/18 17:57:41 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:02:19 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 /* Function to handle the received signal, during the execution of 
 	this function other received signals are blocked if it is in the mask. */

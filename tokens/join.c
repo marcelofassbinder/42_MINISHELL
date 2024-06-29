@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   join.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/25 15:38:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:01:55 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 void	join_words(t_token_list *token_list)
 {
