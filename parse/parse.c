@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/29 15:52:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/30 18:03:13 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,36 @@ void	*build_redir(void *down, t_token *token)
 	return (root);
 }	
 
+bool	has_word(t_token *token)
+{
+	while (token && token->type != PIPELINE)
+	{
+		if (token->type == WORD)
+			return (true);
+		token = token->next;
+	}
+	return (false);
+}
+
 void	*build_exec(t_token *token)
 {
 	void	*root;
 	t_exec	*exec;
 
-	exec = ft_calloc(sizeof(t_exec), 1);
-	exec->cmd_args = define_cmd_args(token);
-	exec->is_builtin = is_builtin(exec->cmd_args[0]);
-	exec->type = WORD;
+	if (has_word(token))
+	{
+		exec = ft_calloc(sizeof(t_exec), 1);
+		exec->cmd_args = define_cmd_args(token);
+		exec->is_builtin = is_builtin(exec->cmd_args[0]);
+		exec->type = WORD;
+	}
 /* 	ft_printf(1, "\n--- NODE EXEC ---\n");
 	ft_printf(1, "ENDERECO = %x\n", exec);
 	ft_printf(1, "exec->type = %i\n", exec->type);
 	ft_printf(1, "cmd_args[0] = %s\n", exec->cmd_args[0]);
 	ft_printf(1, "is_builtin? = %i\n", exec->is_builtin); */
+	else
+		exec = NULL;
 	root = build_redir(exec, token);
 	return(root);
 }
