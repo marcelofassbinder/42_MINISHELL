@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_nodes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 16:54:36 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/06/30 17:54:21 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 bool	is_builtin(char *str)
 {
+	if (!str)
+		return (false);
 	if (!ft_strncmp(str, "pwd", ft_strlen(str)))
 		return (true);
 	if (!ft_strncmp(str, "echo", ft_strlen(str)))
