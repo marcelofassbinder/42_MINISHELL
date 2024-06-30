@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/30 19:08:28 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/06/30 19:33:32 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	run_execve(t_exec *exec, char **envp)
 	
 	path = get_path(getenv("PATH"));
 	i = 0;
+	if (access(exec->cmd_args[0], F_OK) == 0)
+		execve(exec->cmd_args[0], exec->cmd_args, envp);
 	while(path[i])
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
@@ -106,7 +108,6 @@ void	run_exec(t_exec *exec, char **envp)
 	//if (exec->is_builtin)
 	if (!exec->is_builtin)
 		run_execve(exec, envp);		
-	
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen(exec->cmd_args[0])))
 		echo(exec->cmd_args);
 	exit(0);
