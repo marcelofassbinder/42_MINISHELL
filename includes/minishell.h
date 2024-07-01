@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 12:21:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:17:48 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,7 @@ t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
 int				command_args(t_token *token);
 bool			is_builtin(char *str);
-t_redir 		*create_new_redir_e(t_exec *down, t_token *token);
-t_redir 		*create_new_redir_r(t_redir *down, t_token *token);
+t_redir 		*create_new_redir(void *down, t_token *token);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 
