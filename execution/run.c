@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 12:13:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:55:30 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	run_exec(t_exec *exec, char **envp)
 		return ;
 	if (!exec->is_builtin)
 		run_execve(exec, envp);		
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen(exec->cmd_args[0])))
+	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args);
 	//exit(0);
 }
@@ -103,24 +103,23 @@ void	run_redir(t_redir *redir, char **envp)
 void	run_pipe(t_pipe *pipe_str, char **envp)
 {
 	int	fd[2];
-	int pid;
 	
 	if (pipe(fd) == -1)
 		ft_printf(2, "Pipe Error\n");
-	pid = fork();
-	if (pid == 0)
+	if (fork() == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, envp);
 	}
-	pid = fork();
-	if (pid == 0)
+	if (fork() == 0)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		run(pipe_str->right, envp);
 	}
+	close(fd[0]);
+	close(fd[1]);
 	wait(NULL);
 	wait(NULL);
 }

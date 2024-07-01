@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/01 11:41:54 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:19:38 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	*build_redir(void *down, t_token *token)
 	while (token)
 	{
 		if (last_redir(token))
-			root = create_new_redir_e(down, token);
+			root = create_new_redir(down, token);
 		else
-			root = create_new_redir_r(root, token);	
+			root = create_new_redir(root, token);
 		token = get_previous_redir(token);
 	}
 	if (!root)
