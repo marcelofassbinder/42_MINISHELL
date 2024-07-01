@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 12:21:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:09:01 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ typedef struct		s_pipe{
 	void			*left;
 	void			*right;
 }					t_pipe;
+
+typedef struct		s_shell{
+	t_token_list	*token_list;
+	void			*root;
+	char			*envp;
+}					t_shell;
 
 void 	print_tree(void *node, const char *prefix, bool isLeft);
 

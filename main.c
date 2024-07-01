@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/01 12:22:40 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:48:14 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,25 @@ void print_tree(void *node, const char *prefix, bool isLeft) {
 		printPipe((t_pipe *)node, prefix, isLeft);
 }
 
+t_shell	*init_shell(int ac, char **av, char **envp)
+{
+	t_shell	*shell;
+	(void)ac;
+	(void)av;
+
+	shell = ft_calloc(sizeof(t_shell), 1);
+	shell->envp = envp;
+	return (shell);
+}
+
 int	main(int ac, char **av, char **envp)
 {
+	t_shell		*shell;
 	char		*line;
 	t_token_list token_list;
 	void		*root;
 
-	root = NULL;
-	(void) av;	
-	(void) ac;
+	shell = init_shell(ac, av, envp);
 	start_sigaction();
 	while (1)
 	{
@@ -84,7 +94,6 @@ int	main(int ac, char **av, char **envp)
 			exit(0);
 		}
 		wait(NULL);
-		//printf("\n\n\n\n");
 		free_tree(root);
 		free(line);
 		free_token_list(&token_list);
