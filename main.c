@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/01 14:48:14 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/07/01 18:27:28 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,24 @@ void print_tree(void *node, const char *prefix, bool isLeft) {
 		printPipe((t_pipe *)node, prefix, isLeft);
 }
 
+void	shell_error(t_shell *shell, char *str)
+{
+	if (shell->token_list)
+	{
+		if (shell->token_list->first)
+			free_token_list(shell->token_list);
+		free(shell->token_list);
+	}
+	if (shell->root)
+		free_tree(shell->root);
+	if (shell->line)
+		free(shell->line);
+	if (shell)
+		free(shell);
+	ft_printf(2, "%s", str);
+	exit(2);
+}
+
 t_shell	*init_shell(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
@@ -57,45 +75,51 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	(void)av;
 
 	shell = ft_calloc(sizeof(t_shell), 1);
+	if (!shell)
+		shell_error(shell, "Shell Caloc Error\n");
 	shell->envp = envp;
+	return (shell);
+}
+
+t_shell	*ft_read_line(t_shell *shell)
+{
+	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
+	add_history(shell->line);
+	if (!shell->line)
+		exit_line(shell);
+	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
+	if (!shell->token_list)
+		shell_error(shell, "Token list Aloc Error\n");
+	shell->token_list->first = NULL;
+	shell->token_list->last = NULL;
 	return (shell);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_shell		*shell;
-	char		*line;
-	t_token_list token_list;
-	void		*root;
 
-	shell = init_shell(ac, av, envp);
 	start_sigaction();
+	shell = init_shell(ac, av, envp);
 	while (1)
 	{
-		token_list = (t_token_list){0};
-		line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
-		add_history(line);
-		if (!line)
-			exit_line(line);
-		if (!check_syntax(line) || !line[0])
+		shell = ft_read_line(shell);
+		if (!check_syntax(shell->line) || !shell->line[0])
 		{
-			free(line);
+			free(shell->line);
 			continue ;
 		}
-		tokenizer(&token_list, line);
-		//test_redir(&token_list);
-		root = parse(token_list.first);
-		//print_tree(root, "", true);
+		tokenizer(shell->token_list, shell->line);
+		shell->root = parse(shell->token_list->first);
 		if (fork() == 0)
 		{
-			run(root, envp);
-			free_tree(root);
-			free_token_list(&token_list);
-			exit(0);
+			run(shell->root, shell);
+			safe_exit(shell, 0);
 		}
 		wait(NULL);
-		free_tree(root);
-		free(line);
-		free_token_list(&token_list);
+		free_tree(shell->root);
+		free(shell->line);
+		free_token_list(shell->token_list);
+		free(shell->token_list);
 	}
 }
