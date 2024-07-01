@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/30 16:54:51 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/01 12:21:10 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,15 @@ int				append_redir(t_token_list *token_list, char *line, enum e_status status, 
 void			start_sigaction(void);
 bool			check_syntax(char *line);
 
-//FREE.C
+//FREE tokens
 void			free_token_list(t_token_list *token_list);
 void			free_env(t_token *token);
 void			exit_line(char *line);
 void			free_strings(char *s1, char *s2, char *s3);
 void			delete_node(t_token_list *token_list, t_token *tmp);
+
+//FREE tree
+void			free_tree(void *root);
 
 //EXPAND.C
 void			check_dollar(t_token_list *token_list);
@@ -165,5 +168,14 @@ char			**define_cmd_args(t_token *token);
 
 //RUN
 void			run(void *root, char **envp);
+char 			**get_path(char *path_from_env);
+void			run_execve(t_exec *exec, char **envp);
+void			run_exec(t_exec *exec, char **envp);
+void			run_redir(t_redir *redir, char **envp);
+void			run_pipe(t_pipe *pipe_str, char **envp);
+
+//BUILTINS
+
+void			echo(char **cmd_args);
 
 #endif
