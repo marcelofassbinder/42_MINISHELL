@@ -6,16 +6,17 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 11:18:56 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:29:57 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo(char **cmd_args)
+void	echo(char **cmd_args, t_shell *shell)
 {
 	int	i;
 
+	(void)shell;
 	i = 1;
 	while (cmd_args[i])
 	{

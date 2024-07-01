@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tree.c                                        :+:      :+:    :+:   */
+/*   free_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 12:57:04 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 18:26:37 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,23 @@ void	free_tree(void *root)
 		free_exec((t_exec *)root);
 	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
 		free_redir((t_redir *)root);
-/* 	else if (node_type == PIPELINE)
-		free_pipe((t_pipe *)root); */
+	else if (node_type == PIPELINE)
+		free_pipe((t_pipe *)root);
+}
+
+void	safe_exit(t_shell *shell, int status)
+{
+	if (shell->token_list)
+	{
+		if (shell->token_list->first)
+			free_token_list(shell->token_list);
+		free(shell->token_list);
+	}
+	if (shell->root)
+		free_tree(shell->root);
+	if (shell->line)
+		free(shell->line);
+	if (shell)
+		free(shell);
+	exit(status);
 }
