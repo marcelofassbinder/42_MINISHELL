@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 12:13:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:38:44 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,27 @@ void	run_execve(t_exec *exec, char **envp)
 		free(path_cmd);
 		i++;
 	}
-	ft_printf(2, "%s: command not found\n", exec->cmd_args[0]);
+}
+
+void	run_builtin(t_exec *exec, char **envp)
+{
+	(void)envp;
+
+	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
+		echo(exec->cmd_args);
+	else
+		ft_printf(2, "%s: command not found\n", exec->cmd_args[0]);
 }
 
 void	run_exec(t_exec *exec, char **envp)
 {
-	//if (exec->is_builtin)
 	if (!exec)
 		return ;
-	if (!exec->is_builtin)
-		run_execve(exec, envp);		
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen(exec->cmd_args[0])))
-		echo(exec->cmd_args);
+	//else if (exec->is_builtin)
+	else if(!exec->is_builtin)
+		run_execve(exec, envp);
+	else
+		run_builtin(exec, envp);
 	//exit(0);
 }
 void	run_redir(t_redir *redir, char **envp)
