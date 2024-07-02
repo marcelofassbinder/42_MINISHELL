@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 13:39:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:05:48 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,19 @@ void print_tree(void *node, const char *prefix, bool isLeft) {
 		printPipe((t_pipe *)node, prefix, isLeft);
 }
 
-void	shell_error(t_shell *shell, char *str)
+void	shell_error(t_shell *shell, char *str, int error)
 {
+	int status;
+
+	status = shell->exit_status;
+	if (error == 1) // erro de comando
+		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
+	else if (error == 2) // erro de arquivo ou diretorio
+		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
+	else if (error == 3) // erro de permissao
+		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+	else 
+		ft_printf(STDERR_FILENO, "%s", str);
 	if (shell->token_list)
 	{
 		if (shell->token_list->first)
@@ -64,8 +75,7 @@ void	shell_error(t_shell *shell, char *str)
 		free(shell->line);
 	if (shell)
 		free(shell);
-	ft_printf(2, "%s", str);
-	exit(2);
+	exit(status);	
 }
 
 t_shell	*init_shell(int ac, char **av, char **envp)
@@ -76,7 +86,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
-		shell_error(shell, "Shell Caloc Error\n");
+		shell_error(shell, "Shell structure memory allocation error\n", 0);
 	shell->envp = envp;
 	shell->exit_status = 0;
 	return (shell);
@@ -90,7 +100,7 @@ t_shell	*ft_read_line(t_shell *shell)
 		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
 	if (!shell->token_list)
-		shell_error(shell, "Token list Aloc Error\n");
+		shell_error(shell, "Token list memory allocation error\n", 0);
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
 	return (shell);
@@ -112,12 +122,11 @@ int	main(int ac, char **av, char **envp)
 		}
 		tokenizer(shell->token_list, shell->line, shell);
 		shell->root = parse(shell->token_list->first);
+		//print_tree(shell->root, " ", 0);
 		if (fork() == 0)
-		{
 			run(shell->root, shell);
-			safe_exit(shell, shell->exit_status);
-		}
 		wait(&shell->exit_status);
+		shell->exit_status = WEXITSTATUS(shell->exit_status);
 		free_tree(shell->root);
 		free(shell->line);
 		free_token_list(shell->token_list);
