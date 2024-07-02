@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 14:03:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:14:06 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	char **path;
 	char *path_cmd;
 	int i;
-	
+
 	path = get_path(getenv("PATH"));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
@@ -47,7 +47,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 		free(path_cmd);
 		i++;
 	}
-	shell->exit_status = EXIT_FAILURE;
+	shell->exit_status = 127;
 	ft_printf(2, "%s: command not found\n", exec->cmd_args[0]);
 	free(path);
 }
@@ -56,7 +56,6 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 {
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args, shell);
-	shell->exit_status = EXIT_SUCCESS;
 	safe_exit(shell, shell->exit_status);
 }
 
