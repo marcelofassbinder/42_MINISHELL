@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 16:00:34 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 12:47:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_token_list(t_token_list *token_list)
 	{
 		to_free = tmp;
 		tmp = tmp->next;
-		free (to_free->data);
+		free(to_free->data);
 		free(to_free);
 	}
 }

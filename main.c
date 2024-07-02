@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 18:27:28 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:39:25 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	if (!shell)
 		shell_error(shell, "Shell Caloc Error\n");
 	shell->envp = envp;
+	shell->exit_status = 0;
 	return (shell);
 }
 
@@ -109,14 +110,14 @@ int	main(int ac, char **av, char **envp)
 			free(shell->line);
 			continue ;
 		}
-		tokenizer(shell->token_list, shell->line);
+		tokenizer(shell->token_list, shell->line, shell);
 		shell->root = parse(shell->token_list->first);
 		if (fork() == 0)
 		{
 			run(shell->root, shell);
-			safe_exit(shell, 0);
+			safe_exit(shell, shell->exit_status);
 		}
-		wait(NULL);
+		wait(&shell->exit_status);
 		free_tree(shell->root);
 		free(shell->line);
 		free_token_list(shell->token_list);
