@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 13:17:48 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:14:44 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,16 @@ typedef struct		s_pipe{
 	void			*right;
 }					t_pipe;
 
+
+//MAIN STRUCT
+typedef struct		s_shell{
+	t_token_list	*token_list;
+	void			*root;
+	char			**envp;
+	char			*line;
+	int				exit_status;
+}					t_shell;
+
 void 	print_tree(void *node, const char *prefix, bool isLeft);
 
 //SYNTAX
@@ -111,7 +121,7 @@ bool			empty_line(char *str);
 bool			exceeded_token(char *str, int c);
 
 //	TOKENS.C
-void			tokenizer(t_token_list *token_list, char *line);
+void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
 void			print_token_list(t_token_list *token_list);
 int				is_type_word(char c);
 enum e_status	append_quotes(t_token_list *token_list, char c, enum e_status status);
@@ -131,16 +141,18 @@ bool			check_syntax(char *line);
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
 void			free_env(t_token *token);
-void			exit_line(char *line);
+void			exit_line(t_shell *shell);
 void			free_strings(char *s1, char *s2, char *s3);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 
-//FREE tree
+//FREE
 void			free_tree(void *root);
+void			safe_exit(t_shell *shell, int status);
+void			shell_error(t_shell *shell, char *str);
 
 //EXPAND.C
-void			check_dollar(t_token_list *token_list);
-char			*expand(char *data);
+void			check_dollar(t_token_list *token_list, t_shell *shell);
+char			*expand(char *data, t_shell *shell);
 char			find_special(char *data);
 int				count_special(char *data, char special);
 
@@ -166,15 +178,15 @@ int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 
 //RUN
-void			run(void *root, char **envp);
+void			run(void *root, t_shell *shell);
 char 			**get_path(char *path_from_env);
-void			run_execve(t_exec *exec, char **envp);
-void			run_exec(t_exec *exec, char **envp);
-void			run_redir(t_redir *redir, char **envp);
-void			run_pipe(t_pipe *pipe_str, char **envp);
+void			run_execve(t_exec *exec, t_shell *shell);
+void			run_exec(t_exec *exec, t_shell *shell);
+void			run_redir(t_redir *redir, t_shell *shell);
+void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 
 //BUILTINS
 
-void			echo(char **cmd_args);
+void			echo(char **cmd_args, t_shell *shell);
 
 #endif
