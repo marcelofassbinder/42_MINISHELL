@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 13:39:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:29:02 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,11 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	return (shell);
 }
 
+int	g_status;
+
 t_shell	*ft_read_line(t_shell *shell)
 {
+	g_status = 0;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
 	if (!shell->line)
@@ -93,15 +96,55 @@ t_shell	*ft_read_line(t_shell *shell)
 		shell_error(shell, "Token list Aloc Error\n");
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
+	if (g_status == 130)
+		shell->exit_status = 130;
 	return (shell);
+}
+
+/* Function to handle the received signal, during the execution of 
+	this function other received signals are blocked if it is in the mask. */
+void	signal_handler(int signal, siginfo_t *info, void *content)
+{
+	(void)info;
+	(void)content;
+
+	if (signal == SIGINT)
+	{
+		ft_printf(1, "\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		g_status = 130;
+	}
+}
+
+/* Initialize the signal handling structure (sigaction), define the
+masks (signals that are blocked if the signal handler is handling a signal).*/
+void	start_sigaction(void)
+{
+	struct sigaction	sa_quit;
+	struct sigaction	sa_int;
+
+	sigemptyset(&sa_quit.sa_mask);
+	sigemptyset(&sa_int.sa_mask);
+	sa_quit.sa_flags = 0;
+	sa_int.sa_flags = 0;
+	sa_quit.sa_handler = SIG_IGN;
+	sa_int.sa_sigaction = &signal_handler;
+	sigaddset(&sa_quit.sa_mask, SIGQUIT);
+	sigaddset(&sa_quit.sa_mask, SIGINT);
+	sigaddset(&sa_int.sa_mask, SIGQUIT);
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sigaction(SIGQUIT, &sa_quit, NULL);
+	sigaction(SIGINT, &sa_int, NULL);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_shell		*shell;
 
-	start_sigaction();
 	shell = init_shell(ac, av, envp);
+	start_sigaction();
 	while (1)
 	{
 		shell = ft_read_line(shell);
@@ -118,6 +161,7 @@ int	main(int ac, char **av, char **envp)
 			safe_exit(shell, shell->exit_status);
 		}
 		wait(&shell->exit_status);
+		shell->exit_status = WEXITSTATUS(shell->exit_status);
 		free_tree(shell->root);
 		free(shell->line);
 		free_token_list(shell->token_list);
