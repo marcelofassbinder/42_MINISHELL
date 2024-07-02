@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 14:14:44 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:10:38 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@
 # define S_QTE 39
 # define D_QTE 34
 
-
 //	COLORS
 # define RESET "\033[0m"
 # define RED "\033[1;3;31m"
 # define GREEN "\033[1;3;32m"
 # define YELLOW "\033[1;3;93m"
+
+// EXIT CODES
+# define EXIT_CMD 127
 
 //	STATUS
 enum e_status{
@@ -147,8 +149,8 @@ void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE
 void			free_tree(void *root);
-void			safe_exit(t_shell *shell, int status);
-void			shell_error(t_shell *shell, char *str);
+void			safe_exit(t_shell *shell);
+void			shell_error(t_shell *shell, char *str, int error);
 
 //EXPAND.C
 void			check_dollar(t_token_list *token_list, t_shell *shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 13:02:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:06:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	signal_handler(int signal, siginfo_t *info, void *content)
 	(void)info;
 	if (signal == SIGINT)
 	{
-		ft_printf(1, "\n");
-		rl_on_new_line();
 		rl_replace_line("", 0);
+		rl_on_new_line();
+		ft_printf(STDIN_FILENO, "\n");
 		rl_redisplay();
 	}
 }

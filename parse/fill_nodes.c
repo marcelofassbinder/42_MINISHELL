@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 14:14:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:11:16 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	is_builtin(char *str)
 		return (true);
 	if (!ft_strncmp(str, "env", ft_strlen("env")))
 		return (true);
-	if (!ft_strncmp(str, "exit", ft_strlen("exit")))
+	if (!ft_strncmp(str, "exit 2 " , ft_strlen("exit")))
 		return (true);
 	return (false);
 }
@@ -44,11 +44,16 @@ t_redir *create_new_redir(void *down, t_token *token)
 		redir->file = token->next->next->data;
 	else
 		redir->file = token->next->data;
-	node_type = *(enum e_type *)down;
-	if (node_type == WORD)
-		redir->down = (t_exec *)down;
-	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
-		redir->down = (t_redir *)down;
+	if (down)
+	{
+		node_type = *(enum e_type *)down;
+		if (node_type == WORD)
+			redir->down = (t_exec *)down;
+		else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
+			redir->down = (t_redir *)down;
+	}
+	else
+		redir->down = NULL;
 	return (redir);
 }
 

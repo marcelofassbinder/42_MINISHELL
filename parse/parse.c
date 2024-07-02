@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/02 14:14:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:05:51 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ void	*build_exec(t_token *token)
 		exec->is_builtin = is_builtin(exec->cmd_args[0]);
 		exec->type = WORD;
 	}
-/* 	ft_printf(1, "\n--- NODE EXEC ---\n");
-	ft_printf(1, "ENDERECO = %x\n", exec);
-	ft_printf(1, "exec->type = %i\n", exec->type);
-	ft_printf(1, "cmd_args[0] = %s\n", exec->cmd_args[0]);
-	ft_printf(1, "is_builtin? = %i\n", exec->is_builtin); */
+/* 	ft_printf(STDOUT_FILENO, "\n--- NODE EXEC ---\n");
+	ft_printf(STDOUT_FILENO, "ENDERECO = %x\n", exec);
+	ft_printf(STDOUT_FILENO, "exec->type = %i\n", exec->type);
+	ft_printf(STDOUT_FILENO, "cmd_args[0] = %s\n", exec->cmd_args[0]);
+	ft_printf(STDOUT_FILENO, "is_builtin? = %i\n", exec->is_builtin); */
 	else
 		exec = NULL;
 	root = build_redir(exec, token);
@@ -75,11 +75,11 @@ t_pipe	*build_pipe(void *left, void *right)
 	pipe->left = left;
 	pipe->right = right;
 	pipe->type = PIPELINE;
-/* 	ft_printf(1, "\n--- NODE PIPE ---\n");
-	ft_printf(1, "ENDERECO = %x\n", pipe);
-	ft_printf(1, "pipe->type = %i\n", pipe->type);
-	ft_printf(1, "pipe->left = %x\n", pipe->left);
-	ft_printf(1, "pipe->right = %x\n", pipe->right); */
+/* 	ft_printf(STDOUT_FILENO, "\n--- NODE PIPE ---\n");
+	ft_printf(STDOUT_FILENO, "ENDERECO = %x\n", pipe);
+	ft_printf(STDOUT_FILENO, "pipe->type = %i\n", pipe->type);
+	ft_printf(STDOUT_FILENO, "pipe->left = %x\n", pipe->left);
+	ft_printf(STDOUT_FILENO, "pipe->right = %x\n", pipe->right); */
 	return (pipe);
 }
 

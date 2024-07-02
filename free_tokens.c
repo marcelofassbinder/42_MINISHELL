@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 12:47:15 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:05:48 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	exit_line(t_shell *shell)
 {
 	free(shell->line);
 	free(shell);
-	ft_printf(1, "exit\n");
+	ft_printf(STDOUT_FILENO, "exit\n");
 	exit(0);
 }
 

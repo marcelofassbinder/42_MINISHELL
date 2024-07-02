@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 18:26:37 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:12:34 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	free_tree(void *root)
 {
 	enum e_type	node_type;
 
-
 	if (!root)
 		return ;
 	node_type = *(enum e_type *)root;
@@ -63,8 +62,11 @@ void	free_tree(void *root)
 		free_pipe((t_pipe *)root);
 }
 
-void	safe_exit(t_shell *shell, int status)
+void	safe_exit(t_shell *shell)
 {
+	int status;
+
+	status = shell->exit_status;
 	if (shell->token_list)
 	{
 		if (shell->token_list->first)
