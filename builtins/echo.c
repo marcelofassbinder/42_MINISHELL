@@ -6,16 +6,17 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 11:18:56 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:28:11 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo(char **cmd_args)
+void	echo(char **cmd_args, t_shell *shell)
 {
 	int	i;
 
+	(void)shell;
 	i = 1;
 	while (cmd_args[i])
 	{
@@ -25,4 +26,5 @@ void	echo(char **cmd_args)
 			ft_printf(1, " ");
 	}	
 	ft_printf(1, "\n");
+	shell->exit_status = EXIT_SUCCESS;
 }

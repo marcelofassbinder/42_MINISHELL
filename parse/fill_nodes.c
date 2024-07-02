@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 13:26:03 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:14:00 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ bool	is_builtin(char *str)
 {
 	if (!str)
 		return (false);
-	if (!ft_strncmp(str, "pwd", ft_strlen(str)))
+	if (!ft_strncmp(str, "pwd", ft_strlen("pwd")))
 		return (true);
 	if (!ft_strncmp(str, "echo", ft_strlen("echo") + 1))
 		return (true);
-	if (!ft_strncmp(str, "cd", ft_strlen(str)))
+	if (!ft_strncmp(str, "cd", ft_strlen("cd")))
 		return (true);
-	if (!ft_strncmp(str, "export", ft_strlen(str)))
+	if (!ft_strncmp(str, "export", ft_strlen("export")))
 		return (true);
-	if (!ft_strncmp(str, "unset", ft_strlen(str)))
+	if (!ft_strncmp(str, "unset", ft_strlen("unset")))
 		return (true);
-	if (!ft_strncmp(str, "env", ft_strlen(str)))
+	if (!ft_strncmp(str, "env", ft_strlen("env")))
 		return (true);
-	if (!ft_strncmp(str, "exit", ft_strlen(str)))
+	if (!ft_strncmp(str, "exit", ft_strlen("exit")))
 		return (true);
 	return (false);
 }

@@ -6,13 +6,13 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/06/29 13:01:50 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 12:54:13 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	check_dollar(t_token_list *token_list)
+void	check_dollar(t_token_list *token_list, t_shell *shell)
 {
 	t_token	*tmp;
 	t_token	*to_free;
@@ -23,7 +23,7 @@ void	check_dollar(t_token_list *token_list)
 		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next
 			&& tmp->next->type == WORD)
 		{
-			tmp->next->data = expand(tmp->next->data);
+			tmp->next->data = expand(tmp->next->data, shell);
 			to_free = tmp;
 			tmp = tmp->next;
 			delete_node(token_list, to_free);
@@ -39,8 +39,20 @@ void	check_dollar(t_token_list *token_list)
 			tmp = tmp->next;
 	}
 }
+char	*expand_status(char *data, t_shell *shell)
+{
+	char	*new_data;
+	char	*number;
+	char	*to_free;
 
-char	*expand(char *data)
+	to_free = data;
+	number = ft_itoa(shell->exit_status);
+	new_data = ft_strjoin(number, &data[1]);
+	free(to_free);
+	return (new_data);
+}
+
+char	*expand(char *data, t_shell *shell)
 {
 	char	*to_expand;
 	char	*to_free;
@@ -48,6 +60,8 @@ char	*expand(char *data)
 	char	*new;
 	int		i;
 
+	if (data[0] == '?')
+		return (expand_status(data, shell));
 	if (find_special(data))
 	{
 		i = count_special(data, find_special(data));
