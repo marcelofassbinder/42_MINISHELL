@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 18:49:15 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:03:25 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 		free(path_cmd);
 		i++;
 	}
+	shell->exit_status = EXIT_FAILURE;
 	ft_printf(2, "%s: command not found\n", exec->cmd_args[0]);
 	free(path);
 }
@@ -55,23 +56,23 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 {
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args, shell);
-	safe_exit(shell, EXIT_SUCCESS);
+	shell->exit_status = EXIT_SUCCESS;
+	safe_exit(shell, shell->exit_status);
 }
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
-	//else if (exec->is_builtin)
 	else if(!exec->is_builtin)
 		run_execve(exec, shell);
-	else
+	else if (exec->is_builtin)
 		run_builtin(exec, shell);
 }
 void	run_redir(t_redir *redir, t_shell *shell)
 {
 	int	fd;
-	
+
 	if (redir->type == REDIR_OUT)
 	{
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);

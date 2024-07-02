@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/01 16:19:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 12:09:24 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	find_files(t_token_list *token_list)
 	}
 }
 
-void	prepare_tokens(t_token_list *token_list)
+void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 {
-	check_dollar(token_list);
+	check_dollar(token_list, shell);
 	/* printf("-------BEFORE JOIN-------\n");
 	print_token_list(token_list); */
 	join_spaces(token_list);
@@ -55,7 +55,7 @@ void	prepare_tokens(t_token_list *token_list)
 	print_token_list(token_list); */
 }
 
-void	tokenizer(t_token_list *token_list, char *line)
+void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
 {
 	enum e_status 	status;
 	int i;
@@ -81,7 +81,7 @@ void	tokenizer(t_token_list *token_list, char *line)
 			i = append_redir(token_list, &line[i], status, i);
 		i++;
 	}
-	prepare_tokens(token_list);
+	prepare_tokens(token_list, shell);
 }
 
 void print_token_list(t_token_list *token_list)

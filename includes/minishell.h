@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 18:26:58 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:10:54 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct		s_shell{
 	void			*root;
 	char			**envp;
 	char			*line;
+	int				exit_status;
 }					t_shell;
 
 void 	print_tree(void *node, const char *prefix, bool isLeft);
@@ -120,7 +121,7 @@ bool			empty_line(char *str);
 bool			exceeded_token(char *str, int c);
 
 //	TOKENS.C
-void			tokenizer(t_token_list *token_list, char *line);
+void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
 void			print_token_list(t_token_list *token_list);
 int				is_type_word(char c);
 enum e_status	append_quotes(t_token_list *token_list, char c, enum e_status status);
@@ -150,8 +151,8 @@ void			safe_exit(t_shell *shell, int status);
 void			shell_error(t_shell *shell, char *str);
 
 //EXPAND.C
-void			check_dollar(t_token_list *token_list);
-char			*expand(char *data);
+void			check_dollar(t_token_list *token_list, t_shell *shell);
+char			*expand(char *data, t_shell *shell);
 char			find_special(char *data);
 int				count_special(char *data, char special);
 
