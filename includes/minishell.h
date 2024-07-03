@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 18:10:38 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:07:23 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,5 +190,6 @@ void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 //BUILTINS
 
 void			echo(char **cmd_args, t_shell *shell);
+void			pwd(t_shell *shell);
 
 #endif

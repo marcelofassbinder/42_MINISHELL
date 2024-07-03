@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 20:05:48 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:13:04 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,14 @@ int	main(int ac, char **av, char **envp)
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
 			free(shell->line);
+			free(shell->token_list);
 			continue ;
 		}
 		tokenizer(shell->token_list, shell->line, shell);
 		shell->root = parse(shell->token_list->first);
 		//print_tree(shell->root, " ", 0);
+		// se tiver pipe, rodar as buitins no processo pai
+		if (shell->root)
 		if (fork() == 0)
 			run(shell->root, shell);
 		wait(&shell->exit_status);
