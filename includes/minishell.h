@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 16:35:30 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/03 18:57:27 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct		s_pipe{
 	void			*right;
 }					t_pipe;
 
-
 //MAIN STRUCT
 typedef struct		s_shell{
 	t_token_list	*token_list;
@@ -105,6 +104,7 @@ typedef struct		s_shell{
 	char			**envp;
 	char			*line;
 	int				exit_status;
+	int				pid;
 }					t_shell;
 
 void 	print_tree(void *node, const char *prefix, bool isLeft);
@@ -185,9 +185,12 @@ void			run_execve(t_exec *exec, t_shell *shell);
 void			run_exec(t_exec *exec, t_shell *shell);
 void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
+void			run_builtin(t_exec *exec, t_shell *shell);
 
 //BUILTINS
 
 void			echo(char **cmd_args, t_shell *shell);
+void			env(char **cmd_args, t_shell *shell);
+void			export(char **cmd_args, t_shell *shell);
 
 #endif
