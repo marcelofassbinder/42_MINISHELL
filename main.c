@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 17:29:02 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:43:30 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,39 @@ void	shell_error(t_shell *shell, char *str)
 	exit(2);
 }
 
+char	**copy_envs(t_shell *shell, char **envp)
+{
+	int		i;
+	char	**env_copy;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	env_copy = ft_calloc(sizeof(char *), i + 1);
+	if (!env_copy)
+		shell_error(shell, "Caloc error: env\n");
+	i = 0;
+	while (envp[i])
+	{
+		env_copy[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	return (env_copy);
+}
+
 t_shell	*init_shell(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
-	(void)ac;
 	(void)av;
 
+	if (ac != 1)
+		exit (127);
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
 		shell_error(shell, "Shell Caloc Error\n");
-	shell->envp = envp;
+	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
+	shell->pid = 0;
 	return (shell);
 }
 
@@ -86,6 +108,7 @@ int	g_status;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
+	start_sigaction();
 	g_status = 0;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
@@ -96,8 +119,8 @@ t_shell	*ft_read_line(t_shell *shell)
 		shell_error(shell, "Token list Aloc Error\n");
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
-	if (g_status == 130)
-		shell->exit_status = 130;
+	if (g_status == 130 || g_status == 131)
+		shell->exit_status = g_status;
 	return (shell);
 }
 
@@ -144,9 +167,9 @@ int	main(int ac, char **av, char **envp)
 	t_shell		*shell;
 
 	shell = init_shell(ac, av, envp);
-	start_sigaction();
 	while (1)
 	{
+		start_sigaction();
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
@@ -155,13 +178,14 @@ int	main(int ac, char **av, char **envp)
 		}
 		tokenizer(shell->token_list, shell->line, shell);
 		shell->root = parse(shell->token_list->first);
-		if (fork() == 0)
+		run(shell->root, shell);
+/* 		if (fork() == 0)
 		{
 			run(shell->root, shell);
 			safe_exit(shell, shell->exit_status);
 		}
 		wait(&shell->exit_status);
-		shell->exit_status = WEXITSTATUS(shell->exit_status);
+		shell->exit_status = WEXITSTATUS(shell->exit_status); */
 		free_tree(shell->root);
 		free(shell->line);
 		free_token_list(shell->token_list);
