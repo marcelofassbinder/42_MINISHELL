@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 20:05:51 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:08:10 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,27 @@ void	echo(char **cmd_args, t_shell *shell)
 	if (n_flag == 0)
 		ft_printf(STDOUT_FILENO, "\n");
 	shell->exit_status = EXIT_SUCCESS;
+	safe_exit(shell);
 }
+
+void	pwd(t_shell *shell)
+{
+	char *buf;
+
+	buf = NULL;
+	buf = getcwd(buf, 0);
+	if (!buf)
+	{
+		free(buf);
+		ft_printf(STDERR_FILENO, "PWD Error\n");
+		shell->exit_status = EXIT_FAILURE;
+		safe_exit(shell);
+	}
+	ft_printf(1, "%s\n", buf);
+	free(buf);
+	shell->exit_status = EXIT_SUCCESS;
+	safe_exit(shell);
+}
+
+void	exit()
 
