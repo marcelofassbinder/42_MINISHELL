@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/03 22:49:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/04 18:45:32 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,5 @@ void	export(char **cmd_args, t_shell *shell)
 		shell->envp = add_envp(cmd_args[i], shell);
 		i++;
 	}
-	i = 0;
-	while (shell->envp[i])
-	{
-		printf("%s\n", shell->envp[i]);
-		i++;
-	}
+	shell->exit_status = 0;
 }
