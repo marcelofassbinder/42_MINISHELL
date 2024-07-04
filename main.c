@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/03 22:43:30 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/04 21:49:04 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	g_status;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
-	start_sigaction();
+	//start_sigaction();
 	g_status = 0;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
@@ -162,14 +162,26 @@ void	start_sigaction(void)
 	sigaction(SIGINT, &sa_int, NULL);
 }
 
+bool	is_pipe_root(void *root)
+{
+	enum e_type	node_type;
+
+	if (!root)
+		return (false);
+	node_type = *(enum e_type *)root;
+	if (node_type == PIPELINE || node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT)
+		return (true);
+	return (false);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_shell		*shell;
 
 	shell = init_shell(ac, av, envp);
+	start_sigaction();
 	while (1)
 	{
-		start_sigaction();
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
@@ -178,14 +190,18 @@ int	main(int ac, char **av, char **envp)
 		}
 		tokenizer(shell->token_list, shell->line, shell);
 		shell->root = parse(shell->token_list->first);
-		run(shell->root, shell);
-/* 		if (fork() == 0)
+		if (!is_pipe_root(shell->root))
+			run_in_parent(shell->root, shell);
+		if (shell->exit_status == 127 || is_pipe_root(shell->root))
 		{
-			run(shell->root, shell);
-			safe_exit(shell, shell->exit_status);
+ 			if (fork() == 0)
+			{
+				run(shell->root, shell);
+				safe_exit(shell, shell->exit_status);
+			}
+			wait(&shell->exit_status);
+			shell->exit_status = WEXITSTATUS(shell->exit_status);
 		}
-		wait(&shell->exit_status);
-		shell->exit_status = WEXITSTATUS(shell->exit_status); */
 		free_tree(shell->root);
 		free(shell->line);
 		free_token_list(shell->token_list);

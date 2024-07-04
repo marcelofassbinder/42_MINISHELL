@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/03 18:57:27 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/04 21:47:25 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,11 +186,13 @@ void			run_exec(t_exec *exec, t_shell *shell);
 void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
+void			run_in_parent(void *root, t_shell *shell);
 
 //BUILTINS
 
 void			echo(char **cmd_args, t_shell *shell);
 void			env(char **cmd_args, t_shell *shell);
 void			export(char **cmd_args, t_shell *shell);
+char			*get_variable_name(char *environment);
 
 #endif

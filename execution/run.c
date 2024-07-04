@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/03 22:36:47 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/04 21:47:41 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,16 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 		env(exec->cmd_args, shell);
 	if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
 		export(exec->cmd_args, shell);
-	//safe_exit(shell, shell->exit_status);
+/* 	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+		unset(exec->cmd_args, shell); */
+	safe_exit(shell, shell->exit_status);
 }
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
-	else if(!exec->is_builtin)
+	else if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
 		run_builtin(exec, shell);
