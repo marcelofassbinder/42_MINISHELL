@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/04 21:49:04 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 17:23:48 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ int	g_status;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
-	//start_sigaction();
 	g_status = 0;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
@@ -124,44 +123,6 @@ t_shell	*ft_read_line(t_shell *shell)
 	return (shell);
 }
 
-/* Function to handle the received signal, during the execution of 
-	this function other received signals are blocked if it is in the mask. */
-void	signal_handler(int signal, siginfo_t *info, void *content)
-{
-	(void)info;
-	(void)content;
-
-	if (signal == SIGINT)
-	{
-		ft_printf(1, "\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_status = 130;
-	}
-}
-
-/* Initialize the signal handling structure (sigaction), define the
-masks (signals that are blocked if the signal handler is handling a signal).*/
-void	start_sigaction(void)
-{
-	struct sigaction	sa_quit;
-	struct sigaction	sa_int;
-
-	sigemptyset(&sa_quit.sa_mask);
-	sigemptyset(&sa_int.sa_mask);
-	sa_quit.sa_flags = 0;
-	sa_int.sa_flags = 0;
-	sa_quit.sa_handler = SIG_IGN;
-	sa_int.sa_sigaction = &signal_handler;
-	sigaddset(&sa_quit.sa_mask, SIGQUIT);
-	sigaddset(&sa_quit.sa_mask, SIGINT);
-	sigaddset(&sa_int.sa_mask, SIGQUIT);
-	sigaddset(&sa_int.sa_mask, SIGINT);
-	sigaction(SIGQUIT, &sa_quit, NULL);
-	sigaction(SIGINT, &sa_int, NULL);
-}
-
 bool	is_pipe_root(void *root)
 {
 	enum e_type	node_type;
@@ -169,9 +130,34 @@ bool	is_pipe_root(void *root)
 	if (!root)
 		return (false);
 	node_type = *(enum e_type *)root;
-	if (node_type == PIPELINE || node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT)
+	if (node_type == PIPELINE)
 		return (true);
 	return (false);
+}
+
+void	start_minishell(t_shell *shell)
+{
+	tokenizer(shell->token_list, shell->line, shell);
+	shell->root = parse(shell->token_list->first);
+	if (!is_pipe_root(shell->root))
+		run_in_parent(shell->root, shell);
+	if (shell->exit_status == 127 || is_pipe_root(shell->root))
+	{
+ 		if (fork() == 0)
+		{
+			start_child_signals();
+			run(shell->root, shell);
+			safe_exit(shell, shell->exit_status);
+		}
+		g_status = -1;
+		wait(&shell->exit_status);
+		g_status = 0;
+		shell->exit_status = WEXITSTATUS(shell->exit_status);
+	}
+	free_tree(shell->root);
+	free(shell->line);
+	free_token_list(shell->token_list);
+	free(shell->token_list);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -185,26 +171,10 @@ int	main(int ac, char **av, char **envp)
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
+			free(shell->token_list);
 			free(shell->line);
 			continue ;
 		}
-		tokenizer(shell->token_list, shell->line, shell);
-		shell->root = parse(shell->token_list->first);
-		if (!is_pipe_root(shell->root))
-			run_in_parent(shell->root, shell);
-		if (shell->exit_status == 127 || is_pipe_root(shell->root))
-		{
- 			if (fork() == 0)
-			{
-				run(shell->root, shell);
-				safe_exit(shell, shell->exit_status);
-			}
-			wait(&shell->exit_status);
-			shell->exit_status = WEXITSTATUS(shell->exit_status);
-		}
-		free_tree(shell->root);
-		free(shell->line);
-		free_token_list(shell->token_list);
-		free(shell->token_list);
+		start_minishell(shell);
 	}
 }

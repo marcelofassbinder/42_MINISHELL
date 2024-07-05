@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/04 19:34:33 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 12:54:08 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,25 @@ char	*ft_get_env(char *data, t_shell *shell)
 	{
 		cur_env = get_variable_name(shell->envp[i]);
 		if (!ft_strncmp(cur_env, data, ft_strlen(data + 1)))
+		{
+			free(cur_env);
 			return (get_var_value(shell->envp[i]));
+		}
 		i++;
+		free(cur_env);
 	}
 	return (NULL);
+}
+
+char	*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell)
+{
+	char	*new;
+	char	*to_free;
+	
+	to_free = ft_strdup(ft_get_env(to_expand, shell));
+	new = ft_strjoin(to_free, rest);
+	free_strings(data, to_expand, rest);
+	return (new);
 }
 
 char	*expand(char *data, t_shell *shell)
@@ -91,7 +106,7 @@ char	*expand(char *data, t_shell *shell)
 	char	*to_expand;
 	char	*to_free;
 	char	*rest;
-	char	*new;
+	char	*env;
 	int		i;
 
 	if (data[0] == '?')
@@ -105,14 +120,13 @@ char	*expand(char *data, t_shell *shell)
 	else
 	{
 		to_free = data;
-		to_expand = ft_strdup(ft_get_env(data, shell));
+		env = ft_get_env(data, shell);
+		to_expand = ft_strdup(env);
+		free(env);
 		free(to_free);
 		return (to_expand);
 	}
-	to_free = ft_strdup(ft_get_env(to_expand, shell));
-	new = ft_strjoin(to_free, rest);
-	free_strings(to_expand, rest, data);
-	return (new);
+	return (expand_aux(data, to_expand, rest, shell));
 }
 
 char	find_special(char *data)

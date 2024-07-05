@@ -6,11 +6,11 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 12:47:15 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:45:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 void	free_token_list(t_token_list *token_list)
 {
@@ -38,6 +38,7 @@ void	free_env(t_token *token)
 
 void	exit_line(t_shell *shell)
 {
+	free_envs(shell->envp);
 	free(shell->line);
 	free(shell);
 	ft_printf(1, "exit\n");

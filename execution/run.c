@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/04 21:47:41 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 17:47:16 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 		env(exec->cmd_args, shell);
 	if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
 		export(exec->cmd_args, shell);
-/* 	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
-		unset(exec->cmd_args, shell); */
+	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+		unset(exec->cmd_args, shell);
+	else if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+		pwd(shell);
 	safe_exit(shell, shell->exit_status);
 }
 

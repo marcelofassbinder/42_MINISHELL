@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/04 18:45:32 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 12:20:30 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,23 @@ char	*get_variable_name(char *environment)
 
 bool	env_exist(char *var_name, char **env)
 {
-	int	i;
+	int		i;
+	char	*cur_var;
 
 	i = 0;
 	while (env[i])
 	{
-		if (!ft_strncmp(var_name, get_variable_name(env[i]), ft_strlen(var_name) + 1))
+		cur_var = get_variable_name(env[i]);
+		if (!ft_strncmp(var_name, cur_var, ft_strlen(var_name) + 1))
+		{
+			free(cur_var);
+			free(var_name);
 			return (true);
+		}
+		free(cur_var);
 		i++;
 	}
+	free(var_name);
 	return (false);
 }
 
@@ -42,18 +50,22 @@ char	**replace_env(char *environment, t_shell *shell)
 {
 	int		i;
 	char	*var_name;
+	char	*cur_var;
 
 	var_name = get_variable_name(environment);
 	i = 0;
 	while (shell->envp[i])
 	{
-		if (!ft_strncmp(get_variable_name(shell->envp[i]), var_name, ft_strlen(var_name) + 1))
+		cur_var = get_variable_name(shell->envp[i]);
+		if (!ft_strncmp(cur_var, var_name, ft_strlen(var_name) + 1))
 		{
 			free(shell->envp[i]);
 			shell->envp[i] = ft_strdup(environment);
 		}
+		free(cur_var);
 		i++;
 	}
+	free(var_name);
 	return (shell->envp);
 }
 char	**set_new_env(char *environment, t_shell *shell)
@@ -74,6 +86,7 @@ char	**set_new_env(char *environment, t_shell *shell)
 		i++;
 	}
 	env_copy[i] = ft_strdup(environment);
+	free_envs(shell->envp);
 	return (env_copy);
 }
 
@@ -86,6 +99,7 @@ char	**add_envp(char *environment, t_shell *shell)
 		var_name = get_variable_name(environment);
 		if (find_special(var_name) || ft_strchr(var_name, ' ') || !var_name[0])
 		{		
+			free(var_name);
 			ft_printf(1, "minishell: export '%s': not a valid identifier\n", var_name);
 			safe_exit(shell, 127);
 		}
