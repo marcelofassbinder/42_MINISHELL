@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/04 21:47:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 17:47:57 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define S_QTE 39
 # define D_QTE 34
 
+extern int g_status;
 
 //	COLORS
 # define RESET "\033[0m"
@@ -137,6 +138,7 @@ int				append_redir(t_token_list *token_list, char *line, enum e_status status, 
 //SIGNALS.C
 void			start_sigaction(void);
 bool			check_syntax(char *line);
+void			start_child_signals(void);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
@@ -147,8 +149,10 @@ void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE
 void			free_tree(void *root);
+
 void			safe_exit(t_shell *shell, int status);
 void			shell_error(t_shell *shell, char *str);
+void			free_envs(char **envp);
 
 //EXPAND.C
 void			check_dollar(t_token_list *token_list, t_shell *shell);
@@ -193,6 +197,8 @@ void			run_in_parent(void *root, t_shell *shell);
 void			echo(char **cmd_args, t_shell *shell);
 void			env(char **cmd_args, t_shell *shell);
 void			export(char **cmd_args, t_shell *shell);
+void			pwd(t_shell *shell);
+void			unset(char **cmd_args, t_shell *shell);
 char			*get_variable_name(char *environment);
 
 #endif

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_shell.c                                       :+:      :+:    :+:   */
+/*   free_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 18:26:37 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/07/05 13:31:22 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/07/05 13:45:50 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 void	free_exec(t_exec *exec)
 {
@@ -61,21 +61,4 @@ void	free_tree(void *root)
 		free_redir((t_redir *)root);
 	else if (node_type == PIPELINE)
 		free_pipe((t_pipe *)root);
-}
-
-void	safe_exit(t_shell *shell, int status)
-{
-	if (shell->token_list)
-	{
-		if (shell->token_list->first)
-			free_token_list(shell->token_list);
-		free(shell->token_list);
-	}
-	if (shell->root)
-		free_tree(shell->root);
-	if (shell->line)
-		free(shell->line);
-	if (shell)
-		free(shell);
-	exit(status);
 }
