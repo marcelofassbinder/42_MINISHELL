@@ -5,14 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD:free_shell.c
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/02 18:12:34 by mfassbin         ###   ########.fr       */
-=======
-/*   Created: 2024/07/05 13:31:22 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/05 13:45:50 by vivaccar         ###   ########.fr       */
->>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7:clean/free_tree.c
+/*   Updated: 2024/07/06 14:44:39 by mfassbin         ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
@@ -65,27 +62,4 @@ void	free_tree(void *root)
 		free_redir((t_redir *)root);
 	else if (node_type == PIPELINE)
 		free_pipe((t_pipe *)root);
-<<<<<<< HEAD:free_shell.c
-}
-
-void	safe_exit(t_shell *shell)
-{
-	int status;
-
-	status = shell->exit_status;
-	if (shell->token_list)
-	{
-		if (shell->token_list->first)
-			free_token_list(shell->token_list);
-		free(shell->token_list);
-	}
-	if (shell->root)
-		free_tree(shell->root);
-	if (shell->line)
-		free(shell->line);
-	if (shell)
-		free(shell);
-	exit(status);
-=======
->>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7:clean/free_tree.c
 }

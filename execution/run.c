@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 14:16:31 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 		export(exec->cmd_args, shell);
 	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
 		unset(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
 		pwd(shell);
-	safe_exit(shell);
+	if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
+		cd(exec->cmd_args, shell);
 }
 
 void	run_exec(t_exec *exec, t_shell *shell)
@@ -75,6 +76,7 @@ void	run_exec(t_exec *exec, t_shell *shell)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
 		run_builtin(exec, shell);
+	safe_exit(shell);
 }
 void	run_redir(t_redir *redir, t_shell *shell)
 {

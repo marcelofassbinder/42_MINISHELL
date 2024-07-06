@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/05 17:48:56 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**remove_env(char *to_remove, t_shell *shell)
 		i++;
 	new_envs = ft_calloc(sizeof(char *), i);
 	if (!new_envs)
-		shell_error(shell, "Caloc Error: Remove env\n");
+		shell_error(shell, "Calloc Error: Remove env\n", 0);
 	j = i;
 	i = 0;
 	while (i < j -1)
@@ -76,5 +76,5 @@ void	unset(char **cmd_args, t_shell *shell)
 		shell->envp = delete_envp(cmd_args[i], shell);
 		i++;
 	}
-	shell->exit_status = 0;
+	shell->exit_status = EXIT_SUCCESS;
 }

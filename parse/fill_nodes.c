@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/03 15:58:47 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:36:18 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	is_builtin(char *str)
 		return (true);
 	if (!ft_strncmp(str, "env", ft_strlen("env") + 1))
 		return (true);
-	if (!ft_strncmp(str, "exit 2 " , ft_strlen("exit") + 1))
+	if (!ft_strncmp(str, "exit" , ft_strlen("exit") + 1))
 		return (true);
 	return (false);
 }
