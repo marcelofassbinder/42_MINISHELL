@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/03 16:07:23 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/06 14:16:31 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	char **path;
 	char *path_cmd;
 	int i;
-	
+
 	path = get_path(getenv("PATH"));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
@@ -56,17 +56,22 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 {
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
+		env(exec->cmd_args, shell);
+	if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
+		export(exec->cmd_args, shell);
+	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+		unset(exec->cmd_args, shell);
+	else if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
 		pwd(shell);
-	shell->exit_status = EXIT_CMD;
-	//safe_exit(shell);
+	safe_exit(shell);
 }
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
-	else if(!exec->is_builtin)
+	else if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
 		run_builtin(exec, shell);

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/02 12:09:24 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:33:33 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,10 @@ void	find_files(t_token_list *token_list)
 void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 {
 	check_dollar(token_list, shell);
-	/* printf("-------BEFORE JOIN-------\n");
-	print_token_list(token_list); */
 	join_spaces(token_list);
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
-	/* printf("-------JOINED-------\n");
-	print_token_list(token_list); */
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)

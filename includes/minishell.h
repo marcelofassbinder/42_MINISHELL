@@ -6,7 +6,11 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/07/03 16:07:23 by mfassbin         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/05 17:47:57 by vivaccar         ###   ########.fr       */
+>>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +38,11 @@
 # define S_QTE 39
 # define D_QTE 34
 
+<<<<<<< HEAD
+=======
+extern int g_status;
+
+>>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7
 //	COLORS
 # define RESET "\033[0m"
 # define RED "\033[1;3;31m"
@@ -99,7 +108,6 @@ typedef struct		s_pipe{
 	void			*right;
 }					t_pipe;
 
-
 //MAIN STRUCT
 typedef struct		s_shell{
 	t_token_list	*token_list;
@@ -107,6 +115,7 @@ typedef struct		s_shell{
 	char			**envp;
 	char			*line;
 	int				exit_status;
+	int				pid;
 }					t_shell;
 
 void 	print_tree(void *node, const char *prefix, bool isLeft);
@@ -139,6 +148,7 @@ int				append_redir(t_token_list *token_list, char *line, enum e_status status, 
 //SIGNALS.C
 void			start_sigaction(void);
 bool			check_syntax(char *line);
+void			start_child_signals(void);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
@@ -186,10 +196,20 @@ void			run_execve(t_exec *exec, t_shell *shell);
 void			run_exec(t_exec *exec, t_shell *shell);
 void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
+void			run_builtin(t_exec *exec, t_shell *shell);
+void			run_in_parent(void *root, t_shell *shell);
 
 //BUILTINS
 
 void			echo(char **cmd_args, t_shell *shell);
+<<<<<<< HEAD
 void			pwd(t_shell *shell);
+=======
+void			env(char **cmd_args, t_shell *shell);
+void			export(char **cmd_args, t_shell *shell);
+void			pwd(t_shell *shell);
+void			unset(char **cmd_args, t_shell *shell);
+char			*get_variable_name(char *environment);
+>>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7
 
 #endif
