@@ -1,5 +1,6 @@
-SRCS = main.c signals/signals.c syntax/syntax.c syntax/syntax_utils.c tokens/tokens.c tokens/append.c free_shell.c free_tokens.c tokens/expand.c tokens/join.c \
-		parse/parse.c parse/search_functions.c parse/fill_nodes.c execution/run.c builtins/echo.c
+SRCS = 	main.c signals/signals.c syntax/syntax.c syntax/syntax_utils.c tokens/tokens.c tokens/append.c clean/free_shell.c clean/free_tokens.c clean/free_tree.c \
+		tokens/expand.c tokens/join.c parse/parse.c parse/search_functions.c parse/fill_nodes.c execution/run.c builtins/echo.c builtins/env.c \
+		builtins/export.c builtins/unset.c execution/run_parent.c
 
 OBJS = $(SRCS:.c=.o) 
 
@@ -12,6 +13,8 @@ NAME = minishell
 PRINTFA = ./includes/ft_printf/libftprintf.a
 
 PRINTFD = ./includes/ft_printf
+
+.PHONY: all clean fclean re
 
 all: $(NAME) 
 $(NAME): $(OBJS) $(PRINTFA)
