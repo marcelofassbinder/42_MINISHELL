@@ -6,11 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/03 16:07:23 by mfassbin         ###   ########.fr       */
-=======
-/*   Updated: 2024/07/05 17:47:57 by vivaccar         ###   ########.fr       */
->>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7
+/*   Updated: 2024/07/06 17:06:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +34,16 @@
 # define S_QTE 39
 # define D_QTE 34
 
-<<<<<<< HEAD
-=======
-extern int g_status;
-
->>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7
 //	COLORS
 # define RESET "\033[0m"
 # define RED "\033[1;3;31m"
 # define GREEN "\033[1;3;32m"
 # define YELLOW "\033[1;3;93m"
 
-// EXIT CODES
+// GLOBAL VARIABLES
+extern int g_status;
+
+//	EXIT CODES
 # define EXIT_CMD 127
 
 //	STATUS
@@ -118,7 +112,9 @@ typedef struct		s_shell{
 	int				pid;
 }					t_shell;
 
-void 	print_tree(void *node, const char *prefix, bool isLeft);
+
+
+
 
 //SYNTAX
 bool			check_redir(char *str);
@@ -152,13 +148,13 @@ void			start_child_signals(void);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
-void			free_env(t_token *token);
 void			exit_line(t_shell *shell);
 void			free_strings(char *s1, char *s2, char *s3);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE
 void			free_tree(void *root);
+void			free_envs(char **envp);
 void			safe_exit(t_shell *shell);
 void			shell_error(t_shell *shell, char *str, int error);
 
@@ -189,6 +185,13 @@ t_redir 		*create_new_redir(void *down, t_token *token);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 
+//PRINT_TREE.C
+void 	print_tree(void *node, const char *prefix, bool isLeft);
+void printExec(t_exec *exec, const char *prefix, bool isLeft);
+void printRedir(t_redir *redir, const char *prefix, bool isLeft);
+void printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
+
+
 //RUN
 void			run(void *root, t_shell *shell);
 char 			**get_path(char *path_from_env);
@@ -202,14 +205,11 @@ void			run_in_parent(void *root, t_shell *shell);
 //BUILTINS
 
 void			echo(char **cmd_args, t_shell *shell);
-<<<<<<< HEAD
-void			pwd(t_shell *shell);
-=======
 void			env(char **cmd_args, t_shell *shell);
 void			export(char **cmd_args, t_shell *shell);
 void			pwd(t_shell *shell);
 void			unset(char **cmd_args, t_shell *shell);
 char			*get_variable_name(char *environment);
->>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7
+void			cd(char **cmd_args, t_shell *shell);
 
 #endif

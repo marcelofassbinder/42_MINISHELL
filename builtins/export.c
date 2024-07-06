@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/05 12:20:30 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**set_new_env(char *environment, t_shell *shell)
 		i++;
 	env_copy = ft_calloc(sizeof(char *), i + 2);
 	if (!env_copy)
-		shell_error(shell, "Caloc error: env\n");
+		shell_error(shell, "Calloc Error: env\n", 0);
 	i = 0;
 	while (shell->envp[i])
 	{
@@ -99,9 +99,10 @@ char	**add_envp(char *environment, t_shell *shell)
 		var_name = get_variable_name(environment);
 		if (find_special(var_name) || ft_strchr(var_name, ' ') || !var_name[0])
 		{		
+			ft_printf(2, "minishell: export '%s': not a valid identifier\n", var_name);
 			free(var_name);
-			ft_printf(1, "minishell: export '%s': not a valid identifier\n", var_name);
-			safe_exit(shell, 127);
+			shell->exit_status = EXIT_CMD;
+			safe_exit(shell);
 		}
 		if (env_exist(var_name, shell->envp))
 			shell->envp = replace_env(environment, shell);
@@ -121,5 +122,5 @@ void	export(char **cmd_args, t_shell *shell)
 		shell->envp = add_envp(cmd_args[i], shell);
 		i++;
 	}
-	shell->exit_status = 0;
+	shell->exit_status = EXIT_SUCCESS;
 }

@@ -6,49 +6,11 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 14:16:31 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/06 18:58:20 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
-void printExec(t_exec *exec, const char *prefix, bool isLeft) {
-    printf("%s%sEXEC: ", prefix, isLeft ? "├── " : "└── ");
-    for (int i = 0; exec->cmd_args[i] != NULL; i++) {
-        printf("%s ", exec->cmd_args[i]);
-    }
-    printf("(builtin: %s)\n", exec->is_builtin ? "true" : "false");
-}
-
-void printRedir(t_redir *redir, const char *prefix, bool isLeft) {
-    printf("%s%sREDIR: %s\n", prefix, isLeft ? "├── " : "└── ", redir->file);
-    char newPrefix[256];
-    snprintf(newPrefix, sizeof(newPrefix), "%s%s", prefix, isLeft ? "│   " : "    ");
-    print_tree(redir->down, newPrefix, false); // 'false' ensures the proper prefix for the next level
-}
-
-void printPipe(t_pipe *pipe, const char *prefix, bool isLeft) {
-    printf("%s%sPIPE:\n", prefix, isLeft ? "├── " : "└── ");
-    char newPrefixLeft[256];
-    char newPrefixRight[256];
-    snprintf(newPrefixLeft, sizeof(newPrefixLeft), "%s│   ", prefix);
-    snprintf(newPrefixRight, sizeof(newPrefixRight), "%s    ", prefix);
-    print_tree(pipe->left, newPrefixLeft, true);
-    print_tree(pipe->right, newPrefixRight, false);
-}
-
-void print_tree(void *node, const char *prefix, bool isLeft) {
-    if (node == NULL) return;
-
-    enum e_type type = *(enum e_type *)node;
-    
-    if (type == WORD)
-		printExec((t_exec *)node, prefix, isLeft);
-	else if (type == D_REDIR_OUT || type == REDIR_IN || type == REDIR_OUT)
-		printRedir((t_redir *)node, prefix, isLeft);
-	else if(type == PIPELINE)
-		printPipe((t_pipe *)node, prefix, isLeft);
-}
 
 void	shell_error(t_shell *shell, char *str, int error)
 {
@@ -88,7 +50,7 @@ char	**copy_envs(t_shell *shell, char **envp)
 		i++;
 	env_copy = ft_calloc(sizeof(char *), i + 1);
 	if (!env_copy)
-		shell_error(shell, "Caloc error: env\n");
+		shell_error(shell, "Calloc Error: envp copy\n", 0);
 	i = 0;
 	while (envp[i])
 	{
@@ -107,7 +69,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 		exit (127);
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
-		shell_error(shell, "Shell Caloc Error\n");
+		shell_error(shell, "Calloc Error: shell struct\n", 0);
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
 	shell->pid = 0;
@@ -125,7 +87,7 @@ t_shell	*ft_read_line(t_shell *shell)
 		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
 	if (!shell->token_list)
-		shell_error(shell, "Token list memory allocation error\n", 0);
+		shell_error(shell, "Calloc Error: tokens\n", 0);
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
 	if (g_status == 130 || g_status == 131)
@@ -157,7 +119,7 @@ void	start_minishell(t_shell *shell)
 		{
 			start_child_signals();
 			run(shell->root, shell);
-			safe_exit(shell, shell->exit_status);
+			safe_exit(shell);
 		}
 		g_status = -1;
 		wait(&shell->exit_status);
@@ -183,7 +145,6 @@ int	main(int ac, char **av, char **envp)
 		{
 			free(shell->token_list);
 			free(shell->line);
-			free(shell->token_list);
 			continue ;
 		}
 		start_minishell(shell);

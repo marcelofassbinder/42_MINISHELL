@@ -6,11 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-<<<<<<< HEAD:free_tokens.c
-/*   Updated: 2024/07/02 20:05:48 by mfassbin         ###   ########.fr       */
-=======
-/*   Updated: 2024/07/05 13:45:46 by vivaccar         ###   ########.fr       */
->>>>>>> 9d8d37737becefaaf578dbd83e285db451be99e7:clean/free_tokens.c
+/*   Updated: 2024/07/06 14:43:46 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +25,6 @@ void	free_token_list(t_token_list *token_list)
 		free(to_free->data);
 		free(to_free);
 	}
-}
-
-void	free_env(t_token *token)
-{
-	t_token *to_free;
-
-	to_free = token;
-	free(to_free->data);
-	free(to_free);
 }
 
 void	exit_line(t_shell *shell)
