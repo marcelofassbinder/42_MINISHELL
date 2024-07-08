@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   safe_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 18:42:54 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/08 19:05:05 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:55:07 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	safe_fork(t_shell *shell)
 
 	pid = fork();
 	if (pid == -1)
-		shell_error(shell, "Error while creating a child process", 0);
+		shell_error(shell, "Error while creating a child process", 0, false);
 	return (pid);
 }
 
@@ -49,7 +49,7 @@ char *safe_getcwd(char *buf, size_t size, t_shell *shell)
 	{
 		free(cwd);
 		shell->exit_status = EXIT_FAILURE;
-		shell_error(shell, "PWD Error", 0);
+		shell_error(shell, "PWD Error", 0, false);
 		return (NULL);
 	}
 	return(cwd);
