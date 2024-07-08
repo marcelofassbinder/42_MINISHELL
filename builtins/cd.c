@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 16:36:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/08 20:39:04 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 20:42:03 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void	cd(char **cmd_args, t_shell *shell)
 	if (!cmd_args[1] || !ft_strncmp(cmd_args[1], "--", 3)
 		|| !ft_strncmp(cmd_args[1], "~", 2))
 		cd_home(cmd_args, shell);
-	else if (!ft_strncmp(cmd_args[1], "/", 2))
-		safe_chdir("/", shell, 0);
 	else if (!ft_strncmp(cmd_args[1], "-", 2))
 	{
 		safe_chdir(shell->old_pwd, shell, 0);

@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:17:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 20:49:22 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	if (access(exec->cmd_args[0], F_OK) == 0)
 		execve(exec->cmd_args[0], exec->cmd_args, shell->envp);
 	if (!path)
-		shell_error(shell, exec->cmd_args[0], 2);
+		shell_error(shell, exec->cmd_args[0], 2, true);
 	while(path[i])
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
@@ -52,7 +52,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	}
 	shell->exit_status = EXIT_CMD;
 	free(path);
-	shell_error(shell, exec->cmd_args[0], 1);
+	shell_error(shell, exec->cmd_args[0], 1, true);
 }
 
 void	run_builtin(t_exec *exec, t_shell *shell)
@@ -69,6 +69,8 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 		pwd(shell);
 	if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
 		cd(exec->cmd_args, shell);
+	if (!ft_strncmp(exec->cmd_args[0], "exit", ft_strlen("exit") + 1))
+		exit_cmd(exec->cmd_args, shell);
 }
 
 void	run_exec(t_exec *exec, t_shell *shell)
@@ -81,10 +83,11 @@ void	run_exec(t_exec *exec, t_shell *shell)
 		run_builtin(exec, shell);
 	free_and_exit(shell);
 }
-void	run_redir(t_redir *redir, t_shell *shell)
+void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	fd;
 
+	fd = 0;
 	if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
 	{
 		if (redir->type == REDIR_OUT)
@@ -92,18 +95,23 @@ void	run_redir(t_redir *redir, t_shell *shell)
 		else
 			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			shell_error(shell, redir->file, 3);
+			shell_error(shell, redir->file, 3, exit_flag);
 		dup2(fd, STDOUT_FILENO);
 	}
 	else if (redir->type == REDIR_IN)
 	{
 		if (access(redir->file, F_OK) != 0)
-			shell_error(shell, redir->file, 2);
+			shell_error(shell, redir->file, 2, exit_flag);
 		fd = open(redir->file, O_RDONLY);
 		if (fd == -1)
-			shell_error(shell, redir->file, 3);
+			shell_error(shell, redir->file, 3, exit_flag);
 		dup2(fd, STDIN_FILENO);
 	}
+}
+
+void	run_redir(t_redir *redir, t_shell *shell)
+{
+	redirect(shell, redir, true);
 	run((void *)redir->down, shell);
 }
 
@@ -112,7 +120,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	int	fd[2];
 	
 	if (pipe(fd) == -1)
-		shell_error(shell, "Pipe error\n", 0);
+		shell_error(shell, "Pipe error\n", 0, true);
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[0]);

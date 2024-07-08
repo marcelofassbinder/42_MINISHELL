@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:17:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:43:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void	shell_error(t_shell *shell, char *str, int error)
+void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 {
 	int status;
 
@@ -39,7 +39,8 @@ void	shell_error(t_shell *shell, char *str, int error)
 		free(shell->old_pwd);
 	if (shell)
 		free(shell);
-	exit(status);	
+	if (exit_flag)
+		exit(status);	
 }
 
 char	**copy_envs(t_shell *shell, char **envp)
@@ -52,7 +53,7 @@ char	**copy_envs(t_shell *shell, char **envp)
 		i++;
 	env_copy = ft_calloc(sizeof(char *), i + 1);
 	if (!env_copy)
-		shell_error(shell, "Calloc Error: envp copy\n", 0);
+		shell_error(shell, "Calloc Error: envp copy\n", 0, true);
 	i = 0;
 	while (envp[i])
 	{
@@ -69,16 +70,17 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
-		shell_error(shell, "Calloc Error: shell struct\n", 0);
+		shell_error(shell, "Calloc Error: shell struct\n", 0, true);
 	if (ac != 1)
 	{
 		shell->exit_status = EXIT_CMD;
-		shell_error(shell, av[1], 2);
+		shell_error(shell, av[1], 2, true);
 	}
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
 	shell->pid = 0;
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
+	shell->process = CHILD;
 	return (shell);
 }
 
@@ -93,7 +95,7 @@ t_shell	*ft_read_line(t_shell *shell)
 		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
 	if (!shell->token_list)
-		shell_error(shell, "Calloc Error: tokens\n", 0);
+		shell_error(shell, "Calloc Error: tokens\n", 0, true);
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
 	if (g_status == 130 || g_status == 131)
@@ -119,7 +121,7 @@ void	start_minishell(t_shell *shell)
 	shell->root = parse(shell->token_list->first);
 	if (!is_pipe_root(shell->root))
 		run_in_parent(shell->root, shell);
-	if (shell->exit_status == 127 || is_pipe_root(shell->root))
+	if (shell->process == CHILD || is_pipe_root(shell->root))
 	{
  		if (safe_fork(shell) == 0)
 		{
@@ -127,9 +129,7 @@ void	start_minishell(t_shell *shell)
 			run(shell->root, shell);
 			free_and_exit(shell);
 		}
-		g_status = -1;
 		wait(&shell->exit_status);
-		g_status = 0;
 		shell->exit_status = WEXITSTATUS(shell->exit_status);
 	}
 	free_tree(shell->root);

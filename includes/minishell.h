@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:16:30 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:46:38 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdbool.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <limits.h>
 
 # define PIPE '|'
 # define DOLLAR '$'
@@ -33,6 +34,9 @@
 
 # define S_QTE 39
 # define D_QTE 34
+
+# define PARENT 1
+# define CHILD 2
 
 //	COLORS
 # define RESET "\033[0m"
@@ -111,6 +115,7 @@ typedef struct		s_shell{
 	char			*old_pwd;
 	int				exit_status;
 	int				pid;
+	int				process;
 }					t_shell;
 
 
@@ -157,7 +162,7 @@ void			delete_node(t_token_list *token_list, t_token *tmp);
 void			free_tree(void *root);
 void			free_envs(char **envp);
 void			free_and_exit(t_shell *shell);
-void			shell_error(t_shell *shell, char *str, int error);
+void			shell_error(t_shell *shell, char *str, int error, bool exit_flag);
 
 //EXPAND.C
 void			check_dollar(t_token_list *token_list, t_shell *shell);
@@ -189,10 +194,10 @@ int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 
 //PRINT_TREE.C
-void 	print_tree(void *node, const char *prefix, bool isLeft);
-void printExec(t_exec *exec, const char *prefix, bool isLeft);
-void printRedir(t_redir *redir, const char *prefix, bool isLeft);
-void printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
+void 			print_tree(void *node, const char *prefix, bool isLeft);
+void 			printExec(t_exec *exec, const char *prefix, bool isLeft);
+void		 	printRedir(t_redir *redir, const char *prefix, bool isLeft);
+void			 printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
 
 
 //RUN
@@ -204,6 +209,7 @@ void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
+void			redirect(t_shell *shell, t_redir *redir, int exit_flag);
 
 //BUILTINS
 void			echo(char **cmd_args, t_shell *shell);
@@ -214,6 +220,11 @@ void			unset(char **cmd_args, t_shell *shell);
 char			*get_variable_name(char *environment);
 void			cd(char **cmd_args, t_shell *shell);
 void			cd_home(char **cmd_args, t_shell *shell);
+int				str_is_digit(char *str);
+void			exit_cmd(char **cmd_args, t_shell *shell);
+void			exit_number(char **cmd_args, t_shell *shell);
+
+
 
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);

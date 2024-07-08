@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 18:44:01 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:52:36 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	free_and_exit(t_shell *shell)
 	}
 	if (shell->root)
 		free_tree(shell->root);
+	if (shell->envp)
+		free_envs(shell->envp);
 	if (shell->line)
 		free(shell->line);
 	if (shell->old_pwd)
