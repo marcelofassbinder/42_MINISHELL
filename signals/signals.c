@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 14:14:19 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:19:11 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,20 @@ void	start_child_signals(void)
 	signal(SIGQUIT, child_handler);
 }
 
-/* Function to handle the received signal, during the execution of 
+/* Function to handle the received signal, during the execution of
 	this function other received signals are blocked if it is in the mask. */
 void	signal_handler(int signal, siginfo_t *info, void *content)
 {
 	(void)info;
 	(void)content;
 
-	if (signal == SIGINT && g_status != -1)
+	if (signal == SIGINT)
 	{
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		ft_printf(STDIN_FILENO, "\n");
 		rl_redisplay();
 		g_status = 130;
-		exit(130);
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_parent.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:20:39 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
+	shell->process = PARENT;
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args, shell);
 	else if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
@@ -27,7 +28,10 @@ void	run_builtin_p(t_exec *exec, t_shell *shell)
 	else if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
 		cd(exec->cmd_args, shell);
 	else
+	{
+		shell->process = CHILD;
 		shell->exit_status = EXIT_CMD;
+	}
 	//safe_exit(shell, shell->exit_status);
 }
 

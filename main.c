@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 18:58:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:41:55 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
 	shell->pid = 0;
+	shell->process = CHILD;
 	return (shell);
 }
 
@@ -113,7 +114,7 @@ void	start_minishell(t_shell *shell)
 	shell->root = parse(shell->token_list->first);
 	if (!is_pipe_root(shell->root))
 		run_in_parent(shell->root, shell);
-	if (shell->exit_status == 127 || is_pipe_root(shell->root))
+	if (shell->process == CHILD || is_pipe_root(shell->root))
 	{
  		if (fork() == 0)
 		{
@@ -121,9 +122,7 @@ void	start_minishell(t_shell *shell)
 			run(shell->root, shell);
 			safe_exit(shell);
 		}
-		g_status = -1;
 		wait(&shell->exit_status);
-		g_status = 0;
 		shell->exit_status = WEXITSTATUS(shell->exit_status);
 	}
 	free_tree(shell->root);
