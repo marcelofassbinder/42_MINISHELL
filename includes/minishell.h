@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 17:06:59 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:05:29 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 
 # define S_QTE 39
 # define D_QTE 34
+
+# define PARENT 1
+# define CHILD 2
 
 //	COLORS
 # define RESET "\033[0m"
@@ -110,6 +113,7 @@ typedef struct		s_shell{
 	char			*line;
 	int				exit_status;
 	int				pid;
+	int				process;
 }					t_shell;
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/06 14:49:18 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:41:06 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ft_get_env(char *data, t_shell *shell)
 	while (shell->envp[i])
 	{
 		cur_env = get_variable_name(shell->envp[i]);
-		if (!ft_strncmp(cur_env, data, ft_strlen(data + 1)))
+		if (!ft_strncmp(cur_env, data, ft_strlen(cur_env) + 1))
 		{
 			free(cur_env);
 			return (get_var_value(shell->envp[i]));
