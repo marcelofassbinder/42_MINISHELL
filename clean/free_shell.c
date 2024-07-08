@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 16:41:50 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:19:58 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_envs(char **envp)
 	free(envp);
 }
 
-void	safe_exit(t_shell *shell)
+void	free_and_exit(t_shell *shell)
 {
 	int status;
 
@@ -42,6 +42,8 @@ void	safe_exit(t_shell *shell)
 		free_envs(shell->envp);
 	if (shell->line)
 		free(shell->line);
+	if (shell->old_pwd)
+		free(shell->old_pwd);
 	if (shell)
 		free(shell);
 	exit(status);

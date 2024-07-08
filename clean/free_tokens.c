@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 14:43:46 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 18:30:24 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	exit_line(t_shell *shell)
 {
 	free_envs(shell->envp);
 	free(shell->line);
+	free(shell->old_pwd);
 	free(shell);
 	ft_printf(STDOUT_FILENO, "exit\n");
 	exit(0);
