@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 18:58:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:17:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	shell_error(t_shell *shell, char *str, int error)
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
 	else 
-		ft_printf(STDERR_FILENO, "%s", str);
+		ft_printf(STDERR_FILENO, "%s\n", str);
 	if (shell->token_list)
 	{
 		if (shell->token_list->first)
@@ -35,6 +35,8 @@ void	shell_error(t_shell *shell, char *str, int error)
 		free_tree(shell->root);
 	if (shell->line)
 		free(shell->line);
+	if (shell->old_pwd)
+		free(shell->old_pwd);
 	if (shell)
 		free(shell);
 	exit(status);	
@@ -65,14 +67,18 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	t_shell	*shell;
 	(void)av;
 
-	if (ac != 1)
-		exit (127);
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
 		shell_error(shell, "Calloc Error: shell struct\n", 0);
+	if (ac != 1)
+	{
+		shell->exit_status = EXIT_CMD;
+		shell_error(shell, av[1], 2);
+	}
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
 	shell->pid = 0;
+	shell->old_pwd = safe_getcwd(NULL, 0, shell);
 	return (shell);
 }
 
@@ -115,11 +121,11 @@ void	start_minishell(t_shell *shell)
 		run_in_parent(shell->root, shell);
 	if (shell->exit_status == 127 || is_pipe_root(shell->root))
 	{
- 		if (fork() == 0)
+ 		if (safe_fork(shell) == 0)
 		{
 			start_child_signals();
 			run(shell->root, shell);
-			safe_exit(shell);
+			free_and_exit(shell);
 		}
 		g_status = -1;
 		wait(&shell->exit_status);

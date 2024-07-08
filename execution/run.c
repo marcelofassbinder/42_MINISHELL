@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:17:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char **get_path(char *path_from_env)
 		path[i] = ft_strjoin(path[i], "/");
 		i++;		
 	}
+	free(path_from_env);
 	return(path);
 }
 
@@ -35,10 +36,12 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	char *path_cmd;
 	int i;
 
-	path = get_path(getenv("PATH"));
+	path = get_path(ft_get_env("PATH", shell));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
 		execve(exec->cmd_args[0], exec->cmd_args, shell->envp);
+	if (!path)
+		shell_error(shell, exec->cmd_args[0], 2);
 	while(path[i])
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
@@ -76,7 +79,7 @@ void	run_exec(t_exec *exec, t_shell *shell)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
 		run_builtin(exec, shell);
-	safe_exit(shell);
+	free_and_exit(shell);
 }
 void	run_redir(t_redir *redir, t_shell *shell)
 {
@@ -110,13 +113,13 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0);
-	if (fork() == 0)
+	if (safe_fork(shell) == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
 	}
-	if (fork() == 0)
+	if (safe_fork(shell) == 0)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);

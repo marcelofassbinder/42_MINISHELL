@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 18:44:01 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char	**add_envp(char *environment, t_shell *shell)
 			ft_printf(2, "minishell: export '%s': not a valid identifier\n", var_name);
 			free(var_name);
 			shell->exit_status = EXIT_CMD;
-			safe_exit(shell);
+			free_and_exit(shell);
 		}
 		if (env_exist(var_name, shell->envp))
 			shell->envp = replace_env(environment, shell);
