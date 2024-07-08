@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 16:35:16 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:47:27 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ void	pwd(t_shell *shell)
 	if (!buf)
 	{
 		free(buf);
-		ft_printf(STDERR_FILENO, "PWD Error\n");
 		shell->exit_status = EXIT_FAILURE;
-		safe_exit(shell);
+		shell_error(shell, "PWD Error", 0, true);
 	}
 	ft_printf(1, "%s\n", buf);
 	free(buf);

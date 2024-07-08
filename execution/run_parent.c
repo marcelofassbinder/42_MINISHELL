@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 14:20:39 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/08 20:04:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,58 +37,12 @@ void	run_builtin_p(t_exec *exec, t_shell *shell)
 
 void	run_redir_p(t_redir *redir, t_shell *shell)
 {
-	int fd;
 	int saved_stdout;
 	int saved_stdin;
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	if (redir->type == REDIR_OUT)
-	{
-		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			shell_error(shell, "Error while opening file for writing", 0);
-			return;
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			shell_error(shell, "Error while duplicating file descriptor", 0);
-			close(fd);
-			return;
-		}
-	}
-	else if (redir->type == REDIR_IN)
-	{
-		fd = open(redir->file, O_RDONLY);
-		if (fd == -1)
-		{
-			shell_error(shell, "Error while opening file for reading", 0);
-			return;
-		}
-		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			shell_error(shell, "Error while duplicating file descriptor", 0);
-			close(fd);
-			return;
-		}
-	}
-	else
-	{
-		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-		{
-			shell_error(shell, "Error while opening file for appending", 0);
-			return;
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			shell_error(shell, "Error while duplicating file descriptor", 0);
-			close(fd);
-			return;
-		}
-	}
-	close(fd);
+	redirect(shell, redir, false);
 	run_in_parent(redir->down, shell);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);

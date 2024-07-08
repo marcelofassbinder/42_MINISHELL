@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 18:15:39 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:48:31 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ char	**prepare_to_delete(t_shell *shell, int	*k, int *i, int *j)
 
 	*i = 0;
 	while (shell->envp[*i])
-		i++;
+		(*i)++;
 	new_envs = ft_calloc(sizeof(char *), *i);
 	if (!new_envs)
-		shell_error(shell, "Calloc Error: Remove env\n", 0);
+		shell_error(shell, "Calloc Error: Remove env\n", 0, true);
 	*j = *i;
 	*i = 0;
 	*k = 0;

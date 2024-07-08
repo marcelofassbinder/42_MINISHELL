@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:03:51 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:46:42 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	**set_new_env(char *environment, t_shell *shell)
 		i++;
 	env_copy = ft_calloc(sizeof(char *), i + 2);
 	if (!env_copy)
-		shell_error(shell, "Calloc Error: env\n", 0);
+		shell_error(shell, "Calloc Error: env\n", 0, true);
 	i = 0;
 	while (shell->envp[i])
 	{
@@ -106,8 +106,8 @@ char	**add_envp(char *environment, t_shell *shell)
 			shell->envp = replace_env(environment, shell);
 		else
 			shell->envp = set_new_env(environment, shell);
-		free(var_name);
 	}
+	free(var_name);
 	return (shell->envp);
 }
 
