@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 14:36:54 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/08 18:44:01 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_envs(char **envp)
 	free(envp);
 }
 
-void	safe_exit(t_shell *shell)
+void	free_and_exit(t_shell *shell)
 {
 	int status;
 
@@ -40,6 +40,8 @@ void	safe_exit(t_shell *shell)
 		free_tree(shell->root);
 	if (shell->line)
 		free(shell->line);
+	if (shell->old_pwd)
+		free(shell->old_pwd);
 	if (shell)
 		free(shell);
 	exit(status);
