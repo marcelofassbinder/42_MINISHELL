@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 21:46:38 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:10:07 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 extern int g_status;
 
 //	EXIT CODES
+# define EXIT_SYNTAX 2
 # define EXIT_CMD 127
 
 //	STATUS
@@ -209,7 +210,7 @@ void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
-void			redirect(t_shell *shell, t_redir *redir, int exit_flag);
+int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
 
 //BUILTINS
 void			echo(char **cmd_args, t_shell *shell);

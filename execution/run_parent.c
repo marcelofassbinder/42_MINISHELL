@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_parent.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 20:54:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:10:49 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
-	shell->process = PARENT;
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args, shell);
 	else if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
@@ -43,8 +42,8 @@ void	run_redir_p(t_redir *redir, t_shell *shell)
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	redirect(shell, redir, false);
-	run_in_parent(redir->down, shell);
+	if (redirect(shell, redir, false))
+		run_in_parent(redir->down, shell);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
@@ -58,6 +57,7 @@ void	run_in_parent(void *root, t_shell *shell)
 	if (!root)
 		return ;
 	node_type = *(enum e_type *)root;
+	shell->process = PARENT;
 	if (node_type == WORD)
 		run_builtin_p((t_exec *)root, shell);
 	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)

@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 15:04:29 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/09 20:04:30 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,40 +73,94 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 		exit_cmd(exec->cmd_args, shell);
 }
 
+bool	is_local_variable(t_exec *exec, t_shell *shell)
+{
+	ft_printf(1, "%s", exec->cmd_args[0]);
+	(void)shell;
+	return (false);
+}
+
 void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
+	if (is_local_variable(exec, shell))
+		free_and_exit(shell);
 	else if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
 		run_builtin(exec, shell);
 	free_and_exit(shell);
 }
-void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
+
+int	return_parent_error(t_shell *shell, char *str, int error)
+{
+	shell->exit_status = 1;
+	if (error == 1) // erro de comando
+		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
+	else if (error == 2) // erro de arquivo ou diretorio
+		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
+	else if (error == 3) // erro de permissao
+		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+	return (0);
+}
+
+int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	fd;
 
 	fd = 0;
-	if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
+	if (redir->type == REDIR_OUT)
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
 	{
-		if (redir->type == REDIR_OUT)
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (shell->process == CHILD)
+			shell_error(shell, redir->file, 3, exit_flag);
 		else
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-			shell_error(shell, redir->file, 3, exit_flag);
+			return (return_parent_error(shell, redir->file, 3));
+	}
+	else
 		dup2(fd, STDOUT_FILENO);
-	}
-	else if (redir->type == REDIR_IN)
+	return (1);
+}
+
+
+int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
+{
+	int	fd;
+
+	fd = 0;	
+	if (access(redir->file, F_OK) != 0)
 	{
-		if (access(redir->file, F_OK) != 0)
-			shell_error(shell, redir->file, 2, exit_flag);
-		fd = open(redir->file, O_RDONLY);
-		if (fd == -1)
+		if (shell->process == CHILD)
+			shell_error(shell, redir->file, 2, true);
+		else
+			return (return_parent_error(shell, redir->file, 2));
+	}	
+	fd = open(redir->file, O_RDONLY);
+	if (fd == -1)
+	{
+		if (shell->process == CHILD)
 			shell_error(shell, redir->file, 3, exit_flag);
-		dup2(fd, STDIN_FILENO);
+		else
+			return (return_parent_error(shell, redir->file, 3));
 	}
+	if (fd != -1)
+		dup2(fd, STDIN_FILENO);
+	return (1);
+}
+
+int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
+{
+	int	success;
+	
+	if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
+		success = redirect_out(shell, redir, exit_flag);
+	else if (redir->type == REDIR_IN)
+		success = redirect_in(shell, redir, exit_flag);
+	return (success);
 }
 
 void	run_redir(t_redir *redir, t_shell *shell)
