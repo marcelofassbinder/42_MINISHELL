@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 20:49:22 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:04:29 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,18 +125,21 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
+		start_child_signals();
 		run(pipe_str->left, shell);
 	}
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
+		start_child_signals();
 		run(pipe_str->right, shell);
 	}
 	close(fd[0]);
 	close(fd[1]);
-	wait(NULL);
-	wait(NULL);
+	wait(&shell->exit_status);
+	wait(&shell->exit_status);
+	shell->exit_status = WEXITSTATUS(shell->exit_status);
 }
 
 void	run(void *root, t_shell *shell)
