@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/08 14:41:06 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:47:27 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,32 @@ void	check_dollar(t_token_list *token_list, t_shell *shell)
 			tmp = tmp->next;
 	}
 }
-char	*expand_status(char *data, t_shell *shell)
+char	*expand_mode(char *data, t_shell *shell)
 {
 	char	*new_data;
 	char	*number;
 	char	*to_free;
 
-	to_free = data;
-	number = ft_itoa(shell->exit_status);
-	new_data = ft_strjoin(number, &data[1]);
+	if (data[0] == '?')
+	{
+		to_free = data;
+		number = ft_itoa(shell->exit_status);
+		new_data = ft_strjoin(number, &data[1]);
+		free(to_free);
+		return (new_data);
+	}
+	else
+	{
+		to_free = data;
+		if (data[1])
+		{
+			new_data = ft_substr(data, 1, ft_strlen(data));
+			free(to_free);
+			return (new_data);
+		}
+	}
 	free(to_free);
-	return (new_data);
+	return (NULL);
 }
 
 char	*get_var_value(char *env)
@@ -109,8 +124,8 @@ char	*expand(char *data, t_shell *shell)
 	char	*env;
 	int		i;
 
-	if (data[0] == '?')
-		return (expand_status(data, shell));
+	if (data[0] == '?' ||  ft_isdigit(data[0]))
+		return (expand_mode(data, shell));
 	if (find_special(data))
 	{
 		i = count_special(data, find_special(data));
