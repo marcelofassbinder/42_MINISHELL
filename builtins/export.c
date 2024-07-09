@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:46:42 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:47:27 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,26 @@ char	**add_envp(char *environment, t_shell *shell)
 	free(var_name);
 	return (shell->envp);
 }
+void	print_env_x(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->envp[i])
+	{
+		ft_printf(STDOUT_FILENO, "declare -x %s\n", shell->envp[i]);
+		i++;
+	}
+}
 
 void	export(char **cmd_args, t_shell *shell)
 {
 	int	i;
 
 	shell->exit_status = EXIT_SUCCESS;
-	i = 0;
+	i = 1;
+	if (!cmd_args[1])
+		print_env_x(shell);
 	while (cmd_args[i])
 	{
 		if (cmd_args[i][0] == '-')

@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 12:34:24 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/09 16:54:50 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-	else 
+	else
 		ft_printf(STDERR_FILENO, "%s\n", str);
 	if (shell->token_list)
 	{
@@ -121,10 +121,11 @@ void	start_minishell(t_shell *shell)
 	shell->root = parse(shell->token_list->first);
 	if (!is_pipe_root(shell->root))
 		run_in_parent(shell->root, shell);
-	if (shell->process == CHILD || is_pipe_root(shell->root))
+	if (shell->process == CHILD)
 	{
  		if (safe_fork(shell) == 0)
 		{
+			shell->process = CHILD;
 			start_child_signals();
 			run(shell->root, shell);
 			free_and_exit(shell);
