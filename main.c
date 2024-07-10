@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 16:54:50 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/10 18:21:45 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->exit_status = 0;
 	shell->pid = 0;
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
-	shell->process = CHILD;
 	return (shell);
 }
 
@@ -89,6 +88,7 @@ int	g_status;
 t_shell	*ft_read_line(t_shell *shell)
 {
 	g_status = 0;
+	shell->process = CHILD;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
 	if (!shell->line)

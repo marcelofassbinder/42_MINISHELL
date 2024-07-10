@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 20:04:30 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/10 18:17:54 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,10 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 		exit_cmd(exec->cmd_args, shell);
 }
 
-bool	is_local_variable(t_exec *exec, t_shell *shell)
-{
-	ft_printf(1, "%s", exec->cmd_args[0]);
-	(void)shell;
-	return (false);
-}
-
 void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
-	if (is_local_variable(exec, shell))
-		free_and_exit(shell);
 	else if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
@@ -179,21 +170,18 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
-		start_child_signals();
 		run(pipe_str->left, shell);
 	}
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		start_child_signals();
 		run(pipe_str->right, shell);
 	}
 	close(fd[0]);
 	close(fd[1]);
-	wait(&shell->exit_status);
-	wait(&shell->exit_status);
-	shell->exit_status = WEXITSTATUS(shell->exit_status);
+	wait(NULL);
+	wait(NULL);
 }
 
 void	run(void *root, t_shell *shell)
