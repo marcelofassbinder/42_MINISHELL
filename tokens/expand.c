@@ -6,7 +6,7 @@
 /*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/09 16:27:30 by marcelo          ###   ########.fr       */
+/*   Updated: 2024/07/11 17:41:52 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*ft_get_env(char *data, t_shell *shell)
 	while (shell->envp[i])
 	{
 		cur_env = get_variable_name(shell->envp[i]);
-		if (!ft_strncmp(cur_env, data, ft_strlen(cur_env) + 1))
+		if (!ft_strcmp(cur_env, data))
 		{
 			free(cur_env);
 			return (get_var_value(shell->envp[i]));

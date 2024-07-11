@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:48:31 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/11 17:39:29 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**remove_env(char *to_remove, t_shell *shell)
 	while (i < j)
 	{
 		cur_var = get_variable_name(shell->envp[i]);
-		if (!ft_strncmp(to_remove, cur_var, ft_strlen(to_remove) + 1))
+		if (!ft_strcmp(to_remove, cur_var))
 		{
 			i++;
 			free(cur_var);
@@ -67,7 +67,7 @@ char	**delete_envp(char *environment, t_shell *shell)
 	while (shell->envp[i])
 	{
 		cur_var = get_variable_name(shell->envp[i]);
-		if (!ft_strncmp(environment, cur_var, ft_strlen(environment) + 1))
+		if (!ft_strcmp(environment, cur_var))
 		{
 			new_envs = remove_env(cur_var, shell);
 			free (cur_var);

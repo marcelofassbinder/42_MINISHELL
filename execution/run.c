@@ -6,7 +6,7 @@
 /*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/11 17:06:45 by marcelo          ###   ########.fr       */
+/*   Updated: 2024/07/11 17:43:30 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,19 @@ void	run_execve(t_exec *exec, t_shell *shell)
 
 void	run_builtin(t_exec *exec, t_shell *shell)
 {
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "env"))
 		env(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "unset"))
 		unset(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "pwd"))
 		pwd(shell);
-	if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "cd"))
 		cd(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "exit", ft_strlen("exit") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "exit"))
 		exit_cmd(exec->cmd_args, shell);
 }
 
