@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/06 17:38:19 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:13:30 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
+	//print_token_list(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)

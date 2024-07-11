@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_parent.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 20:54:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:59:43 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ void	run_redir_p(t_redir *redir, t_shell *shell)
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	redirect(shell, redir, false);
-	run_in_parent(redir->down, shell);
+	if (redirect(shell, redir, false))
+		run_in_parent(redir->down, shell);
+	else
+		return ;
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
