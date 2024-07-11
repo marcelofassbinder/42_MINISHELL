@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/09 11:47:27 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/09 16:27:30 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ void	check_dollar(t_token_list *token_list, t_shell *shell)
 	tmp = token_list->first;
 	while (tmp)
 	{
-		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next
-			&& tmp->next->type == WORD)
+		if ((tmp->type == ENV && tmp->status != IN_S_QUOTE) && tmp->next
+			&& (tmp->next->type == WORD || tmp->next->type == ENV))
 		{
 			tmp->next->data = expand(tmp->next->data, shell);
+			tmp->next->type = WORD;
 			to_free = tmp;
 			tmp = tmp->next;
 			delete_node(token_list, to_free);
@@ -39,23 +40,26 @@ void	check_dollar(t_token_list *token_list, t_shell *shell)
 			tmp = tmp->next;
 	}
 }
+
 char	*expand_mode(char *data, t_shell *shell)
 {
 	char	*new_data;
 	char	*number;
 	char	*to_free;
-
-	if (data[0] == '?')
+	
+	to_free = data;
+	if (data[0] == '?' || data[0] == '$')
 	{
-		to_free = data;
-		number = ft_itoa(shell->exit_status);
+		if (data[0] == '?')
+			number = ft_itoa(shell->exit_status);
+		else
+			number = ft_itoa(shell->pid);
 		new_data = ft_strjoin(number, &data[1]);
 		free(to_free);
 		return (new_data);
 	}
 	else
 	{
-		to_free = data;
 		if (data[1])
 		{
 			new_data = ft_substr(data, 1, ft_strlen(data));
@@ -63,7 +67,6 @@ char	*expand_mode(char *data, t_shell *shell)
 			return (new_data);
 		}
 	}
-	free(to_free);
 	return (NULL);
 }
 
@@ -124,7 +127,7 @@ char	*expand(char *data, t_shell *shell)
 	char	*env;
 	int		i;
 
-	if (data[0] == '?' ||  ft_isdigit(data[0]))
+	if (data[0] == '?' || data[0] == '$' || ft_isdigit(data[0]))
 		return (expand_mode(data, shell));
 	if (find_special(data))
 	{
@@ -174,4 +177,21 @@ int	count_special(char *data, char special)
 	while (data[i] != special && data[i])
 		i++;
 	return (i);
+}
+
+int ft_get_pid(void)
+{
+	int pid;
+
+	//printf("get_pid = %i\n", getpid());
+	pid = fork();
+	if (pid == 0)
+		exit(0);
+	else
+	{
+		wait(NULL);
+		pid = pid - 1;
+		//printf("ft_get_pid = %i\n", pid);
+		return(pid);
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 16:59:49 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:33:29 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	echo(char **cmd_args, t_shell *shell)
 
 	n_flag = 0;
 	i = 0;
+	if (!cmd_args[1])
+		return ;
 	while(cmd_args[++i][0] == '-')
 	{
 		j = 1; // -nnn

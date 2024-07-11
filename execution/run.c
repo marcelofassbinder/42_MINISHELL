@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 15:04:29 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/09 16:48:54 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	run_exec(t_exec *exec, t_shell *shell)
 		run_builtin(exec, shell);
 	free_and_exit(shell);
 }
-void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
+int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	fd;
 
@@ -95,7 +95,10 @@ void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 		else
 			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
+		{
 			shell_error(shell, redir->file, 3, exit_flag);
+			return (0);
+		}
 		dup2(fd, STDOUT_FILENO);
 	}
 	else if (redir->type == REDIR_IN)
@@ -104,14 +107,19 @@ void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 			shell_error(shell, redir->file, 2, exit_flag);
 		fd = open(redir->file, O_RDONLY);
 		if (fd == -1)
+		{
 			shell_error(shell, redir->file, 3, exit_flag);
+			return (0);
+		}
 		dup2(fd, STDIN_FILENO);
 	}
+	return (1);
 }
 
 void	run_redir(t_redir *redir, t_shell *shell)
 {
-	redirect(shell, redir, true);
+	if (!redirect(shell, redir, true))
+		return ;
 	run((void *)redir->down, shell);
 }
 

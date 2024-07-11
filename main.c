@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 12:34:24 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/09 16:59:43 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	}
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
-	shell->pid = 0;
+	shell->pid = ft_get_pid();
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
 	shell->process = CHILD;
 	return (shell);
