@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_strcmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -36,6 +36,6 @@ int	main(void)
 	unsigned int	i;
 	
 	i = 6;
-	printf("ft_strncmp = %i\n", ft_strncmp(str1, str2, i));
+	printf("ft_strcmp = %i\n", ft_strcmp(str1, str2, i));
 	printf("funcao original = %i", strncmp(str1, str2, i));
 } */
