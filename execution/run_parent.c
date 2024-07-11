@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 16:59:43 by marcelo          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/07/11 17:03:49 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
 void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
-	shell->process = PARENT;
 	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
 		echo(exec->cmd_args, shell);
 	else if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
@@ -45,8 +45,6 @@ void	run_redir_p(t_redir *redir, t_shell *shell)
 	saved_stdin = dup(STDIN_FILENO);
 	if (redirect(shell, redir, false))
 		run_in_parent(redir->down, shell);
-	else
-		return ;
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
@@ -60,6 +58,7 @@ void	run_in_parent(void *root, t_shell *shell)
 	if (!root)
 		return ;
 	node_type = *(enum e_type *)root;
+	shell->process = PARENT;
 	if (node_type == WORD)
 		run_builtin_p((t_exec *)root, shell);
 	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
