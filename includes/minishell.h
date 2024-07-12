@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 15:00:58 by marcelo          ###   ########.fr       */
+/*   Updated: 2024/07/12 15:57:24 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "./ft_printf/libft/libft.h"
 # include "./ft_printf/ft_printf.h"
+# include "./get_next_line/get_next_line.h"
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>

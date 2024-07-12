@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/06 17:38:19 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:40:40 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_redir(t_token *token)
 {
-	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT)
+	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT || token->type == HERE_DOC)
 		return (true);
 	return (false);
 }	

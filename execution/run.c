@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 20:49:22 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:03:04 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,27 @@ void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 	}
 }
 
+void	run_here_doc(t_redir *redir, t_shell *shell)
+{
+	char *buffer;
+	char *line;
+
+	buffer = ft_calloc(sizeof(char), 1);
+	if (!buffer)
+		shell_error(shell, "Calloc Error", 0, true);
+	while(1)
+	{
+		line = get_next_line(STDIN_FILENO);
+		//if (!ft_strcmp())
+	}
+}
+
 void	run_redir(t_redir *redir, t_shell *shell)
 {
-	redirect(shell, redir, true);
+	if(redir->type == HERE_DOC)
+		run_here_doc(redir, shell);
+	else
+		redirect(shell, redir, true);
 	run((void *)redir->down, shell);
 }
 
@@ -154,7 +172,7 @@ void	run(void *root, t_shell *shell)
 		exec = (t_exec *)root;
 		run_exec(exec, shell);
 	}
-	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT)
+	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT || node_type == HERE_DOC)
 	{
 		redir = (t_redir *)root;
 		run_redir(redir, shell);
