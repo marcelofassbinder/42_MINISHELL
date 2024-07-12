@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 16:36:18 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:40:40 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_redir *create_new_redir(void *down, t_token *token)
 		node_type = *(enum e_type *)down;
 		if (node_type == WORD)
 			redir->down = (t_exec *)down;
-		else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
+		else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
 			redir->down = (t_redir *)down;
 	}
 	else
