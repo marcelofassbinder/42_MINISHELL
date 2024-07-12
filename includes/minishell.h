@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/12 15:57:24 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:50:43 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,6 @@ typedef struct		s_shell{
 	int				process;
 }					t_shell;
 
-
-
-
-
 //SYNTAX
 bool			check_redir(char *str);
 bool			check_pipe(char *str);
@@ -194,6 +190,8 @@ bool			is_builtin(char *str);
 t_redir 		*create_new_redir(void *down, t_token *token);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
+bool			has_word(t_token *token);
+
 
 //PRINT_TREE.C
 void 			print_tree(void *node, const char *prefix, bool isLeft);
@@ -211,7 +209,10 @@ void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
-void			redirect(t_shell *shell, t_redir *redir, int exit_flag);
+int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
+char			*write_here_doc(t_redir *redir, t_shell *shell);
+int				run_here_doc(t_redir *redir, t_shell *shell);
+
 
 //BUILTINS
 void			echo(char **cmd_args, t_shell *shell);
@@ -226,12 +227,13 @@ int				str_is_digit(char *str);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
 
-
-
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);
 void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
+
+//teste
+int ft_get_pid(void);
 
 
 #endif

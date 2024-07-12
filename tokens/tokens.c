@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/12 15:40:40 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:43:02 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
+	//print_token_list(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)

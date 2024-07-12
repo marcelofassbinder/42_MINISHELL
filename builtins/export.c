@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:46:42 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/11 17:39:29 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	env_exist(char *var_name, char **env)
 	while (env[i])
 	{
 		cur_var = get_variable_name(env[i]);
-		if (!ft_strncmp(var_name, cur_var, ft_strlen(var_name) + 1))
+		if (!ft_strcmp(var_name, cur_var))
 		{
 			free(cur_var);
 			return (true);
@@ -55,7 +55,7 @@ char	**replace_env(char *environment, t_shell *shell)
 	while (shell->envp[i])
 	{
 		cur_var = get_variable_name(shell->envp[i]);
-		if (!ft_strncmp(cur_var, var_name, ft_strlen(var_name) + 1))
+		if (!ft_strcmp(cur_var, var_name))
 		{
 			free(shell->envp[i]);
 			shell->envp[i] = ft_strdup(environment);
@@ -110,13 +110,26 @@ char	**add_envp(char *environment, t_shell *shell)
 	free(var_name);
 	return (shell->envp);
 }
+void	print_env_x(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->envp[i])
+	{
+		ft_printf(STDOUT_FILENO, "declare -x %s\n", shell->envp[i]);
+		i++;
+	}
+}
 
 void	export(char **cmd_args, t_shell *shell)
 {
 	int	i;
 
 	shell->exit_status = EXIT_SUCCESS;
-	i = 0;
+	i = 1;
+	if (!cmd_args[1])
+		print_env_x(shell);
 	while (cmd_args[i])
 	{
 		if (cmd_args[i][0] == '-')

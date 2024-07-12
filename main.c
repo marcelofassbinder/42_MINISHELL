@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 19:43:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/11 17:07:31 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-	else 
+	else
 		ft_printf(STDERR_FILENO, "%s\n", str);
 	if (shell->token_list)
 	{
@@ -78,9 +78,8 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	}
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
-	shell->pid = 0;
+	shell->pid = ft_get_pid();
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
-	shell->process = CHILD;
 	return (shell);
 }
 
@@ -89,6 +88,7 @@ int	g_status;
 t_shell	*ft_read_line(t_shell *shell)
 {
 	g_status = 0;
+	shell->process = CHILD;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
 	if (!shell->line)
@@ -121,10 +121,11 @@ void	start_minishell(t_shell *shell)
 	shell->root = parse(shell->token_list->first);
 	if (!is_pipe_root(shell->root))
 		run_in_parent(shell->root, shell);
-	if (shell->process == CHILD || is_pipe_root(shell->root))
+	if (shell->process == CHILD)
 	{
  		if (safe_fork(shell) == 0)
 		{
+			shell->process = CHILD;
 			start_child_signals();
 			run(shell->root, shell);
 			free_and_exit(shell);
