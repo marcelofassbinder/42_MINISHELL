@@ -5,29 +5,29 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 20:54:20 by mfassbin         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/07/12 16:30:22 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
 void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
-	shell->process = PARENT;
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "env"))
 		env(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "unset"))
 		unset(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "pwd"))
 		pwd(shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "cd"))
 		cd(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "exit", ft_strlen("exit") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "exit"))
 		exit_cmd(exec->cmd_args, shell);
 	else
 	{
@@ -43,8 +43,8 @@ void	run_redir_p(t_redir *redir, t_shell *shell)
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	redirect(shell, redir, false);
-	run_in_parent(redir->down, shell);
+	if (redirect(shell, redir, false))
+		run_in_parent(redir->down, shell);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
@@ -58,8 +58,9 @@ void	run_in_parent(void *root, t_shell *shell)
 	if (!root)
 		return ;
 	node_type = *(enum e_type *)root;
+	shell->process = PARENT;
 	if (node_type == WORD)
 		run_builtin_p((t_exec *)root, shell);
-	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
 		run_redir_p((t_redir *)root, shell);
 }

@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 14:44:39 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:34:23 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	free_tree(void *root)
 	node_type = *(enum e_type *)root;
 	if (node_type == WORD)
 		free_exec((t_exec *)root);
-	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
 		free_redir((t_redir *)root);
 	else if (node_type == PIPELINE)
 		free_pipe((t_pipe *)root);

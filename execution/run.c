@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/12 16:03:04 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:51:49 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,19 @@ void	run_execve(t_exec *exec, t_shell *shell)
 
 void	run_builtin(t_exec *exec, t_shell *shell)
 {
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "env"))
 		env(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "unset"))
 		unset(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "pwd"))
 		pwd(shell);
-	if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "cd"))
 		cd(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "exit", ft_strlen("exit") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "exit"))
 		exit_cmd(exec->cmd_args, shell);
 }
 
@@ -83,33 +83,86 @@ void	run_exec(t_exec *exec, t_shell *shell)
 		run_builtin(exec, shell);
 	free_and_exit(shell);
 }
-void	redirect(t_shell *shell, t_redir *redir, int exit_flag)
+
+int	return_parent_error(t_shell *shell, char *str, int error)
+{
+	shell->exit_status = 1;
+	if (error == 1) // erro de comando
+		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
+	else if (error == 2) // erro de arquivo ou diretorio
+		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
+	else if (error == 3) // erro de permissao
+		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+	return (0);
+}
+
+int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	fd;
 
 	fd = 0;
-	if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
+	if (redir->type == REDIR_OUT)
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
 	{
-		if (redir->type == REDIR_OUT)
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (shell->process == CHILD)
+			shell_error(shell, redir->file, 3, exit_flag);
 		else
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-			shell_error(shell, redir->file, 3, exit_flag);
+			return (return_parent_error(shell, redir->file, 3));
+	}
+	else
 		dup2(fd, STDOUT_FILENO);
-	}
-	else if (redir->type == REDIR_IN)
-	{
-		if (access(redir->file, F_OK) != 0)
-			shell_error(shell, redir->file, 2, exit_flag);
-		fd = open(redir->file, O_RDONLY);
-		if (fd == -1)
-			shell_error(shell, redir->file, 3, exit_flag);
-		dup2(fd, STDIN_FILENO);
-	}
+	return (1);
 }
 
-void	run_here_doc(t_redir *redir, t_shell *shell)
+
+int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
+{
+	int	fd;
+
+	fd = 0;	
+	if (access(redir->file, F_OK) != 0)
+	{
+		if (shell->process == CHILD)
+			shell_error(shell, redir->file, 2, true);
+		else
+			return (return_parent_error(shell, redir->file, 2));
+	}	
+	fd = open(redir->file, O_RDONLY);
+	if (fd == -1)
+	{
+		if (shell->process == CHILD)
+			shell_error(shell, redir->file, 3, exit_flag);
+		else
+			return (return_parent_error(shell, redir->file, 3));
+	}
+	if (fd != -1)
+		dup2(fd, STDIN_FILENO);
+	return (1);
+}
+
+int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
+{
+	int	success;
+	
+	success = 0;
+	if (redir->type == HERE_DOC)
+	{
+		if (shell->process == PARENT)
+			success = 1;
+		else if (shell->process == CHILD)
+			success = run_here_doc(redir, shell);
+	}
+	else if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
+		success = redirect_out(shell, redir, exit_flag);
+	else if (redir->type == REDIR_IN)
+		success = redirect_in(shell, redir, exit_flag);
+	return (success);
+}
+
+char	*write_here_doc(t_redir *redir, t_shell *shell)
 {
 	char *buffer;
 	char *line;
@@ -119,17 +172,49 @@ void	run_here_doc(t_redir *redir, t_shell *shell)
 		shell_error(shell, "Calloc Error", 0, true);
 	while(1)
 	{
+		ft_printf(STDIN_FILENO, ">");
 		line = get_next_line(STDIN_FILENO);
-		//if (!ft_strcmp())
+		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
+		{
+			free(line);
+			break ;
+		}
+		buffer = ft_strjoin(buffer, line);
+		free(line);
 	}
+	return (buffer);
+}
+
+int	run_here_doc(t_redir *redir, t_shell *shell)
+{
+	char *buffer;
+	int fd[2];
+
+	buffer = write_here_doc(redir, shell);
+	if (pipe(fd) == -1)
+		shell_error(shell, "Pipe error\n", 0, true);
+	if (safe_fork(shell) == 0)
+	{
+		close(fd[0]);
+		write(fd[1], buffer, ft_strlen(buffer));
+		free(buffer);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		exit(0);
+	}
+	else
+	{
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+	}
+	return (1);
 }
 
 void	run_redir(t_redir *redir, t_shell *shell)
 {
-	if(redir->type == HERE_DOC)
-		run_here_doc(redir, shell);
-	else
-		redirect(shell, redir, true);
+	if (!redirect(shell, redir, true))
+		return ;
 	run((void *)redir->down, shell);
 }
 
