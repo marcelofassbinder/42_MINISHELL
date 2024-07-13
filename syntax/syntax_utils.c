@@ -6,11 +6,38 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 13:02:09 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/13 18:24:34 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+bool	special_char(char *str)
+{
+	char	*special = "();`&|";
+	enum 	e_status	status;
+
+	status = GENERAL;
+	while (*str)
+	{
+		if (*str == D_QTE && status == GENERAL)
+			status = IN_D_QUOTE;
+		else if (*str == S_QTE && status == GENERAL)
+			status = IN_S_QUOTE;
+		else if (*str == S_QTE && status == IN_S_QUOTE)
+			status = GENERAL;
+		else if (*str == D_QTE && status == IN_D_QUOTE)
+			status = GENERAL;
+		if (ft_strchr(special, *str) && status == GENERAL)
+		{
+			ft_printf(STDERR_FILENO,
+				"minishell: syntax error unexpected token %c\n", *str);
+			return (true);
+		}
+		str++;
+	}
+	return (false);	
+}
 
 bool	unclosed_quotes(char *str)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/10 18:17:54 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/13 18:26:10 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
-	if (!exec)
+	if (!exec || !exec->cmd_args[0])
 		return ;
 	else if (!exec->is_builtin)
 		run_execve(exec, shell);
@@ -149,7 +149,7 @@ int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 	
 	if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
 		success = redirect_out(shell, redir, exit_flag);
-	else if (redir->type == REDIR_IN)
+	else
 		success = redirect_in(shell, redir, exit_flag);
 	return (success);
 }
