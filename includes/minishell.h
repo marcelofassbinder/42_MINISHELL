@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/12 17:50:43 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/13 15:18:45 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 
 //teste
-int ft_get_pid(void);
+int ft_get_pid(t_shell *shell);
 
 
 #endif
