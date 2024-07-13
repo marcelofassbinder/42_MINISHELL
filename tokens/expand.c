@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/11 17:41:52 by marcelo          ###   ########.fr       */
+/*   Updated: 2024/07/13 15:18:45 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,19 +179,16 @@ int	count_special(char *data, char special)
 	return (i);
 }
 
-int ft_get_pid(void)
+int ft_get_pid(t_shell *shell)
 {
 	int pid;
 
 	//printf("get_pid = %i\n", getpid());
 	pid = fork();
 	if (pid == 0)
-		exit(0);
-	else
-	{
-		wait(NULL);
-		pid = pid - 1;
-		//printf("ft_get_pid = %i\n", pid);
-		return(pid);
-	}
+		free_and_exit(shell);
+	wait(NULL);
+	pid = pid - 1;
+	//printf("ft_get_pid = %i\n", pid);
+	return(pid);
 }

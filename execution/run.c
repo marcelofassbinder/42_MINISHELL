@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/12 17:51:49 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/13 17:31:10 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,12 +146,19 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	success;
+	enum e_type node_type;
 	
 	success = 0;
 	if (redir->type == HERE_DOC)
 	{
 		if (shell->process == PARENT)
+		{
 			success = 1;
+			if (redir->down)
+				node_type = *(enum e_type *)redir->down;
+			if (!redir->down || node_type != WORD)
+				success = run_here_doc(redir, shell);
+		}
 		else if (shell->process == CHILD)
 			success = run_here_doc(redir, shell);
 	}
@@ -170,6 +177,7 @@ char	*write_here_doc(t_redir *redir, t_shell *shell)
 	buffer = ft_calloc(sizeof(char), 1);
 	if (!buffer)
 		shell_error(shell, "Calloc Error", 0, true);
+	dup2(STDERR_FILENO, STDIN_FILENO);
 	while(1)
 	{
 		ft_printf(STDIN_FILENO, ">");
@@ -202,12 +210,11 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		close(fd[1]);
 		exit(0);
 	}
-	else
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-	}
+	wait(NULL);
+	free(buffer);
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
 	return (1);
 }
 
