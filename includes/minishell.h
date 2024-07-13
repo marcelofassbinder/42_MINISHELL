@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 18:10:07 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/13 18:24:52 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define YELLOW "\033[1;3;93m"
 
 // GLOBAL VARIABLES
-extern int g_status;
+extern int received_signal;
 
 //	EXIT CODES
 # define EXIT_SYNTAX 2
@@ -133,6 +133,7 @@ bool			previous_is_redir(char *str);
 bool			unclosed_quotes(char *str);
 bool			empty_line(char *str);
 bool			exceeded_token(char *str, int c);
+bool			special_char(char *str);
 
 //	TOKENS.C
 void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
@@ -149,9 +150,12 @@ int				append_word(t_token_list *token_list, char *line, enum e_status status, i
 int				append_redir(t_token_list *token_list, char *line, enum e_status status, int i);
 
 //SIGNALS.C
-void			start_sigaction(void);
+void			start_sig(void);
+void			signal_handler(int signal);
 bool			check_syntax(char *line);
-void			start_child_signals(void);
+void			sig_default(void);
+void			signal_change(int signal);
+void			sig_modify(void);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);

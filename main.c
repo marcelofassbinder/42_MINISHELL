@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/10 18:21:45 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/13 17:32:21 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,10 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	return (shell);
 }
 
-int	g_status;
+int	received_signal;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
-	g_status = 0;
 	shell->process = CHILD;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
@@ -98,8 +97,10 @@ t_shell	*ft_read_line(t_shell *shell)
 		shell_error(shell, "Calloc Error: tokens\n", 0, true);
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
-	if (g_status == 130 || g_status == 131)
-		shell->exit_status = g_status;
+	if (received_signal == 2)
+		shell->exit_status = 130;
+	else if (received_signal == 3)
+		shell->exit_status = 131;
 	return (shell);
 }
 
@@ -123,13 +124,14 @@ void	start_minishell(t_shell *shell)
 		run_in_parent(shell->root, shell);
 	if (shell->process == CHILD)
 	{
- 		if (safe_fork(shell) == 0)
+		if (safe_fork(shell) == 0)
 		{
-			shell->process = CHILD;
-			start_child_signals();
+			
+			sig_default();
 			run(shell->root, shell);
 			free_and_exit(shell);
 		}
+ 		sig_modify();
 		wait(&shell->exit_status);
 		shell->exit_status = WEXITSTATUS(shell->exit_status);
 	}
@@ -144,12 +146,13 @@ int	main(int ac, char **av, char **envp)
 	t_shell		*shell;
 
 	shell = init_shell(ac, av, envp);
-	start_sigaction();
 	while (1)
 	{
+		start_sig();
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
+			shell->exit_status = EXIT_SYNTAX;
 			free(shell->token_list);
 			free(shell->line);
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 13:02:14 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/13 18:24:26 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ bool	check_syntax(char *line)
 	if (redir_error(line))
 		return (false);
 	if (pipe_error(line))
+		return (false);
+	if (special_char(line))
 		return (false);
 	return (true);
 }
