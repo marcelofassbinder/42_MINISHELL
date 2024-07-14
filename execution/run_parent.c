@@ -3,30 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   run_parent.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 11:22:49 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 18:10:49 by vinivaccari      ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/07/13 17:16:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
 void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "env"))
 		env(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "unset"))
 		unset(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "pwd"))
 		pwd(shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "cd"))
 		cd(exec->cmd_args, shell);
-	else if (!ft_strncmp(exec->cmd_args[0], "exit", ft_strlen("exit") + 1))
+	else if (!ft_strcmp(exec->cmd_args[0], "exit"))
 		exit_cmd(exec->cmd_args, shell);
 	else
 	{
@@ -60,6 +61,6 @@ void	run_in_parent(void *root, t_shell *shell)
 	shell->process = PARENT;
 	if (node_type == WORD)
 		run_builtin_p((t_exec *)root, shell);
-	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
 		run_redir_p((t_redir *)root, shell);
 }

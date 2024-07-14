@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/13 16:36:41 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/14 14:57:42 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_redir(t_token *token)
 {
-	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT)
+	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT || token->type == HERE_DOC)
 		return (true);
 	return (false);
 }	
@@ -42,6 +42,11 @@ void	find_files(t_token_list *token_list)
 	}
 }
 
+void	find_local_vars(t_token_list *token_list)
+{
+	print_token_list(token_list);
+}
+
 void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 {
 	check_dollar(token_list, shell);
@@ -50,6 +55,7 @@ void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
+	//print_token_list(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
