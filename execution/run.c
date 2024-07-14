@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/14 15:01:00 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/14 16:34:30 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,8 +247,9 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	wait(NULL);
-	wait(NULL);
+	wait(&shell->exit_status);
+	wait(&shell->exit_status);
+	shell->exit_status = WEXITSTATUS(shell->exit_status);
 }
 
 void	run(void *root, t_shell *shell)
