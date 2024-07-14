@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 16:26:47 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/14 14:49:05 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	echo(char **cmd_args, t_shell *shell)
 
 	n_flag = 0;
 	i = 0;
+	if (!cmd_args[1])
+		return ;	
 	while(cmd_args[++i][0] == '-')
 	{
 		j = 1; // -nnn
@@ -35,7 +37,7 @@ void	echo(char **cmd_args, t_shell *shell)
 		if (cmd_args[i])
 			ft_printf(STDOUT_FILENO, " ");
 	}
-	if (n_flag == 0)
+	if (n_flag == 0 || !cmd_args[0])
 		ft_printf(STDOUT_FILENO, "\n");
 	shell->exit_status = EXIT_SUCCESS;
 }

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 18:26:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/14 15:01:00 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	char *path_cmd;
 	int i;
 
+	if (!exec->cmd_args[0][0])
+		return ;
 	path = get_path(ft_get_env("PATH", shell));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
@@ -57,27 +59,27 @@ void	run_execve(t_exec *exec, t_shell *shell)
 
 void	run_builtin(t_exec *exec, t_shell *shell)
 {
-	if (!ft_strncmp(exec->cmd_args[0], "echo", ft_strlen("echo") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "env", ft_strlen("env") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "env"))
 		env(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "export", ft_strlen("export") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "unset", ft_strlen("unset") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "unset"))
 		unset(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "pwd"))
 		pwd(shell);
-	if (!ft_strncmp(exec->cmd_args[0], "cd", ft_strlen("cd") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "cd"))
 		cd(exec->cmd_args, shell);
-	if (!ft_strncmp(exec->cmd_args[0], "exit", ft_strlen("exit") + 1))
+	if (!ft_strcmp(exec->cmd_args[0], "exit"))
 		exit_cmd(exec->cmd_args, shell);
 }
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
-	if (!exec || !exec->cmd_args[0])
+	if (!exec)
 		return ;
-	else if (!exec->is_builtin)
+	if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
 		run_builtin(exec, shell);
@@ -146,17 +148,82 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	success;
+	enum e_type node_type;
 	
-	if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
+	success = 0;
+	if (redir->type == HERE_DOC)
+	{
+		if (shell->process == PARENT)
+		{
+			success = 1;
+			if (redir->down)
+				node_type = *(enum e_type *)redir->down;
+			if (!redir->down || node_type != WORD)
+				success = run_here_doc(redir, shell);
+		}
+		else if (shell->process == CHILD)
+			success = run_here_doc(redir, shell);
+	}
+	else if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
 		success = redirect_out(shell, redir, exit_flag);
 	else
 		success = redirect_in(shell, redir, exit_flag);
 	return (success);
 }
 
+char	*write_here_doc(t_redir *redir, t_shell *shell)
+{
+	char *buffer;
+	char *line;
+
+	buffer = ft_calloc(sizeof(char), 1);
+	if (!buffer)
+		shell_error(shell, "Calloc Error", 0, true);
+	dup2(STDERR_FILENO, STDIN_FILENO);
+	while(1)
+	{
+		ft_printf(STDIN_FILENO, ">");
+		line = get_next_line(STDIN_FILENO);
+		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
+		{
+			free(line);
+			break ;
+		}
+		buffer = ft_strjoin(buffer, line);
+		free(line);
+	}
+	return (buffer);
+}
+
+int	run_here_doc(t_redir *redir, t_shell *shell)
+{
+	char *buffer;
+	int fd[2];
+
+	buffer = write_here_doc(redir, shell);
+	if (pipe(fd) == -1)
+		shell_error(shell, "Pipe error\n", 0, true);
+	if (safe_fork(shell) == 0)
+	{
+		close(fd[0]);
+		write(fd[1], buffer, ft_strlen(buffer));
+		free(buffer);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		exit(0);
+	}
+	wait(NULL);
+	free(buffer);
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
+	return (1);
+}
+
 void	run_redir(t_redir *redir, t_shell *shell)
 {
-	redirect(shell, redir, true);
+	if (!redirect(shell, redir, true))
+		return ;
 	run((void *)redir->down, shell);
 }
 
@@ -199,7 +266,7 @@ void	run(void *root, t_shell *shell)
 		exec = (t_exec *)root;
 		run_exec(exec, shell);
 	}
-	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT)
+	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT || node_type == HERE_DOC)
 	{
 		redir = (t_redir *)root;
 		run_redir(redir, shell);

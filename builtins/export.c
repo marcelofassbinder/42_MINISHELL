@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 18:47:27 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/11 17:39:29 by marcelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	env_exist(char *var_name, char **env)
 	while (env[i])
 	{
 		cur_var = get_variable_name(env[i]);
-		if (!ft_strncmp(var_name, cur_var, ft_strlen(var_name) + 1))
+		if (!ft_strcmp(var_name, cur_var))
 		{
 			free(cur_var);
 			return (true);
@@ -55,7 +55,7 @@ char	**replace_env(char *environment, t_shell *shell)
 	while (shell->envp[i])
 	{
 		cur_var = get_variable_name(shell->envp[i]);
-		if (!ft_strncmp(cur_var, var_name, ft_strlen(var_name) + 1))
+		if (!ft_strcmp(cur_var, var_name))
 		{
 			free(shell->envp[i]);
 			shell->envp[i] = ft_strdup(environment);

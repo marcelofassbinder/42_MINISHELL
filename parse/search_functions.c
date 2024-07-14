@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   search_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:13:59 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/01 11:07:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:40:40 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_token	*get_next_redir(t_token *token)
 
 bool	last_redir(t_token *token)
 {
-	if (token->type != REDIR_IN && token->type != REDIR_OUT && token->type != D_REDIR_OUT)
+	if (token->type != REDIR_IN && token->type != REDIR_OUT && token->type != D_REDIR_OUT && token->type != HERE_DOC)
 		return (false);
 	token = get_next_redir(token);
 	if (!token)
@@ -56,7 +56,7 @@ t_token	*get_previous_redir(t_token *token)
 		return (NULL);
 	while (token && token->type != PIPELINE)
 	{
-		if (token->type == REDIR_IN || token->type == D_REDIR_OUT || token->type == REDIR_OUT)
+		if (token->type == REDIR_IN || token->type == D_REDIR_OUT || token->type == REDIR_OUT || token->type == HERE_DOC)
 			return (token);
 		token = token->prev;
 	}

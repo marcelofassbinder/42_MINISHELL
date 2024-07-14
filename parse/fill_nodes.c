@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_nodes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/06 16:36:18 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/14 15:23:03 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ bool	is_builtin(char *str)
 {
 	if (!str)
 		return (false);
-	if (!ft_strncmp(str, "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strcmp(str, "pwd"))
 		return (true);
-	if (!ft_strncmp(str, "echo", ft_strlen("echo") + 1))
+	if (!ft_strcmp(str, "echo"))
 		return (true);
-	if (!ft_strncmp(str, "cd", ft_strlen("cd") + 1))
+	if (!ft_strcmp(str, "cd"))
 		return (true);
-	if (!ft_strncmp(str, "export", ft_strlen("export") + 1))
+	if (!ft_strcmp(str, "export"))
 		return (true);
-	if (!ft_strncmp(str, "unset", ft_strlen("unset") + 1))
+	if (!ft_strcmp(str, "unset"))
 		return (true);
-	if (!ft_strncmp(str, "env", ft_strlen("env") + 1))
+	if (!ft_strcmp(str, "env"))
 		return (true);
-	if (!ft_strncmp(str, "exit" , ft_strlen("exit") + 1))
+	if (!ft_strcmp(str, "exit"))
 		return (true);
 	return (false);
 }
@@ -49,7 +49,7 @@ t_redir *create_new_redir(void *down, t_token *token)
 		node_type = *(enum e_type *)down;
 		if (node_type == WORD)
 			redir->down = (t_exec *)down;
-		else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT)
+		else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
 			redir->down = (t_redir *)down;
 	}
 	else
@@ -70,6 +70,7 @@ int	count_args(t_token *token)
 	}
 	return (count);
 }
+
 
 char	**define_cmd_args(t_token *token)
 {
