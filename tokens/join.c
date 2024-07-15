@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/06/29 13:01:55 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/15 13:49:22 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	join_quotes(t_token_list *token_list)
 			&& (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
 		{
 			tmp = join_nodes(token_list, tmp);
+			if (!tmp)
+				return (join_quotes(token_list));
 			if (tmp)
 			{
 				to_delete = tmp;

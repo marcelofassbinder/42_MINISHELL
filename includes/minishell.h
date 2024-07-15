@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 18:43:58 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:38:47 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ char			*expand(char *data, t_shell *shell);
 char			find_special(char *data);
 int				count_special(char *data, char special);
 char			*ft_get_env(char *data, t_shell *shell);
+char			*get_var_value(char *env);
 
 
 //JOIN.C
@@ -189,6 +190,7 @@ t_token			*get_next_redir(t_token *token);
 bool			last_redir(t_token *token);
 t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
+char			*get_redir_file(t_token *token);
 int				command_args(t_token *token);
 bool			is_builtin(char *str);
 t_redir 		*create_new_redir(void *down, t_token *token);

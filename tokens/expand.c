@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/14 14:37:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/15 18:51:11 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	check_dollar(t_token_list *token_list, t_shell *shell)
 			tmp = tmp->next;
 			delete_node(token_list, to_free);
 		}
+		else if (tmp->type == ENV && tmp->status == IN_S_QUOTE)
+			tmp->type = WORD;
  		else if (tmp->type == ENV && ((!tmp->next) || (tmp->next->type != WORD
 			&& tmp->next->type != S_QUOTE && tmp->next->type != D_QUOTE)))
 			tmp->type = WORD;
@@ -128,7 +130,7 @@ char	*get_var_value(char *env)
 
 	i = 0;
 	j = 0;
-	while (env[i] != '=')
+	while (env[i] && env[i] != '=')
 	{
 		i++;
 		j++;

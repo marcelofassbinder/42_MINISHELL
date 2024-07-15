@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:07:56 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/09 14:57:44 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/15 17:57:35 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	env(char **cmd_args, t_shell *shell)
 	i = 0;
 	while (shell->envp[i])
 	{
-		ft_printf(1, "%s\n", shell->envp[i]);
+		if (ft_strchr(shell->envp[i], '='))
+			ft_printf(1, "%s\n", shell->envp[i]);
 		i++;
 	}
 	shell->exit_status = EXIT_SUCCESS;
