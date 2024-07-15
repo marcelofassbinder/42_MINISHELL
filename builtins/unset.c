@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcelo <marcelo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/11 17:39:29 by marcelo          ###   ########.fr       */
+/*   Updated: 2024/07/15 16:42:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,15 @@ void	unset(char **cmd_args, t_shell *shell)
 
 	i = 1;
 	shell->exit_status = EXIT_SUCCESS;
+	if (cmd_args[i][0] == '-')
+	{
+		ft_printf(2, "minishell: unset '%s': not a valid identifier\n", cmd_args[i]);
+		shell->exit_status = 2;
+		i++;
+		return ;
+	}
 	while (cmd_args[i])
 	{
-		if (cmd_args[i][0] == '-')
-		{
-			ft_printf(2, "minishell: unset '%s': not a valid identifier\n", cmd_args[i]);
-			shell->exit_status = 2;
-			i++;
-			continue ;
-		}
 		shell->envp = delete_envp(cmd_args[i], shell);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/14 15:23:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:08:22 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
+char	*get_redir_file(t_token *token)
+{
+	char *file;
+
+	if (token->next->type == W_SPACE)
+	{
+		if (!token->next->next)
+			file = NULL;
+		else
+			file = token->next->next->data;
+	}
+	else
+		file = token->next->data;
+	return (file);
+}
+
 t_redir *create_new_redir(void *down, t_token *token)
 {
 	t_redir		*redir;
@@ -40,10 +56,7 @@ t_redir *create_new_redir(void *down, t_token *token)
 
 	redir = ft_calloc(sizeof(t_redir), 1);
 	redir->type = token->type;
-	if (token->next->type == W_SPACE)
-		redir->file = token->next->next->data;
-	else
-		redir->file = token->next->data;
+	redir->file = get_redir_file(token);
 	if (down)
 	{
 		node_type = *(enum e_type *)down;

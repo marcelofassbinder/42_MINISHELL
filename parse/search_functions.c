@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   search_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:13:59 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/12 15:40:40 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:20:35 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_token	*find_last_or_pipe(t_token *token, int flag)
 {
 	while (token->next)
 	{
-		if (token->type == PIPELINE)
+		if (token->type == PIPELINE && token->status == GENERAL)
 			return (token);
 		token = token->next;
 	}

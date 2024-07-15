@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/14 14:57:42 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/15 13:50:40 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
-	//print_token_list(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
