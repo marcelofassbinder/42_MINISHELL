@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/15 18:45:58 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/16 17:10:05 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	print_env_x(t_shell *shell)
 		var = get_variable_name(shell->envp[i]);
 		value = get_var_value(shell->envp[i]);
 		ft_printf(STDOUT_FILENO, "declare -x %s", var);
-		if (value[0])
+		if (value)
 			ft_printf(STDOUT_FILENO, "=\"%s\"", value);
 		ft_printf(STDOUT_FILENO, "\n");
 		i++;
