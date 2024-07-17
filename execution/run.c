@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/14 16:34:30 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/17 18:18:56 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,35 @@ char **get_path(char *path_from_env)
 	return(path);
 }
 
+char	**filter_envs(char **envp)
+{
+	int		i;
+	int		j;
+	char	**new_envs;
+
+	i = 0;
+	j = 0;
+	while (envp[i])
+	{
+		if (ft_strchr(envp[i], '='))
+			j++;
+		i++;
+	}
+	new_envs = ft_calloc(sizeof(char *), j + 1);
+	i = 0;
+	j = 0;
+	while (envp[i])
+	{
+		if (ft_strchr(envp[i], '='))
+		{
+			new_envs[j] = ft_strdup(envp[i]);
+			j++;
+		}
+		i++;
+	}
+	return (new_envs);
+}
+
 void	run_execve(t_exec *exec, t_shell *shell)
 {	
 	char **path;
@@ -41,14 +70,14 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	path = get_path(ft_get_env("PATH", shell));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
-		execve(exec->cmd_args[0], exec->cmd_args, shell->envp);
+		execve(exec->cmd_args[0], exec->cmd_args, filter_envs(shell->envp));
 	if (!path)
 		shell_error(shell, exec->cmd_args[0], 2, true);
 	while(path[i])
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
 		if (access(path_cmd, F_OK) == 0)
-			execve(path_cmd, exec->cmd_args, shell->envp);
+			execve(path_cmd, exec->cmd_args, filter_envs(shell->envp));
 		free(path_cmd);
 		i++;
 	}
@@ -61,8 +90,6 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 {
 	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	if (!ft_strcmp(exec->cmd_args[0], "env"))
-		env(exec->cmd_args, shell);
 	if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
 	if (!ft_strcmp(exec->cmd_args[0], "unset"))
@@ -79,6 +106,8 @@ void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
+	if (!ft_strcmp(exec->cmd_args[0], "env") && exec->cmd_args[1])
+		shell_error(shell, "env", 2, true);
 	if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)

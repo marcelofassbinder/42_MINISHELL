@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/16 17:27:05 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/17 18:44:16 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	echo(char **cmd_args, t_shell *shell)
 	while (cmd_args[i])
 	{
 		ft_printf(STDOUT_FILENO, "%s", cmd_args[i++]);
-		if (cmd_args[i])
+		if (cmd_args[i] && cmd_args[i][0])
 			ft_printf(STDOUT_FILENO, " ");
 	}
 	if (n_flag == 0 || !cmd_args[0])
