@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/12 16:05:21 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/17 19:17:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-t_redir *create_new_redir(void *down, t_token *token)
+t_redir *create_new_redir(void *down, t_token *token, t_shell *shell)
 {
 	t_redir		*redir;
 	enum e_type	node_type;
+	static int	id = 0;
 
 	redir = ft_calloc(sizeof(t_redir), 1);
 	redir->type = token->type;
@@ -54,6 +55,12 @@ t_redir *create_new_redir(void *down, t_token *token)
 	}
 	else
 		redir->down = NULL;
+	if (redir->type == HERE_DOC)
+	{
+		redir->id = id;
+		id++;
+		run_here_doc(redir, shell);
+	}
 	return (redir);
 }
 

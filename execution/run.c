@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 17:31:10 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:13:37 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,12 +146,15 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	success;
-	enum e_type node_type;
+	//enum e_type node_type;
 	
 	success = 0;
 	if (redir->type == HERE_DOC)
 	{
-		if (shell->process == PARENT)
+		success = 1;
+		dup2(shell->fd_heredoc[redir->id], STDIN_FILENO);
+		//close(shell->fd_heredoc[redir->id]);
+		/* if (shell->process == PARENT)
 		{
 			success = 1;
 			if (redir->down)
@@ -160,7 +163,7 @@ int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 				success = run_here_doc(redir, shell);
 		}
 		else if (shell->process == CHILD)
-			success = run_here_doc(redir, shell);
+			success = run_here_doc(redir, shell); */
 	}
 	else if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
 		success = redirect_out(shell, redir, exit_flag);
@@ -178,10 +181,11 @@ char	*write_here_doc(t_redir *redir, t_shell *shell)
 	if (!buffer)
 		shell_error(shell, "Calloc Error", 0, true);
 	dup2(STDERR_FILENO, STDIN_FILENO);
+	printf("redir -> eof = %s\n", redir->file);
 	while(1)
 	{
-		ft_printf(STDIN_FILENO, ">");
-		line = get_next_line(STDIN_FILENO);
+		ft_printf(shell->fd_in, ">");
+		line = get_next_line(shell->fd_in);
 		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
 		{
 			free(line);
@@ -213,9 +217,42 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	wait(NULL);
 	free(buffer);
 	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
+	add_here_doc_fd(shell, fd[0], false);
 	return (1);
+}
+
+void	add_here_doc_fd(t_shell *shell, int fd_here_doc, bool init)
+{
+	int i;
+	int *to_free;
+	int *new;
+
+	if (init)
+	{
+		shell->fd_heredoc = ft_calloc(sizeof(int), 1);
+		if (!shell->fd_heredoc)
+			shell_error(shell, "Calloc error: heredoc", 0, true);
+		shell->fd_heredoc[0] = -1;
+		return ;
+	}
+	i = 0;
+	while(shell->fd_heredoc[i] != -1)
+		i++;
+	new = ft_calloc(sizeof(int), i + 1);
+	if (!new)
+		shell_error(shell, "Calloc error: heredoc", 0, true);
+	ft_memcpy(new, shell->fd_heredoc, i);
+	new[i] = fd_here_doc;
+	new[i + 1] = -1;
+	to_free = shell->fd_heredoc;
+	free(to_free);
+	shell->fd_heredoc = new;
+	i = 0;
+	while(new[i])
+	{
+		printf("fds_heredoc[%i] = %i\n", i, new[i]);
+		i++;
+	}
 }
 
 void	run_redir(t_redir *redir, t_shell *shell)
@@ -234,14 +271,16 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
+		dup2(fd[1], shell->fd_out);
 		run(pipe_str->left, shell);
+		exit(0);
 	}
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
+		dup2(fd[0], shell->fd_in);
 		run(pipe_str->right, shell);
+		exit(0);
 	}
 	close(fd[0]);
 	close(fd[1]);

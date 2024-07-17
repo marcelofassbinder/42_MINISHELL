@@ -6,13 +6,13 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/12 15:40:40 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:33:05 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	*build_redir(void *down, t_token *token)
+void	*build_redir(void *down, t_token *token, t_shell *shell)
 {
 	t_token	*last_token;
 	void	*root;
@@ -23,9 +23,9 @@ void	*build_redir(void *down, t_token *token)
 	while (token)
 	{
 		if (last_redir(token))
-			root = create_new_redir(down, token);
+			root = create_new_redir(down, token, shell);
 		else
-			root = create_new_redir(root, token);
+			root = create_new_redir(root, token, shell);
 		token = get_previous_redir(token);
 	}
 	if (!root)
@@ -44,7 +44,7 @@ bool	has_word(t_token *token)
 	return (false);
 }
 
-void	*build_exec(t_token *token)
+void	*build_exec(t_token *token, t_shell *shell)
 {
 	void	*root;
 	t_exec	*exec;
@@ -63,7 +63,7 @@ void	*build_exec(t_token *token)
 	ft_printf(STDOUT_FILENO, "is_builtin? = %i\n", exec->is_builtin); */
 	else
 		exec = NULL;
-	root = build_redir(exec, token);
+	root = build_redir(exec, token, shell);
 	return(root);
 }
 
@@ -83,13 +83,13 @@ t_pipe	*build_pipe(void *left, void *right)
 	return (pipe);
 }
 
-void	*parse(t_token *token)
+void	*parse(t_token *token, t_shell *shell)
 {
 	void	*root;
 
-	root = build_exec(token);
+	root = build_exec(token, shell);
 	token = find_last_or_pipe(token, 0);
 	if (token)
-		root = build_pipe(root, parse(token->next));
+		root = build_pipe(root, parse(token->next, shell));
 	return (root);
 }

@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 15:18:45 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/17 19:34:46 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct		s_redir{
 	enum e_type		type;
 	char			*file;
 	void			*down;
+	int 			id;
 }					t_redir;
 
 typedef struct		s_pipe{
@@ -118,6 +119,9 @@ typedef struct		s_shell{
 	int				exit_status;
 	int				pid;
 	int				process;
+	int				fd_in;
+	int				fd_out;
+	int				*fd_heredoc;
 }					t_shell;
 
 //SYNTAX
@@ -177,20 +181,20 @@ void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
 
 //PARSE.C
-void			*parse(t_token *token);
-void			*build_exec(t_token *token);
-void			*build_redir(void *down, t_token *token);
+void			*parse(t_token *token, t_shell *shell);
+void			*build_exec(t_token *token, t_shell *shell);
+void			*build_redir(void *down, t_token *token, t_shell *shell);
 t_pipe			*build_pipe(void *left, void *right);
 t_token			*get_next_redir(t_token *token);
 bool			last_redir(t_token *token);
 t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
-int				command_args(t_token *token);
 bool			is_builtin(char *str);
-t_redir 		*create_new_redir(void *down, t_token *token);
+t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 bool			has_word(t_token *token);
+void			add_here_doc_fd(t_shell *shell, int fd_here_doc, bool init);
 
 
 //PRINT_TREE.C
