@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/15 17:38:47 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:15:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ void			cd_home(char **cmd_args, t_shell *shell);
 int				str_is_digit(char *str);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
+char			*remove_plus(char *environment);
 
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);
