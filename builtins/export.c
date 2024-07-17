@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/16 17:10:05 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/17 14:17:05 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	**replace_env(char *environment, t_shell *shell, int mode)
 	free(var_name);
 	return (shell->envp);
 }
-char	**set_new_env(char *environment, t_shell *shell)
+char	**set_new_env(char *environment, t_shell *shell, int mode)
 {
 	int		i;
 	char	**env_copy;
@@ -108,7 +108,10 @@ char	**set_new_env(char *environment, t_shell *shell)
 		env_copy[i] = ft_strdup(shell->envp[i]);
 		i++;
 	}
-	env_copy[i] = ft_strdup(environment);
+	if (mode == 1)
+		env_copy[i] = remove_plus(environment);
+	if (mode == 0)
+		env_copy[i] = ft_strdup(environment);
 	free_envs(shell->envp);
 	return (env_copy);
 }
@@ -135,6 +138,28 @@ int	add_mode(char *environment)
 	return (0); // just add mode
 }
 
+char	*remove_plus(char *environment)
+{
+	char	*new;
+	int		i;
+	int		j;	
+
+	i = 0;
+	j = 0;
+	new = ft_calloc(sizeof(char), ft_strlen(environment));
+	while (environment[i])
+	{
+		if (environment[i] != '+')
+		{
+			new[j] = environment[i];
+			j++;	
+		}
+		i++;
+	}
+	new[j] = '\0';
+	return (new);
+}
+
 char	**add_envp(char *environment, t_shell *shell)
 {
 	char	*var_name;
@@ -147,7 +172,7 @@ char	**add_envp(char *environment, t_shell *shell)
 	if (env_exist(var_name, shell->envp))
 		shell->envp = replace_env(environment, shell, mode);
 	else
-		shell->envp = set_new_env(environment, shell);
+		shell->envp = set_new_env(environment, shell, mode);
 	free(var_name);
 	return (shell->envp);
 }

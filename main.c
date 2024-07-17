@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/16 17:15:25 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/17 14:23:11 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
 	else
 		ft_printf(STDERR_FILENO, "%s\n", str);
+	if (shell->envp)
+		free_envs(shell->envp);
 	if (shell->token_list)
 	{
 		if (shell->token_list->first)
