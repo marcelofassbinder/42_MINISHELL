@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:13:59 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/15 16:20:35 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/17 19:04:47 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	last_redir(t_token *token)
 
 t_token	*find_last_or_pipe(t_token *token, int flag)
 {
-	while (token->next)
+	while (token && token->next)
 	{
 		if (token->type == PIPELINE && token->status == GENERAL)
 			return (token);
@@ -50,7 +50,7 @@ t_token	*find_last_or_pipe(t_token *token, int flag)
 
 t_token	*get_previous_redir(t_token *token)
 {
-	if (token->prev)
+	if (token && token->prev)
 		token = token->prev;
 	else
 		return (NULL);

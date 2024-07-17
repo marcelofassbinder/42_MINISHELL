@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_parent.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/13 17:16:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:58:52 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
 	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
-	else if (!ft_strcmp(exec->cmd_args[0], "env"))
-		env(exec->cmd_args, shell);
 	else if (!ft_strcmp(exec->cmd_args[0], "export"))
 		export(exec->cmd_args, shell);
 	else if (!ft_strcmp(exec->cmd_args[0], "unset"))

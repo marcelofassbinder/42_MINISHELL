@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/16 17:09:30 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/17 16:41:38 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ char	find_special(char *data)
 	int		j;
 
 	i = 0;
-	specials = "~`!@#$%^&*()_-+={[\\;|:<,.>/?]}";
+	specials = "~`!@#$%^&*()-+={[\\;|:<,.>/?]}";
 	while (data[i])
 	{
 		j = 0;

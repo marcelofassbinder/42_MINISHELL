@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 14:17:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:53:40 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ void	print_env_x(t_shell *shell)
 		if (value)
 			ft_printf(STDOUT_FILENO, "=\"%s\"", value);
 		ft_printf(STDOUT_FILENO, "\n");
+		free(var);
 		i++;
 	}
 }

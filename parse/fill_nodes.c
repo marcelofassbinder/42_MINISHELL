@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/15 16:08:22 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:59:08 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ bool	is_builtin(char *str)
 	if (!ft_strcmp(str, "export"))
 		return (true);
 	if (!ft_strcmp(str, "unset"))
-		return (true);
-	if (!ft_strcmp(str, "env"))
 		return (true);
 	if (!ft_strcmp(str, "exit"))
 		return (true);
