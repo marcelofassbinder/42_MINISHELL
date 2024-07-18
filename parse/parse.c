@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/17 19:07:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:48:47 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	has_word(t_token *token)
 {
 	while (token && token->type != PIPELINE)
 	{
-		if (token->type == WORD)
+		if (token->type == WORD || token->type == T_NULL)
 			return (true);
 		token = token->next;
 	}

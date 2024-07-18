@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 16:59:08 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:49:40 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	**define_cmd_args(t_token *token)
 	i = 0;
 	while(token && token->type != PIPELINE)
 	{
-		if (token->type == WORD)
+		if (token->type == WORD || token->type == T_NULL)
 		{
 			cmd_args[i] = ft_strdup(token->data);
 			i++;
