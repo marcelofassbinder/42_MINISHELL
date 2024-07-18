@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 19:17:59 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:58:33 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,17 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-t_redir *create_new_redir(void *down, t_token *token, t_shell *shell)
+t_redir *create_new_redir(void *down, t_token *token, t_shell *shell, int flag)
 {
 	t_redir		*redir;
 	enum e_type	node_type;
 	static int	id = 0;
 
+	if (flag == 1)
+	{
+		id = 0;
+		return (NULL);
+	}
 	redir = ft_calloc(sizeof(t_redir), 1);
 	redir->type = token->type;
 	if (token->next->type == W_SPACE)
@@ -57,9 +62,12 @@ t_redir *create_new_redir(void *down, t_token *token, t_shell *shell)
 		redir->down = NULL;
 	if (redir->type == HERE_DOC)
 	{
+		printf("CREATE NEW REDIR\n");
+		id = shell->count_hd - id - 1;
 		redir->id = id;
-		id++;
-		run_here_doc(redir, shell);
+		printf("REDIR->id = %i\n", redir->id);
+		printf("REDIR->eof = %s\n", redir->file);
+		//run_here_doc(redir, shell);
 	}
 	return (redir);
 }

@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 19:34:46 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:39:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct		s_shell{
 	int				fd_in;
 	int				fd_out;
 	int				*fd_heredoc;
+	int				count_hd;
 }					t_shell;
 
 //SYNTAX
@@ -190,7 +191,7 @@ bool			last_redir(t_token *token);
 t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
 bool			is_builtin(char *str);
-t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell);
+t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 bool			has_word(t_token *token);
@@ -238,6 +239,7 @@ char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 
 //teste
 int ft_get_pid(t_shell *shell);
+int has_here_doc(t_shell *shell);
 
 
 #endif

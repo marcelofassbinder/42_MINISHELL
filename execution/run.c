@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 20:13:37 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:46:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,11 @@ int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 			return (return_parent_error(shell, redir->file, 3));
 	}
 	else
+	{
+		printf("fd de input = %i\n ", STDIN_FILENO);
+		printf("fd do file1 = %i\n ", fd);
 		dup2(fd, STDOUT_FILENO);
+	}
 	return (1);
 }
 
@@ -139,7 +143,9 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 			return (return_parent_error(shell, redir->file, 3));
 	}
 	if (fd != -1)
+	{
 		dup2(fd, STDIN_FILENO);
+	}
 	return (1);
 }
 
@@ -153,6 +159,10 @@ int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 	{
 		success = 1;
 		dup2(shell->fd_heredoc[redir->id], STDIN_FILENO);
+		printf("dup2 para redir id = %i\n", redir->id);
+		printf("redir EOF = %s\n", redir->file);
+		/*printf("count - id - 1 = %i\n\n", shell->count_hd - redir->id);
+		printf("fd_heredoc[count - id - 1] = %i\n\n", shell->fd_heredoc[shell->count_hd - redir->id - 1]); */
 		//close(shell->fd_heredoc[redir->id]);
 		/* if (shell->process == PARENT)
 		{
