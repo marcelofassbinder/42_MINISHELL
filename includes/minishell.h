@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 14:15:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:42:56 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ enum e_type{
 	HERE_DOC,
 	S_QUOTE,
 	D_QUOTE,
-	T_FILE
+	T_FILE,
+	T_NULL
 };
 
 //	TOKEN STRUCTS

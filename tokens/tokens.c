@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/17 18:20:36 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:19:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,38 @@ void	find_files(t_token_list *token_list)
 	}
 }
 
-void	find_local_vars(t_token_list *token_list)
+
+void	token_redir_pipe(t_token_list *token_list)
 {
-	print_token_list(token_list);
+	t_token	*tmp;
+
+	tmp = token_list->first;
+	while (tmp)
+	{
+		if (tmp->type == REDIR_OUT && tmp->next && tmp->next->type == PIPELINE)
+			delete_node(token_list, tmp->next);
+		tmp = tmp->next;
+	}
+}
+
+void	repeated_quotes(t_token_list *token_list)
+{
+	t_token	*tmp;
+
+	tmp = token_list->first;
+	while (tmp)
+	{
+		if ((tmp->status == GENERAL) && (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
+		{
+			if ((tmp->next && tmp->next->status == GENERAL) && (tmp->next->type == D_QUOTE || tmp->next->type == S_QUOTE))
+			{
+				tmp->data = ft_strdup("");
+				tmp->type = T_NULL;
+				delete_node(token_list, tmp->next);
+			}
+		}
+		tmp = tmp->next;
+	}
 }
 
 void	prepare_tokens(t_token_list *token_list, t_shell *shell)
@@ -55,6 +84,7 @@ void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
+	token_redir_pipe(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
@@ -90,7 +120,7 @@ void print_token_list(t_token_list *token_list)
 {
 	int i;
 	t_token *ptr;
-	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE", "FILE"};
+	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE", "FILE", "NULL"};
 
 	ptr = token_list->first;
 	i = 1;
