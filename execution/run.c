@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 21:45:31 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:53:32 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	char *path_cmd;
 	int i;
 
-	if (!exec->cmd_args[0][0])
+	if (!exec->cmd_args[0])
 		return ;
 	path = get_path(ft_get_env("PATH", shell));
 	i = 0;
