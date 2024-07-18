@@ -1,0 +1,6 @@
+dup2 para redir id = 0
+redir EOF = end
+dup2 para redir id = 2
+redir EOF = end2
+fd de input = 0
+ fd do file1 = 7

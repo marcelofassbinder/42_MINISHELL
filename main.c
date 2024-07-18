@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 19:47:05 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:47:42 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->pid = ft_get_pid(shell);
 	shell->fd_in = STDIN_FILENO;
 	shell->fd_out = STDOUT_FILENO;
-	add_here_doc_fd(shell, 0, true);
 	return (shell);
 }
 
@@ -122,21 +121,53 @@ bool	is_pipe_root(void *root)
 int has_here_doc(t_shell *shell)
 {
 	t_token *token;
+	int count;
 
 	token = shell->token_list->first;
+	count = 0;
 	while(token)
 	{
 		if (token->type == HERE_DOC)
-			return (1);
+			count++;
 		token = token->next;
 	}
-	return (0);
+	return (count);
+}
+
+void	open_all_heredocs(void *root, t_shell *shell)
+{
+	enum e_type node_type;
+	t_pipe		*pipe;
+	t_redir		*redir;
+
+	if (!root)
+		return ;
+	node_type = *(enum e_type *)root;
+	if (node_type == PIPELINE)
+	{
+		pipe = (t_pipe *)root;
+		open_all_heredocs(pipe->left, shell);
+		//open_all_heredocs(pipe->right, shell);
+	}
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
+	{
+		redir = (t_redir *)root;
+		if (node_type == HERE_DOC)
+			run_here_doc(redir, shell);
+		open_all_heredocs(redir->down, shell);
+	}
+	else if (node_type == WORD)
+		return ;
 }
 
 void	start_minishell(t_shell *shell)
 {
+	add_here_doc_fd(shell, 0, true);
 	tokenizer(shell->token_list, shell->line, shell);
+	shell->count_hd = has_here_doc(shell);
 	shell->root = parse(shell->token_list->first, shell);
+	if (shell->count_hd)
+		open_all_heredocs(shell->root, shell);
 	if (!is_pipe_root(shell->root) && !has_here_doc(shell))
 		run_in_parent(shell->root, shell);
 	if (shell->process == CHILD || has_here_doc(shell))
@@ -146,11 +177,15 @@ void	start_minishell(t_shell *shell)
 			shell->process = CHILD;
 			start_child_signals();
 			run(shell->root, shell);
+			close(shell->fd_heredoc[0]);
+			close(shell->fd_heredoc[1]);
+			close(shell->fd_heredoc[2]);
 			free_and_exit(shell);
 		}
 		wait(&shell->exit_status);
 		shell->exit_status = WEXITSTATUS(shell->exit_status);
 	}
+	create_new_redir(NULL, shell->token_list->first, shell, 1);
 	free_tree(shell->root);
 	free(shell->line);
 	free_token_list(shell->token_list);
