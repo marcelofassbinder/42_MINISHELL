@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 18:49:43 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:38:31 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,7 @@ bool	is_pipe_root(void *root)
 void	start_minishell(t_shell *shell)
 {
 	tokenizer(shell->token_list, shell->line, shell);
-	print_token_list(shell->token_list);
 	shell->root = parse(shell->token_list->first);
-	print_tree(shell->root, "└──", 0);
 	if (!is_pipe_root(shell->root))
 		run_in_parent(shell->root, shell);
 	if (shell->process == CHILD)

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/15 13:49:22 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:37:02 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,23 @@
 void	join_words(t_token_list *token_list)
 {
 	t_token	*tmp;
-	t_token	*to_free;
 
 	tmp = token_list->first;
 	while (tmp && tmp->next)
 	{
-		if (tmp->type == WORD && tmp->next->type == WORD)
+		if (tmp->type == WORD && (tmp->next->type == WORD || tmp->next->type == T_NULL))
 		{
 			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
-			to_free = tmp->next;
-			delete_node(token_list, to_free);
+			delete_node(token_list, tmp->next);
 		}
+		else if (tmp->type == T_NULL && (tmp->next->type == T_NULL || tmp->next->type == WORD))
+		{
+			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
+			delete_node(token_list, tmp->next);
+			tmp->type = WORD;
+		}
+		else if (tmp->type == T_NULL && tmp->next->type == T_NULL)
+			delete_node(token_list, tmp->next);
 		else
 			tmp = tmp->next;
 	}
@@ -61,16 +67,10 @@ t_token	*join_nodes(t_token_list *token_list, t_token *token)
 
 	to_delete = token;
 	token = token->next;
-	if (token->type == token->prev->type)
-	{
-		delete_node(token_list, to_delete);
-		delete_node(token_list, token);
-		return (NULL);
-	}
 	delete_node(token_list, to_delete);
 	while (token)
 	{
-		if (token->next->status != GENERAL)
+		if (token->next->status != GENERAL && token->next->type != T_NULL)
 		{
 			token->data = ft_strjoin(token->data, token->next->data);
 			to_delete = token->next;
@@ -84,6 +84,15 @@ t_token	*join_nodes(t_token_list *token_list, t_token *token)
 	return (token);
 }
 
+t_token	*create_null_token(t_token *token, t_token_list *token_list)
+{
+	token->type = T_NULL;
+	free(token->data);
+	token->data = ft_strdup("");
+	delete_node(token_list, token->next);
+	return (token->next);
+}
+
 void	join_quotes(t_token_list *token_list)
 {
 	t_token	*tmp;
@@ -95,9 +104,12 @@ void	join_quotes(t_token_list *token_list)
 		if (tmp->status == GENERAL
 			&& (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
 		{
+			if (tmp->next && (tmp->next->type == tmp->type))
+			{
+				tmp = create_null_token(tmp, token_list);
+				continue ;
+			}
 			tmp = join_nodes(token_list, tmp);
-			if (!tmp)
-				return (join_quotes(token_list));
 			if (tmp)
 			{
 				to_delete = tmp;
