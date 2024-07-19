@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/18 21:19:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:22:51 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	repeated_quotes(t_token_list *token_list)
 void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 {
 	check_dollar(token_list, shell);
-	received_signal = 0;
+	g_received_signal = 0;
 	join_spaces(token_list);
 	join_quotes(token_list);
 	join_words(token_list);

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 13:52:13 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:55:18 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,14 @@ char	*get_redir_file(t_token *token)
 	return (file);
 }
 
-t_redir *create_new_redir(void *down, t_token *token)
+t_redir *define_redir(void *down, t_token *token, t_shell *shell)
 {
-	t_redir		*redir;
+	t_redir *redir;
 	enum e_type	node_type;
 
 	redir = ft_calloc(sizeof(t_redir), 1);
+	if (!redir)
+		shell_error(shell, "Calloc error: redir", 0, true);
 	redir->type = token->type;
 	redir->file = get_redir_file(token);
 	if (down)
@@ -65,6 +67,25 @@ t_redir *create_new_redir(void *down, t_token *token)
 	}
 	else
 		redir->down = NULL;
+	return (redir);
+}
+
+t_redir *create_new_redir(void *down, t_token *token, t_shell *shell, int flag)
+{
+	t_redir		*redir;
+	static int	id = 0;
+
+	if (flag == 1)
+	{
+		id = 0;
+		return (NULL);
+	}
+	redir = define_redir(down, token, shell);
+	if (redir->type == HERE_DOC)
+	{
+		redir->id = id;
+		id ++;
+	}
 	return (redir);
 }
 

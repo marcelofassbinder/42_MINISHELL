@@ -6,13 +6,13 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/18 21:48:47 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:16:33 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	*build_redir(void *down, t_token *token)
+void	*build_redir(void *down, t_token *token, t_shell *shell)
 {
 	t_token	*last_token;
 	void	*root;
@@ -23,15 +23,15 @@ void	*build_redir(void *down, t_token *token)
 	while (token)
 	{
 		if (last_redir(token))
-			root = create_new_redir(down, token);
+			root = create_new_redir(down, token, shell, 0);
 		else
-			root = create_new_redir(root, token);
+			root = create_new_redir(root, token, shell, 0);
 		token = get_previous_redir(token);
 	}
 	if (!root)
 		return (down);
 	return (root);
-}	
+}
 
 bool	has_word(t_token *token)
 {
@@ -44,7 +44,7 @@ bool	has_word(t_token *token)
 	return (false);
 }
 
-void	*build_exec(t_token *token)
+void	*build_exec(t_token *token, t_shell *shell)
 {
 	void	*root;
 	t_exec	*exec;
@@ -56,14 +56,9 @@ void	*build_exec(t_token *token)
 		exec->is_builtin = is_builtin(exec->cmd_args[0]);
 		exec->type = WORD;
 	}
-/* 	ft_printf(STDOUT_FILENO, "\n--- NODE EXEC ---\n");
-	ft_printf(STDOUT_FILENO, "ENDERECO = %x\n", exec);
-	ft_printf(STDOUT_FILENO, "exec->type = %i\n", exec->type);
-	ft_printf(STDOUT_FILENO, "cmd_args[0] = %s\n", exec->cmd_args[0]);
-	ft_printf(STDOUT_FILENO, "is_builtin? = %i\n", exec->is_builtin); */
 	else
 		exec = NULL;
-	root = build_redir(exec, token);
+	root = build_redir(exec, token, shell);
 	return(root);
 }
 
@@ -75,21 +70,16 @@ t_pipe	*build_pipe(void *left, void *right)
 	pipe->left = left;
 	pipe->right = right;
 	pipe->type = PIPELINE;
-/* 	ft_printf(STDOUT_FILENO, "\n--- NODE PIPE ---\n");
-	ft_printf(STDOUT_FILENO, "ENDERECO = %x\n", pipe);
-	ft_printf(STDOUT_FILENO, "pipe->type = %i\n", pipe->type);
-	ft_printf(STDOUT_FILENO, "pipe->left = %x\n", pipe->left);
-	ft_printf(STDOUT_FILENO, "pipe->right = %x\n", pipe->right); */
 	return (pipe);
 }
 
-void	*parse(t_token *token)
+void	*parse(t_token *token, t_shell *shell)
 {
 	void	*root;
 
-	root = build_exec(token);
+	root = build_exec(token, shell);
 	token = find_last_or_pipe(token, 0);
 	if (token)
-		root = build_pipe(root, parse(token->next));
+		root = build_pipe(root, parse(token->next, shell));
 	return (root);
 }

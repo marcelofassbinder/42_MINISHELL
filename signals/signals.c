@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 16:52:35 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:37:27 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,25 @@ void	signal_change(int signal)
 	if (signal == SIGINT)
 	{
 		ft_printf(1, "\n");
-		received_signal = 2;
+		g_received_signal = 2;
 	}
 	else
 	{
 		ft_printf(1, " quit (Core dumped)\n");
-		received_signal = 3;
+		g_received_signal = 3;
 	}
+}
+
+void	sig_ignore(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	sig_iterative(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	sig_default(void)
@@ -48,7 +60,7 @@ void	signal_handler(int signal)
 		rl_on_new_line();
 		ft_printf(STDIN_FILENO, "\n");
 		rl_redisplay();
-		received_signal = 2;
+		g_received_signal = 2;
 	}
 }
 
