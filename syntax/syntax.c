@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/13 18:24:26 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 09:39:59 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,23 @@ bool	check_redir(char *str)
 	return (false);
 }
 
+bool	first_pipe(char *str)
+{
+	str = str - 2;
+	while (*str)
+	{
+		if (!ft_isspace(*str))
+			return (false);
+		str--;
+	}
+	return (true);
+}
+
 bool	check_pipe(char *str)
 {
 	str++;
-	if (empty_line(str) || exceeded_token(str, PIPE) || previous_is_redir(str))
+	if (empty_line(str) || exceeded_token(str, PIPE)
+		|| previous_is_redir(str) || first_pipe(str))
 	{
 		ft_printf(STDERR_FILENO,
 		"minishell: syntax error unexpected token |\n");
