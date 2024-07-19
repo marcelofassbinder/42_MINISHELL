@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 15:56:54 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:45:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,19 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	}
 	shell->envp = copy_envs(shell, envp);
 	shell->exit_status = 0;
-	shell->pid = 0;
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
+	shell->pid = ft_get_pid(shell);
+	shell->fd_in = STDIN_FILENO;
+	shell->fd_out = STDOUT_FILENO;
 	return (shell);
 }
 
-int	received_signal;
+int	g_received_signal;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
 	shell->process = CHILD;
+	shell->line = NULL;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
 	if (!shell->line)
@@ -101,9 +104,9 @@ t_shell	*ft_read_line(t_shell *shell)
 		shell_error(shell, "Calloc Error: tokens\n", 0, true);
 	shell->token_list->first = NULL;
 	shell->token_list->last = NULL;
-	if (received_signal == 2)
+	if (g_received_signal == SIGINT)
 		shell->exit_status = 130;
-	else if (received_signal == 3)
+	else if (g_received_signal == SIGQUIT)
 		shell->exit_status = 131;
 	return (shell);
 }
@@ -120,17 +123,65 @@ bool	is_pipe_root(void *root)
 	return (false);
 }
 
+int has_here_doc(t_shell *shell)
+{
+	t_token *token;
+	int count;
+
+	token = shell->token_list->first;
+	count = 0;
+	while(token)
+	{
+		if (token->type == HERE_DOC)
+			count++;
+		token = token->next;
+	}
+	return (count);
+}
+void	open_all_heredocs(void *root, t_shell *shell)
+{
+	enum e_type node_type;
+	t_pipe		*pipe;
+	t_redir		*redir;
+
+	if (!root)
+		return ;
+	node_type = *(enum e_type *)root;
+	if (node_type == PIPELINE)
+	{
+		pipe = (t_pipe *)root;
+		open_all_heredocs(pipe->left, shell);
+		open_all_heredocs(pipe->right, shell);
+	}
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
+	{
+		redir = (t_redir *)root;
+		if (node_type == HERE_DOC)
+			run_here_doc(redir, shell);
+		open_all_heredocs(redir->down, shell);
+	}
+	else if (node_type == WORD)
+		return ;
+}
+
 void	start_minishell(t_shell *shell)
 {
 	tokenizer(shell->token_list, shell->line, shell);
-	shell->root = parse(shell->token_list->first);
-	if (!is_pipe_root(shell->root))
+	shell->count_hd = has_here_doc(shell);
+	add_here_doc_fd(shell, 0, 0, true);
+	shell->root = parse(shell->token_list->first, shell);
+	if (shell->count_hd)
+	{
+		open_all_heredocs(shell->root, shell);
+		get_next_line(-1);
+	}
+	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);
-	if (shell->process == CHILD)
+	if (shell->process == CHILD || shell->count_hd)
 	{
 		if (safe_fork(shell) == 0)
 		{
-			
+			shell->process = CHILD;
 			sig_default();
 			run(shell->root, shell);
 			free_and_exit(shell);
@@ -139,10 +190,12 @@ void	start_minishell(t_shell *shell)
 		wait(&shell->exit_status);
 		shell->exit_status = WEXITSTATUS(shell->exit_status);
 	}
+	create_new_redir(NULL, NULL, NULL, 1);
 	free_tree(shell->root);
 	free(shell->line);
 	free_token_list(shell->token_list);
 	free(shell->token_list);
+	free(shell->fd_heredoc);
 }
 
 int	main(int ac, char **av, char **envp)

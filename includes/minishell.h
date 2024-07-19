@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 20:42:56 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:38:19 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define YELLOW "\033[1;3;93m"
 
 // GLOBAL VARIABLES
-extern int received_signal;
+extern int g_received_signal;
 
 //	EXIT CODES
 # define EXIT_SYNTAX 2
@@ -101,6 +101,7 @@ typedef struct		s_redir{
 	enum e_type		type;
 	char			*file;
 	void			*down;
+	int 			id;
 }					t_redir;
 
 typedef struct		s_pipe{
@@ -119,6 +120,10 @@ typedef struct		s_shell{
 	int				exit_status;
 	int				pid;
 	int				process;
+	int				fd_in;
+	int				fd_out;
+	int				*fd_heredoc;
+	int				count_hd;
 }					t_shell;
 
 //SYNTAX
@@ -154,6 +159,8 @@ bool			check_syntax(char *line);
 void			sig_default(void);
 void			signal_change(int signal);
 void			sig_modify(void);
+void			sig_iterative(void);
+void			sig_ignore(void);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
@@ -183,21 +190,22 @@ void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
 
 //PARSE.C
-void			*parse(t_token *token);
-void			*build_exec(t_token *token);
-void			*build_redir(void *down, t_token *token);
+void			*parse(t_token *token, t_shell *shell);
+void			*build_exec(t_token *token, t_shell *shell);
+void			*build_redir(void *down, t_token *token, t_shell *shell);
 t_pipe			*build_pipe(void *left, void *right);
 t_token			*get_next_redir(t_token *token);
 bool			last_redir(t_token *token);
 t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
 char			*get_redir_file(t_token *token);
-int				command_args(t_token *token);
 bool			is_builtin(char *str);
-t_redir 		*create_new_redir(void *down, t_token *token);
+t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
+t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 bool			has_word(t_token *token);
+void			add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
 
 
 //PRINT_TREE.C
@@ -242,6 +250,7 @@ char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 
 //teste
 int ft_get_pid(t_shell *shell);
+int has_here_doc(t_shell *shell);
 
 
 #endif

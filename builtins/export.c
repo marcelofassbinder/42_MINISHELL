@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 17:53:40 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:04:54 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ char	**replace_env(char *environment, t_shell *shell, int mode)
 	free(var_name);
 	return (shell->envp);
 }
+
 char	**set_new_env(char *environment, t_shell *shell, int mode)
 {
 	int		i;
