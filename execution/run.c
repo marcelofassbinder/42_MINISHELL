@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 15:17:08 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:58:28 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,19 @@ int	return_parent_error(t_shell *shell, char *str, int error)
 		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+	else if (error == 4) // erro de permissao
+		ft_printf(STDERR_FILENO, "minishell: %s: ambiguous redirect\n", str);
 	return (0);
 }
 
 bool	has_no_file(t_shell *shell, t_redir *redir, int exit_flag)
 {
+	if (!redir->file)
+	{
+		if (shell->process == CHILD)
+			shell_error(shell, "", 4, exit_flag);
+		return (return_parent_error(shell, "", 4));
+	}
 	if (!redir->file[0])
 	{
 		if (shell->process == CHILD)

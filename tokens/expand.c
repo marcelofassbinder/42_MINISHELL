@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/19 15:05:35 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:52:11 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ void	check_dollar(t_token_list *token_list, t_shell *shell)
 			&& (tmp->next->type == WORD || tmp->next->type == ENV))
 		{
 			tmp->next->data = expand(tmp->next->data, shell);
+			if (!tmp->next->data)
+			{
+				delete_node(token_list, tmp->next);
+				to_free = tmp;
+				tmp = tmp->next;
+				delete_node(token_list, to_free);
+				continue ;
+			}
 			tmp->next->type = WORD;
 			to_free = tmp;
 			tmp = tmp->next;
@@ -205,7 +213,10 @@ char	*expand(char *data, t_shell *shell)
 	{
 		to_free = data;
 		env = ft_get_env(data, shell);
-		to_expand = ft_strdup(env);
+		if (env == NULL)
+			to_expand = NULL;
+		else
+			to_expand = ft_strdup(env);
 		free(env);
 		free(to_free);
 		return (to_expand);
