@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 18:46:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:11:33 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,31 +149,30 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 	return (1);
 }
 
+//teste
+int	has_pipe(t_shell *shell)
+{
+	t_token *token;
+
+	token = shell->token_list->first;
+	while(token)
+	{
+		if (token->type == PIPELINE)
+			return (1);
+		token = token->next;
+	}
+	return (0);
+}
+
 int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	success;
-	//enum e_type node_type;
 	
 	success = 0;
 	if (redir->type == HERE_DOC)
 	{
 		success = 1;
 		dup2(shell->fd_heredoc[redir->id], STDIN_FILENO);
-		printf("dup2 para redir id = %i\n", redir->id);
-		printf("redir EOF = %s\n", redir->file);
-		/*printf("count - id - 1 = %i\n\n", shell->count_hd - redir->id);
-		printf("fd_heredoc[count - id - 1] = %i\n\n", shell->fd_heredoc[shell->count_hd - redir->id - 1]); */
-		//close(shell->fd_heredoc[redir->id]);
-		/* if (shell->process == PARENT)
-		{
-			success = 1;
-			if (redir->down)
-				node_type = *(enum e_type *)redir->down;
-			if (!redir->down || node_type != WORD)
-				success = run_here_doc(redir, shell);
-		}
-		else if (shell->process == CHILD)
-			success = run_here_doc(redir, shell); */
 	}
 	else if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
 		success = redirect_out(shell, redir, exit_flag);
@@ -222,47 +221,37 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		free(buffer);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		exit(0);
+		get_next_line(-1);
+		free_and_exit(shell);
 	}
 	wait(NULL);
 	free(buffer);
 	close(fd[1]);
-	add_here_doc_fd(shell, fd[0], false);
+	add_here_doc_fd(shell, fd[0], redir->id, false);
 	return (1);
 }
 
-void	add_here_doc_fd(t_shell *shell, int fd_here_doc, bool init)
+void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 {
 	int i;
-	int *to_free;
-	int *new;
 
 	if (init)
 	{
-		shell->fd_heredoc = ft_calloc(sizeof(int), 1);
+		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
 		if (!shell->fd_heredoc)
 			shell_error(shell, "Calloc error: heredoc", 0, true);
-		shell->fd_heredoc[0] = -1;
+		shell->fd_heredoc[shell->count_hd] = -1;
 		return ;
 	}
 	i = 0;
+	printf("pos = %i\n", pos);
+	shell->fd_heredoc[pos] = fd_here_doc;
+	/* i = 0;
 	while(shell->fd_heredoc[i] != -1)
-		i++;
-	new = ft_calloc(sizeof(int), i + 1);
-	if (!new)
-		shell_error(shell, "Calloc error: heredoc", 0, true);
-	ft_memcpy(new, shell->fd_heredoc, i);
-	new[i] = fd_here_doc;
-	new[i + 1] = -1;
-	to_free = shell->fd_heredoc;
-	free(to_free);
-	shell->fd_heredoc = new;
-	i = 0;
-	while(new[i])
 	{
-		printf("fds_heredoc[%i] = %i\n", i, new[i]);
+		printf("fds_heredoc[%i] = %i\n", i, shell->fd_heredoc[i]);
 		i++;
-	}
+	} */
 }
 
 void	run_redir(t_redir *redir, t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 21:52:36 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:12:02 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	free_and_exit(t_shell *shell)
 		free(shell->line);
 	if (shell->old_pwd)
 		free(shell->old_pwd);
+	if (shell->fd_heredoc)
+		free(shell->fd_heredoc);
 	if (shell)
 		free(shell);
 	exit(status);
