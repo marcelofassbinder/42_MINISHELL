@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 21:53:32 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:17:08 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void	run_exec(t_exec *exec, t_shell *shell)
 {
 	if (!exec)
 		return ;
+	if (!exec->cmd_args[0][0])
+		shell_error(shell, "", 1, true);
 	if (!ft_strcmp(exec->cmd_args[0], "env") && exec->cmd_args[1])
 		shell_error(shell, "env", 2, true);
 	if (!exec->is_builtin)
@@ -127,11 +129,24 @@ int	return_parent_error(t_shell *shell, char *str, int error)
 	return (0);
 }
 
+bool	has_no_file(t_shell *shell, t_redir *redir, int exit_flag)
+{
+	if (!redir->file[0])
+	{
+		if (shell->process == CHILD)
+			shell_error(shell, redir->file, 2, exit_flag);
+		return (return_parent_error(shell, "", 2));
+	}
+	return (1);
+}
+
 int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	fd;
 
 	fd = 0;
+	if (!has_no_file(shell, redir, exit_flag))
+		return (0);
 	if (redir->type == REDIR_OUT)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
@@ -154,6 +169,8 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 	int	fd;
 
 	fd = 0;	
+	if (has_no_file(shell, redir, exit_flag))
+		return (0);
 	if (access(redir->file, F_OK) != 0)
 	{
 		if (shell->process == CHILD)
