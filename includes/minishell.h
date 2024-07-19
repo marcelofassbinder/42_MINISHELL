@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 18:39:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:54:50 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,10 +192,11 @@ t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
 bool			is_builtin(char *str);
 t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
+t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
 bool			has_word(t_token *token);
-void			add_here_doc_fd(t_shell *shell, int fd_here_doc, bool init);
+void			add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
 
 
 //PRINT_TREE.C
