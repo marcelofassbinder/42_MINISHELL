@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 21:49:40 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:52:13 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	count_args(t_token *token)
 	count = 0;
 	while(token && token->type != PIPELINE)
 	{
-		if (token->type == WORD)
+		if (token->type == WORD || token->type == T_NULL)
 			count++;
 		token = token->next;
 	}
