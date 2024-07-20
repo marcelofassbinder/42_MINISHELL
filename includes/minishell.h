@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 17:38:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:39:09 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,10 @@ typedef struct		s_shell{
 	char			**envp;
 	char			*line;
 	char			*old_pwd;
+	int				*fd_heredoc;
 	int				exit_status;
 	int				pid;
 	int				process;
-	int				fd_in;
-	int				fd_out;
-	int				*fd_heredoc;
 	int				count_hd;
 }					t_shell;
 
