@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 12:39:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 20:03:57 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,22 @@ char	**filter_envs(char **envp)
 
 void	run_execve(t_exec *exec, t_shell *shell)
 {	
-	char **path;
-	char *path_cmd;
-	int i;
+	char	**path;
+	char	*path_cmd;
+	int		i;
+	int		error;
+	char	**envs;
 
+	error = 0;
 	if (!exec->cmd_args[0])
 		return ;
 	path = get_path(ft_get_env("PATH", shell));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
-		execve(exec->cmd_args[0], exec->cmd_args, filter_envs(shell->envp));
+	{
+		envs = filter_envs(shell->envp);
+		error = execve(exec->cmd_args[0], exec->cmd_args, envs);
+	}
 	if (!path)
 		shell_error(shell, exec->cmd_args[0], 2, true);
 	while(path[i])
@@ -83,6 +89,13 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	}
 	shell->exit_status = EXIT_CMD;
 	free(path);
+	if (error == -1)
+	{
+		printf("%i", error);
+		free_envs(envs);
+		shell->exit_status = 126;
+		shell_error(shell, exec->cmd_args[0], 3, true);
+	}
 	shell_error(shell, exec->cmd_args[0], 1, true);
 }
 
@@ -104,7 +117,7 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
-	if (!exec)
+	if (!exec || !exec->cmd_args[0])
 		return ;
 	if (!exec->cmd_args[0][0])
 		shell_error(shell, "", 1, true);

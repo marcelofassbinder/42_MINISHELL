@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 12:16:55 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:47:03 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ char			find_special(char *data);
 int				count_special(char *data, char special);
 char			*ft_get_env(char *data, t_shell *shell);
 char			*get_var_value(char *env);
-
+char			**copy_envs(t_shell *shell, char **envp);
 
 //JOIN.C
 void			join_spaces(t_token_list *token_list);
