@@ -6,49 +6,72 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/19 15:52:11 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:18:12 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void	check_is_not_env(t_token *tmp)
+{
+	if (tmp->type == ENV && tmp->status == IN_S_QUOTE)
+		tmp->type = WORD;
+ 	else if (tmp->type == ENV && ((!tmp->next) || (tmp->next->type != WORD
+		&& tmp->next->type != S_QUOTE && tmp->next->type != D_QUOTE)))
+		tmp->type = WORD;
+}
+
+void	delete_null_nodes(t_token_list *token_list, t_token *tmp)
+{
+	t_token	*to_free;
+	
+	delete_node(token_list, tmp->next);
+	to_free = tmp;
+	tmp = tmp->next;
+	delete_node(token_list, to_free);
+}
+
+void	delete_expanded_node(t_token_list *token_list, t_token *tmp)
+{
+	t_token	*to_free;
+
+	tmp->next->type = WORD;
+	to_free = tmp;
+	tmp = tmp->next;
+	delete_node(token_list, to_free);
+}
+
+void	delete_env_node(t_token_list *token_list, t_token *tmp)
+{
+	t_token	*to_free;
+
+	to_free = tmp;
+	tmp = tmp->next;
+	delete_node(token_list, to_free);	
+}
+
 void	check_dollar(t_token_list *token_list, t_shell *shell)
 {
 	t_token	*tmp;
-	t_token	*to_free;
 
 	tmp = token_list->first;
 	while (tmp)
 	{
-		if ((tmp->type == ENV && tmp->status != IN_S_QUOTE) && tmp->next
+		check_is_not_env(tmp);
+		if ((tmp->type == ENV) && tmp->next
 			&& (tmp->next->type == WORD || tmp->next->type == ENV))
 		{
 			tmp->next->data = expand(tmp->next->data, shell);
 			if (!tmp->next->data)
 			{
-				delete_node(token_list, tmp->next);
-				to_free = tmp;
-				tmp = tmp->next;
-				delete_node(token_list, to_free);
+				delete_null_nodes(token_list, tmp);
 				continue ;
 			}
-			tmp->next->type = WORD;
-			to_free = tmp;
-			tmp = tmp->next;
-			delete_node(token_list, to_free);
+			delete_expanded_node(token_list, tmp);
 		}
-		else if (tmp->type == ENV && tmp->status == IN_S_QUOTE)
-			tmp->type = WORD;
- 		else if (tmp->type == ENV && ((!tmp->next) || (tmp->next->type != WORD
-			&& tmp->next->type != S_QUOTE && tmp->next->type != D_QUOTE)))
-			tmp->type = WORD;
 		else if (tmp->type == ENV && tmp->status == GENERAL && tmp->next &&
 			(tmp->next->type == S_QUOTE || tmp->next->type == D_QUOTE))
-		{
-			to_free = tmp;
-			tmp = tmp->next;
-			delete_node(token_list, to_free);
-		}
+			delete_env_node(token_list, tmp);
 		else
 			tmp = tmp->next;
 	}
