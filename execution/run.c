@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 18:06:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 12:39:25 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,10 +265,8 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	buffer = write_here_doc(redir, shell);
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);
-	
 	if (safe_fork(shell) == 0)
 	{
-		sig_iterative();
 		close(fd[0]);
 		write(fd[1], buffer, ft_strlen(buffer));
 		free(buffer);
@@ -277,9 +275,7 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		get_next_line(-1);
 		free_and_exit(shell);
 	}
-	sig_ignore();
 	wait(NULL);
-	start_sig();
 	free(buffer);
 	close(fd[1]);
 	add_here_doc_fd(shell, fd[0], redir->id, false);

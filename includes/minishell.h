@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 17:38:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 12:16:55 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ void			signal_change(int signal);
 void			sig_modify(void);
 void			sig_iterative(void);
 void			sig_ignore(void);
+void			sig_heredoc(void);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);

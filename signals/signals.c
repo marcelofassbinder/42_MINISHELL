@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 17:37:27 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 12:37:21 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,9 @@ void	signal_change(int signal)
 	}
 	else
 	{
-		ft_printf(1, " quit (Core dumped)\n");
+		ft_printf(1, "Quit (Core dumped)\n");
 		g_received_signal = 3;
 	}
-}
-
-void	sig_ignore(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	sig_iterative(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 }
 
 void	sig_default(void)
@@ -50,6 +38,21 @@ void	sig_modify(void)
 	signal(SIGQUIT, signal_change);
 }
 
+void	heredoc_handler(int signal)
+{
+	if (signal == SIGINT)
+	{
+		ft_printf(1, "\n");
+		exit(130);
+	}
+}
+
+void	sig_heredoc(void)
+{
+	signal(SIGINT, heredoc_handler);
+	signal(SIGQUIT, heredoc_handler);
+}
+
 /* Function to handle the received signal, during the execution of
 	this function other received signals are blocked if it is in the mask. */
 void	signal_handler(int signal)
@@ -62,6 +65,11 @@ void	signal_handler(int signal)
 		rl_redisplay();
 		g_received_signal = 2;
 	}
+}
+void	sig_ignore(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 /* Initialize the signal handling structure (sigaction), define the
