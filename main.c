@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 17:45:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:36:06 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-	else if (error == 4)
+	else if (error == 4) // redirect para nao expandivel
 		ft_printf(STDERR_FILENO, "minishell: ambiguous redirect\n", str);
 	else
 		ft_printf(STDERR_FILENO, "%s\n", str);

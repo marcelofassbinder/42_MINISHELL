@@ -6,75 +6,60 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/20 13:18:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:36:44 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	check_is_not_env(t_token *tmp)
+void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 {
-	if (tmp->type == ENV && tmp->status == IN_S_QUOTE)
-		tmp->type = WORD;
- 	else if (tmp->type == ENV && ((!tmp->next) || (tmp->next->type != WORD
-		&& tmp->next->type != S_QUOTE && tmp->next->type != D_QUOTE)))
-		tmp->type = WORD;
+	t_token *to_free;
+
+	(*tmp)->next->data = expand((*tmp)->next->data, shell);
+	if (!(*tmp)->next->data)
+	{
+		delete_node(token_list, (*tmp)->next);
+		to_free = *tmp;
+		*tmp = (*tmp)->next;
+		delete_node(token_list, to_free);
+	}
+	else
+	{
+		(*tmp)->next->type = WORD;
+		to_free = *tmp;
+		*tmp = (*tmp)->next;
+		delete_node(token_list, to_free);
+	}
 }
 
-void	delete_null_nodes(t_token_list *token_list, t_token *tmp)
+void check_dollar(t_token_list *token_list, t_shell *shell)
 {
-	t_token	*to_free;
-	
-	delete_node(token_list, tmp->next);
-	to_free = tmp;
-	tmp = tmp->next;
-	delete_node(token_list, to_free);
-}
+	t_token *tmp = token_list->first;
+	t_token *to_free;
 
-void	delete_expanded_node(t_token_list *token_list, t_token *tmp)
-{
-	t_token	*to_free;
-
-	tmp->next->type = WORD;
-	to_free = tmp;
-	tmp = tmp->next;
-	delete_node(token_list, to_free);
-}
-
-void	delete_env_node(t_token_list *token_list, t_token *tmp)
-{
-	t_token	*to_free;
-
-	to_free = tmp;
-	tmp = tmp->next;
-	delete_node(token_list, to_free);	
-}
-
-void	check_dollar(t_token_list *token_list, t_shell *shell)
-{
-	t_token	*tmp;
-
-	tmp = token_list->first;
 	while (tmp)
 	{
-		check_is_not_env(tmp);
-		if ((tmp->type == ENV) && tmp->next
-			&& (tmp->next->type == WORD || tmp->next->type == ENV))
+		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next &&
+			(tmp->next->type == WORD || tmp->next->type == ENV))
 		{
-			tmp->next->data = expand(tmp->next->data, shell);
-			if (!tmp->next->data)
-			{
-				delete_null_nodes(token_list, tmp);
-				continue ;
-			}
-			delete_expanded_node(token_list, tmp);
+			handle_expansion(token_list, &tmp, shell);
+			continue;
 		}
+		if ((tmp->type == ENV && tmp->status == IN_S_QUOTE) || (tmp->type
+			== ENV && (!tmp->next || (tmp->next->type != WORD
+				&& tmp->next->type != S_QUOTE && tmp->next->type != D_QUOTE))))
+			tmp->type = WORD;
 		else if (tmp->type == ENV && tmp->status == GENERAL && tmp->next &&
 			(tmp->next->type == S_QUOTE || tmp->next->type == D_QUOTE))
-			delete_env_node(token_list, tmp);
+		{
+			to_free = tmp;
+			tmp = tmp->next;
+			delete_node(token_list, to_free);
+		}
 		else
 			tmp = tmp->next;
-	}
+    }
 }
 
 char	*expand_digit(char *data)
@@ -215,12 +200,29 @@ bool	is_special(int c)
 	return (false);
 }
 
+char	*expand_normal(char *data, t_shell *shell)
+{
+	char	*env;
+	char	*expanded;
+	char	*to_free;
+	
+	to_free = data;
+	env = ft_get_env(data, shell);
+	if (!env)
+	{
+		free(to_free);
+		return (NULL);	
+	}
+	expanded = ft_strdup(env);
+	free(env);
+	free(to_free);
+	return (expanded);
+}
+
 char	*expand(char *data, t_shell *shell)
 {
 	char	*to_expand;
-	char	*to_free;
 	char	*rest;
-	char	*env;
 	int		i;
 
 	if (data[0] == '?' || data[0] == '$' || ft_isdigit(data[0])
@@ -233,17 +235,7 @@ char	*expand(char *data, t_shell *shell)
 		rest = ft_substr(data, i, ft_strlen(data) - i);
 	}
 	else
-	{
-		to_free = data;
-		env = ft_get_env(data, shell);
-		if (env == NULL)
-			to_expand = NULL;
-		else
-			to_expand = ft_strdup(env);
-		free(env);
-		free(to_free);
-		return (to_expand);
-	}
+		return (expand_normal(data, shell));
 	return (expand_aux(data, to_expand, rest, shell));
 }
 
