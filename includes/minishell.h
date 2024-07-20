@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 13:39:09 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/20 20:02:21 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ typedef struct		s_shell{
 	int				exit_status;
 	int				pid;
 	int				process;
+	int				fd_in;
+	int				fd_out;
 	int				count_hd;
 }					t_shell;
 
@@ -249,6 +251,11 @@ char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 //teste
 int ft_get_pid(t_shell *shell);
 int has_here_doc(t_shell *shell);
+
+//heredoc
+char	*expand_here_doc(char *line, t_shell *shell);
+char	*replace_expanded_var(char *line, char *after_doll, char *expanded, t_shell *shell, int flag);
+char	*clean_var(char *after_doll);
 
 
 #endif
