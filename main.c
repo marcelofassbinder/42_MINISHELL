@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 17:45:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:39:09 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->exit_status = 0;
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
 	shell->pid = ft_get_pid(shell);
-	shell->fd_in = STDIN_FILENO;
-	shell->fd_out = STDOUT_FILENO;
 	return (shell);
 }
 

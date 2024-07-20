@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 18:06:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:32:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,8 +244,8 @@ char	*write_here_doc(t_redir *redir, t_shell *shell)
 	dup2(STDERR_FILENO, STDIN_FILENO);
 	while(1)
 	{
-		ft_printf(shell->fd_in, ">");
-		line = get_next_line(shell->fd_in);
+		ft_printf(STDIN_FILENO, ">");
+		line = get_next_line(STDIN_FILENO);
 		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
 		{
 			free(line);
@@ -265,10 +265,8 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	buffer = write_here_doc(redir, shell);
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);
-	
 	if (safe_fork(shell) == 0)
 	{
-		sig_iterative();
 		close(fd[0]);
 		write(fd[1], buffer, ft_strlen(buffer));
 		free(buffer);
@@ -277,9 +275,7 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		get_next_line(-1);
 		free_and_exit(shell);
 	}
-	sig_ignore();
 	wait(NULL);
-	start_sig();
 	free(buffer);
 	close(fd[1]);
 	add_here_doc_fd(shell, fd[0], redir->id, false);
@@ -288,8 +284,6 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 
 void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 {
-	int i;
-
 	if (init)
 	{
 		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
@@ -298,7 +292,6 @@ void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 		shell->fd_heredoc[shell->count_hd] = -1;
 		return ;
 	}
-	i = 0;
 	shell->fd_heredoc[pos] = fd_here_doc;
 }
 
@@ -318,14 +311,14 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[0]);
-		dup2(fd[1], shell->fd_out);
+		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
 		exit(0);
 	}
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[1]);
-		dup2(fd[0], shell->fd_in);
+		dup2(fd[0], STDIN_FILENO);
 		run(pipe_str->right, shell);
 		exit(0);
 	}
