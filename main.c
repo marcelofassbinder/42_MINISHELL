@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 13:39:09 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:04:01 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->exit_status = 0;
 	shell->old_pwd = safe_getcwd(NULL, 0, shell);
 	shell->pid = ft_get_pid(shell);
+	shell->fd_in = STDIN_FILENO;
+	shell->fd_out = STDOUT_FILENO;
 	return (shell);
 }
 
@@ -171,7 +173,7 @@ void	start_minishell(t_shell *shell)
 	if (shell->count_hd)
 	{
 		open_all_heredocs(shell->root, shell);
-		get_next_line(-1);
+		//get_next_line(-1);
 	}
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);

@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 14:32:59 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:05:07 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,10 +194,8 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 		else
 			return (return_parent_error(shell, redir->file, 3));
 	}
-	if (fd != -1)
-	{
+	else
 		dup2(fd, STDIN_FILENO);
-	}
 	return (1);
 }
 
@@ -240,14 +238,16 @@ char	*write_here_doc(t_redir *redir, t_shell *shell)
 
 	buffer = ft_calloc(sizeof(char), 1);
 	if (!buffer)
-		shell_error(shell, "Calloc Error", 0, true);
+		shell_error(shell, "Calloc Error: here_doc", 0, true);
 	dup2(STDERR_FILENO, STDIN_FILENO);
 	while(1)
 	{
-		ft_printf(STDIN_FILENO, ">");
-		line = get_next_line(STDIN_FILENO);
+		ft_printf(shell->fd_in, ">");
+		line = get_next_line(shell->fd_in);
+		line = expand_here_doc(line, shell);
 		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
 		{
+			//get_next_line(-1);
 			free(line);
 			break ;
 		}
@@ -264,18 +264,19 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 
 	buffer = write_here_doc(redir, shell);
 	if (pipe(fd) == -1)
-		shell_error(shell, "Pipe error\n", 0, true);
+		shell_error(shell, "Pipe error\n", 0, true);	
 	if (safe_fork(shell) == 0)
 	{
 		close(fd[0]);
 		write(fd[1], buffer, ft_strlen(buffer));
 		free(buffer);
-		dup2(fd[1], STDOUT_FILENO);
+		dup2(fd[1], shell->fd_out);
 		close(fd[1]);
 		get_next_line(-1);
 		free_and_exit(shell);
 	}
 	wait(NULL);
+	//get_next_line(-1);
 	free(buffer);
 	close(fd[1]);
 	add_here_doc_fd(shell, fd[0], redir->id, false);
