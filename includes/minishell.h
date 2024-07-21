@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 20:02:21 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 15:32:54 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct		s_exec{
 typedef struct		s_redir{
 	enum e_type		type;
 	char			*file;
+	enum e_status	file_status;
 	void			*down;
 	int 			id;
 }					t_redir;
@@ -198,7 +199,7 @@ t_token			*get_next_redir(t_token *token);
 bool			last_redir(t_token *token);
 t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
-char			*get_redir_file(t_token *token);
+void			define_redir_file(t_redir *redir, t_token *token);
 bool			is_builtin(char *str);
 t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
 t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
@@ -256,6 +257,8 @@ int has_here_doc(t_shell *shell);
 char	*expand_here_doc(char *line, t_shell *shell);
 char	*replace_expanded_var(char *line, char *after_doll, char *expanded, t_shell *shell, int flag);
 char	*clean_var(char *after_doll);
+char *copy_before_doll(char *line, char *after_doll, char *expanded, t_shell *shell);
+char 	*copy_after_doll(char *new_line, char *line, char *after_doll);
 
 
 #endif
