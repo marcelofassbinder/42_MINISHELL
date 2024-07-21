@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 17:39:48 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:48:22 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ typedef struct		s_exec{
 
 typedef struct		s_redir{
 	enum e_type		type;
-	char			*file;
 	enum e_status	file_status;
+	char			*file;
 	void			*down;
 	int 			id;
 }					t_redir;
@@ -140,23 +140,23 @@ bool			exceeded_token(char *str, int c);
 bool			special_char(char *str);
 
 //	TOKENS.C
-void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
-void			print_token_list(t_token_list *token_list);
-int				is_type_word(char c);
 enum e_status	append_quotes(t_token_list *token_list, char c, enum e_status status);
 enum e_status	change_status(t_token_list *token_list, char c, enum e_status status, enum e_type type);
 bool			is_redir(t_token *token);
+int				is_type_word(char c);
+void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
+void			print_token_list(t_token_list *token_list);
 void			find_files(t_token_list *token_list);
 
 //APPEND.C
-void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
 int				append_word(t_token_list *token_list, char *line, enum e_status status, int i);
 int				append_redir(t_token_list *token_list, char *line, enum e_status status, int i);
+void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
 
 //SIGNALS.C
+bool			check_syntax(char *line);
 void			start_sig(void);
 void			signal_handler(int signal);
-bool			check_syntax(char *line);
 void			sig_default(void);
 void			signal_change(int signal);
 void			sig_modify(void);
@@ -176,37 +176,36 @@ void			free_and_exit(t_shell *shell);
 void			shell_error(t_shell *shell, char *str, int error, bool exit_flag);
 
 //EXPAND.C
-void			check_dollar(t_token_list *token_list, t_shell *shell);
+int				count_special(char *data, char special);
 char			*expand(char *data, t_shell *shell);
 char			find_special(char *data);
-int				count_special(char *data, char special);
 char			*ft_get_env(char *data, t_shell *shell);
 char			*get_var_value(char *env);
+void			check_dollar(t_token_list *token_list, t_shell *shell);
 
 
 //JOIN.C
-void			join_spaces(t_token_list *token_list);
 t_token			*join_nodes(t_token_list *token_list, t_token *token);
+void			join_spaces(t_token_list *token_list);
 void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
 
 //PARSE.C
+t_token			*get_next_redir(t_token *token);
+t_token			*find_last_or_pipe(t_token *token, int flag);
+t_token			*get_previous_redir(t_token *token);
+t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
+t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
+t_pipe			*build_pipe(void *left, void *right);
+int				count_args(t_token *token);
+char			**define_cmd_args(t_token *token);
+bool			last_redir(t_token *token);
+bool			is_builtin(char *str);
+bool			has_word(t_token *token);
 void			*parse(t_token *token, t_shell *shell);
 void			*build_exec(t_token *token, t_shell *shell);
 void			*build_redir(void *down, t_token *token, t_shell *shell);
-t_pipe			*build_pipe(void *left, void *right);
-t_token			*get_next_redir(t_token *token);
-bool			last_redir(t_token *token);
-t_token			*find_last_or_pipe(t_token *token, int flag);
-t_token			*get_previous_redir(t_token *token);
 void			define_redir_file(t_redir *redir, t_token *token);
-bool			is_builtin(char *str);
-t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
-t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
-int				count_args(t_token *token);
-char			**define_cmd_args(t_token *token);
-bool			has_word(t_token *token);
-void			add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
 
 
 //PRINT_TREE.C
@@ -217,7 +216,7 @@ void			 printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
 
 
 //RUN
-void			run(void *root, t_shell *shell);
+int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
 char 			**get_path(char *path_from_env);
 void			run_execve(t_exec *exec, t_shell *shell);
 void			run_exec(t_exec *exec, t_shell *shell);
@@ -225,42 +224,41 @@ void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
-int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
-char			*write_here_doc(t_redir *redir, t_shell *shell);
-int				run_here_doc(t_redir *redir, t_shell *shell);
+void			run(void *root, t_shell *shell);
 
 
 //BUILTINS
+int				check_option_n(char **cmd_args);
+int				str_is_digit(char *str);
+char			*get_variable_name(char *environment);
+char			*remove_plus(char *environment);
 void			echo(char **cmd_args, t_shell *shell);
 void			env(char **cmd_args, t_shell *shell);
 void			export(char **cmd_args, t_shell *shell);
 void			pwd(t_shell *shell);
 void			unset(char **cmd_args, t_shell *shell);
-char			*get_variable_name(char *environment);
 void			cd(char **cmd_args, t_shell *shell);
 void			cd_home(char **cmd_args, t_shell *shell);
-int				str_is_digit(char *str);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
-char			*remove_plus(char *environment);
 
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);
-void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
+void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 
 //teste
-int ft_get_pid(t_shell *shell);
-int has_here_doc(t_shell *shell);
+int 			ft_get_pid(t_shell *shell);
+int 			has_here_doc(t_shell *shell);
 
-//heredoc
-char	*expand_here_doc(char *line, t_shell *shell);
-char	*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
-char 	*copy_before_doll(char *line, char *after_doll,/*  char *expanded, */ t_shell *shell);
-char 	*copy_after_doll(char *new_line, char *line, char *after_doll);
-char	*add_backslash_n(char *line, t_shell *shell);
-void	copy_string(char *new, char *line, int j);
-
-
+//	HEREDOC
+int				run_here_doc(t_redir *redir, t_shell *shell);
+char			*write_here_doc(t_redir *redir, t_shell *shell);
+char			*expand_here_doc(char *line, t_shell *shell);
+char			*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
+char 			*copy_before_doll(char *line, char *after_doll,/*  char *expanded, */ t_shell *shell);
+char 			*copy_after_doll(char *new_line, char *line, char *after_doll);
+char			*add_backslash_n(char *line, t_shell *shell);
+void			add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
 
 #endif

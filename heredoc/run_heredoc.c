@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/21 16:24:52 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:42:46 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,9 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		free(buffer);
 		dup2(fd[1], shell->fd_out);
 		close(fd[1]);
-		//get_next_line(-1);
 		free_and_exit(shell);
 	}
 	wait(NULL);
-	//get_next_line(-1);
 	free(buffer);
 	close(fd[1]);
 	add_here_doc_fd(shell, fd[0], redir->id, false);
