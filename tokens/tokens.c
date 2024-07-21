@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/19 17:22:51 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:39:56 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 	join_words(token_list);
 	find_files(token_list);
 	token_redir_pipe(token_list);
+	print_token_list(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)

@@ -3,14 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/20 19:36:44 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 11:33:48 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	insert_token(char *data, t_token **token)
+{
+	t_token	*new;
+	t_token	*space;
+
+	new = ft_calloc(sizeof(t_token), 1);
+	space = ft_calloc(sizeof(t_token), 1);
+	new->data = data;
+	new->status = GENERAL;
+	new->type = WORD;
+	space->data = ft_strdup(" ");
+	space->status = GENERAL;
+	space->type = W_SPACE;
+	space->prev = (*token);
+	space->next = new;
+	new->prev = space;
+	new->next = (*token)->next;
+	if ((*token)->next)
+		(*token)->next->prev = new;
+	(*token)->next = space;
+}
+
+void	split_env(t_token_list *token_list, t_token **token)
+{
+	char	**splited;
+	int		i;
+	t_token	*tmp;
+
+	tmp = (*token);
+	splited = ft_split((*token)->next->data, ' ');
+	i = 1;
+	(*token) = (*token)->next;
+	free((*token)->data);
+	(*token)->data = splited[0];
+	while (splited[i])
+	{
+		insert_token(splited[i], token);
+		(*token) = (*token)->next->next;
+		i++;
+	}
+	(*token) = (*token)->next;
+	delete_node(token_list, tmp);
+	i = 0;
+	free (splited);
+}
 
 void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 {
@@ -24,6 +70,8 @@ void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 		*tmp = (*tmp)->next;
 		delete_node(token_list, to_free);
 	}
+	else if (ft_strchr((*tmp)->next->data, ' ') && (*tmp)->next->status == GENERAL)
+		split_env(token_list, tmp);
 	else
 	{
 		(*tmp)->next->type = WORD;
