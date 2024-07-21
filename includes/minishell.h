@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 20:02:21 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 12:58:00 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,9 +253,8 @@ int ft_get_pid(t_shell *shell);
 int has_here_doc(t_shell *shell);
 
 //heredoc
-char	*expand_here_doc(char *line, t_shell *shell);
+char	*expand_heredoc(char *line, t_shell *shell);
 char	*replace_expanded_var(char *line, char *after_doll, char *expanded, t_shell *shell, int flag);
 char	*clean_var(char *after_doll);
-
 
 #endif
