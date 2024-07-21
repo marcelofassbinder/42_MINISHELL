@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 15:32:54 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:32:18 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,10 +255,12 @@ int has_here_doc(t_shell *shell);
 
 //heredoc
 char	*expand_here_doc(char *line, t_shell *shell);
-char	*replace_expanded_var(char *line, char *after_doll, char *expanded, t_shell *shell, int flag);
-char	*clean_var(char *after_doll);
-char *copy_before_doll(char *line, char *after_doll, char *expanded, t_shell *shell);
+char	*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
+char 	*copy_before_doll(char *line, char *after_doll,/*  char *expanded, */ t_shell *shell);
 char 	*copy_after_doll(char *new_line, char *line, char *after_doll);
+char	*add_backslash_n(char *line, t_shell *shell);
+void	copy_string(char *new, char *line, int j);
+
 
 
 #endif

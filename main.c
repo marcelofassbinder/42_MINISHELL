@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 19:04:01 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 16:33:26 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		free(shell->line);
 	if (shell->old_pwd)
 		free(shell->old_pwd);
+	if (shell->fd_heredoc)
+		free(shell->fd_heredoc);
 	if (shell)
 		free(shell);
 	if (exit_flag)

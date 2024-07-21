@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 15:52:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 16:24:52 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,72 +229,6 @@ int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 	else
 		success = redirect_in(shell, redir, exit_flag);
 	return (success);
-}
-
-char	*write_here_doc(t_redir *redir, t_shell *shell)
-{
-	char *buffer;
-	char *line;
-
-	buffer = ft_calloc(sizeof(char), 1);
-	if (!buffer)
-		shell_error(shell, "Calloc Error: here_doc", 0, true);
-	dup2(STDERR_FILENO, STDIN_FILENO);
-	while(1)
-	{
-		ft_printf(shell->fd_in, ">");
-		line = get_next_line(shell->fd_in);
-		if (redir->file_status == GENERAL)
-			line = expand_here_doc(line, shell);
-		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
-		{
-			//get_next_line(-1);
-			free(line);
-			break ;
-		}
-		buffer = ft_strjoin(buffer, line);
-		free(line);
-	}
-	return (buffer);
-}
-
-int	run_here_doc(t_redir *redir, t_shell *shell)
-{
-	char *buffer;
-	int fd[2];
-
-	buffer = write_here_doc(redir, shell);
-	if (pipe(fd) == -1)
-		shell_error(shell, "Pipe error\n", 0, true);	
-	if (safe_fork(shell) == 0)
-	{
-		close(fd[0]);
-		write(fd[1], buffer, ft_strlen(buffer));
-		free(buffer);
-		dup2(fd[1], shell->fd_out);
-		close(fd[1]);
-		get_next_line(-1);
-		free_and_exit(shell);
-	}
-	wait(NULL);
-	//get_next_line(-1);
-	free(buffer);
-	close(fd[1]);
-	add_here_doc_fd(shell, fd[0], redir->id, false);
-	return (1);
-}
-
-void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
-{
-	if (init)
-	{
-		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
-		if (!shell->fd_heredoc)
-			shell_error(shell, "Calloc error: heredoc", 0, true);
-		shell->fd_heredoc[shell->count_hd] = -1;
-		return ;
-	}
-	shell->fd_heredoc[pos] = fd_here_doc;
 }
 
 void	run_redir(t_redir *redir, t_shell *shell)

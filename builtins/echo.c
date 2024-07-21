@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 20:52:35 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:37:48 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ void	echo(char **cmd_args, t_shell *shell)
  		if (j != ft_strlen(cmd_args[i]))
 			break ;
 		n_flag = 1;
+	}
+	if (!cmd_args[i])
+	{
+		ft_printf(STDOUT_FILENO, "\n");
+		return;
 	}
 	while (cmd_args[i])
 	{
