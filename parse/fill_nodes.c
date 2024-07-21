@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_nodes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 13:40:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 15:32:54 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,26 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-char	*get_redir_file(t_token *token)
+void	define_redir_file(t_redir *redir, t_token *token)
 {
-	char *file;
-
 	if (token->next->type == W_SPACE)
 	{
 		if (!token->next->next)
-			file = NULL;
+		{
+			redir->file = NULL;
+			redir->file_status = GENERAL;
+		}
 		else
-			file = token->next->next->data;
+		{
+			redir->file = token->next->next->data;
+			redir->file_status = token->next->next->status;
+		}
 	}
 	else
-		file = token->next->data;
-	return (file);
+	{
+		redir->file = token->next->data;
+		redir->file_status = token->next->status;
+	}
 }
 
 t_redir *define_redir(void *down, t_token *token, t_shell *shell)
@@ -56,7 +62,7 @@ t_redir *define_redir(void *down, t_token *token, t_shell *shell)
 	if (!redir)
 		shell_error(shell, "Calloc error: redir", 0, true);
 	redir->type = token->type;
-	redir->file = get_redir_file(token);
+	define_redir_file(redir, token);
 	if (down)
 	{
 		node_type = *(enum e_type *)down;
