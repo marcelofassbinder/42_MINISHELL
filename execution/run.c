@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 20:03:57 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:30:13 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,8 +297,6 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 
 void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 {
-	int i;
-
 	if (init)
 	{
 		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
@@ -307,7 +305,6 @@ void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 		shell->fd_heredoc[shell->count_hd] = -1;
 		return ;
 	}
-	i = 0;
 	shell->fd_heredoc[pos] = fd_here_doc;
 }
 
