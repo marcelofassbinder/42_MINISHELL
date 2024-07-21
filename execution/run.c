@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 10:30:13 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/21 20:56:24 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	free(path);
 	if (error == -1)
 	{
-		printf("%i", error);
 		free_envs(envs);
 		shell->exit_status = 126;
 		shell_error(shell, exec->cmd_args[0], 3, true);
@@ -318,17 +317,20 @@ void	run_redir(t_redir *redir, t_shell *shell)
 void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 {
 	int	fd[2];
+	int	pid[2];
 	
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);
-	if (safe_fork(shell) == 0)
+	pid[0] = safe_fork(shell);
+	if (pid[0] == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], shell->fd_out);
 		run(pipe_str->left, shell);
 		exit(0);
 	}
-	if (safe_fork(shell) == 0)
+	pid[1] = safe_fork(shell);
+	if (pid[1] == 0)
 	{
 		close(fd[1]);
 		dup2(fd[0], shell->fd_in);
@@ -337,9 +339,9 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	wait(&shell->exit_status);
-	wait(&shell->exit_status);
-	shell->exit_status = WEXITSTATUS(shell->exit_status);
+	waitpid(pid[0], &shell->exit_status, 0);
+	waitpid(pid[1], &shell->exit_status, 0);
+	shell->exit_status = get_status(shell->exit_status);
 }
 
 void	run(void *root, t_shell *shell)
