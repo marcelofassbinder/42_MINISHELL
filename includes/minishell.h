@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 15:47:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:47:39 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,13 +155,11 @@ int				append_redir(t_token_list *token_list, char *line, enum e_status status, 
 //SIGNALS.C
 void			start_sig(void);
 void			signal_handler(int signal);
-bool			check_syntax(char *line);
-void			sig_default(void);
-void			signal_change(int signal);
-void			sig_modify(void);
-void			sig_iterative(void);
 void			sig_ignore(void);
 void			sig_heredoc(void);
+void			sig_default(void);
+void			heredoc_handler(int signal);
+int				get_status(int status);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);

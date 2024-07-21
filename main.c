@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 14:36:06 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:48:20 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,6 @@ t_shell	*ft_read_line(t_shell *shell)
 	shell->token_list->last = NULL;
 	if (g_received_signal == SIGINT)
 		shell->exit_status = 130;
-	else if (g_received_signal == SIGQUIT)
-		shell->exit_status = 131;
 	return (shell);
 }
 
@@ -164,8 +162,28 @@ void	open_all_heredocs(void *root, t_shell *shell)
 		return ;
 }
 
-void	start_minishell(t_shell *shell)
+int	get_status(int status)
 {
+	if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+	{
+		if (WIFSIGNALED(status == SIGINT))
+		{
+			ft_printf(1, "\n");
+			return (130);
+		}
+		else if (WIFSIGNALED(status == SIGQUIT))
+		{
+			ft_printf(1, "Quit (core dumped)\n");
+			return (131);
+		}
+	}
+	return (0);
+}
+
+void	start_minishell(t_shell *shell)
+{	
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = has_here_doc(shell);
 	add_here_doc_fd(shell, 0, 0, true);
@@ -186,9 +204,9 @@ void	start_minishell(t_shell *shell)
 			run(shell->root, shell);
 			free_and_exit(shell);
 		}
- 		sig_modify();
+ 		sig_ignore();
 		wait(&shell->exit_status);
-		shell->exit_status = WEXITSTATUS(shell->exit_status);
+		shell->exit_status = get_status(shell->exit_status);
 	}
 	create_new_redir(NULL, NULL, NULL, 1);
 	free_tree(shell->root);
