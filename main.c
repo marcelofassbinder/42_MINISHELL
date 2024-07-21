@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 16:33:26 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:42:46 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,10 +173,7 @@ void	start_minishell(t_shell *shell)
 	add_here_doc_fd(shell, 0, 0, true);
 	shell->root = parse(shell->token_list->first, shell);
 	if (shell->count_hd)
-	{
 		open_all_heredocs(shell->root, shell);
-		//get_next_line(-1);
-	}
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);
 	if (shell->process == CHILD || shell->count_hd)
