@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 18:20:26 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:27:08 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	unset(char **cmd_args, t_shell *shell)
 		return ;
 	if (cmd_args[i][0] == '-')
 	{
-		ft_printf(2, "minishell: unset '%s': not a valid identifier\n", cmd_args[i]);
+		ft_printf(STDERR_FILENO, "minishell: unset '%s': not a valid identifier\n", cmd_args[i]);
 		shell->exit_status = 2;
 		i++;
 		return ;
