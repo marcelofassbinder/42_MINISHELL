@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 13:41:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:20:30 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->pid = ft_get_pid(shell);
 	shell->fd_in = STDIN_FILENO;
 	shell->fd_out = STDOUT_FILENO;
+	//shell->path = getenv("PATH");
 	return (shell);
 }
 
@@ -191,8 +192,6 @@ void	start_minishell(t_shell *shell)
 	shell->count_hd = has_here_doc(shell);
 	add_here_doc_fd(shell, 0, 0, true);
 	shell->root = parse(shell->token_list->first, shell);
-	if (shell->count_hd)
-		open_all_heredocs(shell->root, shell);
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);
 	if (shell->process == CHILD || shell->count_hd)
@@ -201,6 +200,8 @@ void	start_minishell(t_shell *shell)
 		{
 			shell->process = CHILD;
 			sig_default();
+			if (shell->count_hd)
+				open_all_heredocs(shell->root, shell);
 			run(shell->root, shell);
 			free_and_exit(shell);
 		}
