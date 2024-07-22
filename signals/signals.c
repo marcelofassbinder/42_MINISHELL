@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 20:45:44 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/22 15:47:38 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,12 @@ void	sig_default(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void	heredoc_handler(int signal)
-{
-	if (signal == SIGINT)
-	{
-		ft_printf(1, "\n");
-		exit(130);
-	}
-}
-
 void	sig_heredoc(void)
 {
-	signal(SIGINT, heredoc_handler);
-	signal(SIGQUIT, heredoc_handler);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-/* Function to handle the received signal, during the execution of
-	this function other received signals are blocked if it is in the mask. */
 void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -52,8 +41,6 @@ void	sig_ignore(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-/* Initialize the signal handling structure (sigaction), define the
-masks (signals that are blocked if the signal handler is handling a signal).*/
 void	start_sig(void)
 {
 	signal(SIGINT, signal_handler);
