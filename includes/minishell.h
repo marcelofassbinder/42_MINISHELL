@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 13:00:39 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:41:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ int				get_status(int status);
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
 void			exit_line(t_shell *shell);
-void			free_strings(char *s1, char *s2, char *s3);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE

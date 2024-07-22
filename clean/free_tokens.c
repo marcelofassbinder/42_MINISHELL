@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:14:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/08 18:30:24 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:20:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,6 @@ void	exit_line(t_shell *shell)
 	free(shell);
 	ft_printf(STDOUT_FILENO, "exit\n");
 	exit(0);
-}
-
-void	free_strings(char *s1, char *s2, char *s3)
-{
-	free(s1);
-	free(s2);
-	free(s3);
 }
 
 void	delete_node(t_token_list *token_list, t_token *tmp)
