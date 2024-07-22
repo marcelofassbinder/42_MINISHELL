@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 17:03:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:17:20 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,12 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	}
 	shell->exit_status = EXIT_CMD;
 	free(path);
-	if (error == -1 && exec->cmd_args[0][0] == '.' && exec->cmd_args[0][1] == '/')
+	if (error == -1)
 	{
 		free_envs(envs);
 		shell->exit_status = 126;
 		shell_error(shell, exec->cmd_args[0], 3, true);
 	}
-	if (error == -1)
-		free_envs(envs);
 	shell_error(shell, exec->cmd_args[0], 1, true);
 }
 
@@ -136,15 +134,20 @@ void	run_exec(t_exec *exec, t_shell *shell)
 
 int	return_parent_error(t_shell *shell, char *str, int error)
 {
-	shell->exit_status = 1;
+	shell->exit_status = EXIT_FAILURE;
 	if (error == 1) // erro de comando
+	{
+		shell->exit_status = EXIT_CMD;
 		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
+	} 
 	else if (error == 2) // erro de arquivo ou diretorio
 		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
 	else if (error == 4) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: ambiguous redirect\n", str);
+	else
+		ft_printf(STDERR_FILENO, "%s\n", str);
 	return (0);
 }
 
