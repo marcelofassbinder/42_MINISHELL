@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 13:41:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:10:39 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
 		if (access(path_cmd, F_OK) == 0)
-			execve(path_cmd, exec->cmd_args, filter_envs(shell->envp));
+			error = execve(path_cmd, exec->cmd_args, filter_envs(shell->envp));
 		free(path_cmd);
 		i++;
 	}
@@ -91,7 +91,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	free(path);
 	if (error == -1)
 	{
-		printf("%i", error);
+		//printf("%i", error);
 		free_envs(envs);
 		shell->exit_status = 126;
 		shell_error(shell, exec->cmd_args[0], 3, true);
@@ -132,15 +132,20 @@ void	run_exec(t_exec *exec, t_shell *shell)
 
 int	return_parent_error(t_shell *shell, char *str, int error)
 {
-	shell->exit_status = 1;
+	shell->exit_status = EXIT_FAILURE;
 	if (error == 1) // erro de comando
+	{
+		shell->exit_status = EXIT_CMD;
 		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
+	} 
 	else if (error == 2) // erro de arquivo ou diretorio
 		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
 	else if (error == 3) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
 	else if (error == 4) // erro de permissao
 		ft_printf(STDERR_FILENO, "minishell: %s: ambiguous redirect\n", str);
+	else
+		ft_printf(STDERR_FILENO, "%s\n", str);
 	return (0);
 }
 
