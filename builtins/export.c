@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 17:04:54 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:25:48 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,24 +178,73 @@ char	**add_envp(char *environment, t_shell *shell)
 	return (shell->envp);
 }
 
+void	swap(char **envs, int j)
+{
+	char	*temp;
+	char	*cur_var_i;
+	char	*cur_var_j;
+
+	cur_var_i = get_variable_name(envs[j]);
+	cur_var_j = get_variable_name(envs[j + 1]);
+	if (ft_strcmp(cur_var_i, cur_var_j) > 0)
+	{
+	    temp = envs[j];
+        envs[j] = envs[j + 1];
+        envs[j + 1] = temp;
+	}
+	free(cur_var_i);
+	free(cur_var_j);
+}
+
+char	**ordered_envs(t_shell *shell, int size)
+{
+	char	**ordered;
+	int		i;
+	int		j;
+
+	ordered = copy_envs(shell, shell->envp);
+	i = 0;
+	j = 0;
+    while (i < size - 1)
+    {
+        j = 0;
+        while (j < size - i - 1)
+        {
+			swap(ordered, j);
+            j++;
+        }
+        i++;
+    }
+	return (ordered);
+}
+
 void	print_env_x(t_shell *shell)
 {
-	int	i;
+	int		i;
 	char	*var;
 	char	*value;
+	char	**ordered;
+	int		size;
 
 	i = 0;
-	while (shell->envp[i])
+	size = 0;
+	while (shell->envp[size])
+        size++;
+	ordered = ordered_envs(shell, size);
+	while (ordered[i])
 	{
-		var = get_variable_name(shell->envp[i]);
-		value = get_var_value(shell->envp[i]);
+		var = get_variable_name(ordered[i]);
+		value = get_var_value(ordered[i]);
 		ft_printf(STDOUT_FILENO, "declare -x %s", var);
 		if (value)
 			ft_printf(STDOUT_FILENO, "=\"%s\"", value);
+		if (value)
+			free(value);
 		ft_printf(STDOUT_FILENO, "\n");
 		free(var);
 		i++;
 	}
+	free_envs(ordered);
 }
 
 void	export(char **cmd_args, t_shell *shell)

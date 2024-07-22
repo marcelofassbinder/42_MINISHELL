@@ -3,39 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:19:10 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 12:37:21 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:45:44 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	signal_change(int signal)
-{
-	if (signal == SIGINT)
-	{
-		ft_printf(1, "\n");
-		g_received_signal = 2;
-	}
-	else
-	{
-		ft_printf(1, "Quit (Core dumped)\n");
-		g_received_signal = 3;
-	}
-}
-
 void	sig_default(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-}
-
-void	sig_modify(void)
-{
-	signal(SIGINT, signal_change);
-	signal(SIGQUIT, signal_change);
 }
 
 void	heredoc_handler(int signal)

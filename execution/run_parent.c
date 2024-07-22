@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/17 16:58:52 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:57:00 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 void	run_builtin_p(t_exec *exec, t_shell *shell)
 {
+	if (!exec->cmd_args[0])
+		return ;
 	if (!ft_strcmp(exec->cmd_args[0], "echo"))
 		echo(exec->cmd_args, shell);
 	else if (!ft_strcmp(exec->cmd_args[0], "export"))

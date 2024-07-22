@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 17:40:33 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:56:31 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,22 @@ char	**filter_envs(char **envp)
 
 void	run_execve(t_exec *exec, t_shell *shell)
 {	
-	char **path;
-	char *path_cmd;
-	int i;
+	char	**path;
+	char	*path_cmd;
+	int		i;
+	int		error;
+	char	**envs;
 
+	error = 0;
 	if (!exec->cmd_args[0])
 		return ;
 	path = get_path(ft_get_env("PATH", shell));
 	i = 0;
 	if (access(exec->cmd_args[0], F_OK) == 0)
-		execve(exec->cmd_args[0], exec->cmd_args, filter_envs(shell->envp));
+	{
+		envs = filter_envs(shell->envp);
+		error = execve(exec->cmd_args[0], exec->cmd_args, envs);
+	}
 	if (!path)
 		shell_error(shell, exec->cmd_args[0], 2, true);
 	while(path[i])
@@ -83,6 +89,13 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	}
 	shell->exit_status = EXIT_CMD;
 	free(path);
+	if (error == -1)
+	{
+		printf("%i", error);
+		free_envs(envs);
+		shell->exit_status = 126;
+		shell_error(shell, exec->cmd_args[0], 3, true);
+	}
 	shell_error(shell, exec->cmd_args[0], 1, true);
 }
 
@@ -104,7 +117,7 @@ void	run_builtin(t_exec *exec, t_shell *shell)
 
 void	run_exec(t_exec *exec, t_shell *shell)
 {
-	if (!exec)
+	if (!exec || !exec->cmd_args[0])
 		return ;
 	if (!exec->cmd_args[0][0])
 		shell_error(shell, "", 1, true);
@@ -241,17 +254,20 @@ void	run_redir(t_redir *redir, t_shell *shell)
 void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 {
 	int	fd[2];
+	int	pid[2];
 	
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);
-	if (safe_fork(shell) == 0)
+	pid[0] = safe_fork(shell);
+	if (pid[0] == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
 		exit(0);
 	}
-	if (safe_fork(shell) == 0)
+	pid[1] = safe_fork(shell);
+	if (pid[1] == 0)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
@@ -260,9 +276,9 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	wait(&shell->exit_status);
-	wait(&shell->exit_status);
-	shell->exit_status = WEXITSTATUS(shell->exit_status);
+	waitpid(pid[0], &shell->exit_status, 0);
+	waitpid(pid[1], &shell->exit_status, 0);
+	shell->exit_status = get_status(shell->exit_status);
 }
 
 void	run(void *root, t_shell *shell)
