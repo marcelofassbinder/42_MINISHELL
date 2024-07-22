@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/21 12:01:53 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/22 14:51:59 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-bool	is_redir(t_token *token)
-{
-	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT || token->type == HERE_DOC)
-		return (true);
-	return (false);
-}	
+#include "../includes/minishell.h"	
 
 void	find_files(t_token_list *token_list)
 {
@@ -41,7 +34,6 @@ void	find_files(t_token_list *token_list)
 		tmp = tmp->next;
 	}
 }
-
 
 void	token_redir_pipe(t_token_list *token_list)
 {
@@ -74,17 +66,6 @@ void	repeated_quotes(t_token_list *token_list)
 		}
 		tmp = tmp->next;
 	}
-}
-
-void	prepare_tokens(t_token_list *token_list, t_shell *shell)
-{
-	check_dollar(token_list, shell);
-	g_received_signal = 0;
-	join_spaces(token_list);
-	join_quotes(token_list);
-	join_words(token_list);
-	find_files(token_list);
-	token_redir_pipe(token_list);
 }
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
@@ -133,23 +114,6 @@ void print_token_list(t_token_list *token_list)
 		ptr = ptr->next;	
 		i++;
 	}
-}
-
-int is_type_word(char c)
-{
-	if (!ft_isspace(c) && c != S_QTE && c != D_QTE && c != PIPE && 
-		c != DOLLAR && c != R_IN && c != R_OUT && c)
-				return (1);
-	return (0);
-}
-
-enum e_status append_quotes(t_token_list *token_list, char c, enum e_status status)
-{
-	if (c == S_QTE)
-		status = change_status(token_list, c, status, S_QUOTE);
-	else if (c == D_QTE)
-		status = change_status(token_list, c, status, D_QUOTE);
-	return (status);
 }
 
 enum e_status change_status(t_token_list *token_list, char c, enum e_status status, enum e_type type)

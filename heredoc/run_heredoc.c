@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_heredoc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/21 17:42:46 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:42:50 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	char *buffer;
 	int fd[2];
 
+	sig_heredoc();
 	buffer = write_here_doc(redir, shell);
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);	

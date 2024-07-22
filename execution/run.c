@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 13:41:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:03:03 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,23 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
 		if (access(path_cmd, F_OK) == 0)
-			execve(path_cmd, exec->cmd_args, filter_envs(shell->envp));
+		{
+			envs = filter_envs(shell->envp);
+			error = execve(path_cmd, exec->cmd_args, envs);
+		}
 		free(path_cmd);
 		i++;
 	}
 	shell->exit_status = EXIT_CMD;
 	free(path);
-	if (error == -1)
+	if (error == -1 && exec->cmd_args[0][0] == '.' && exec->cmd_args[0][1] == '/')
 	{
-		printf("%i", error);
 		free_envs(envs);
 		shell->exit_status = 126;
 		shell_error(shell, exec->cmd_args[0], 3, true);
 	}
+	if (error == -1)
+		free_envs(envs);
 	shell_error(shell, exec->cmd_args[0], 1, true);
 }
 
@@ -126,7 +130,7 @@ void	run_exec(t_exec *exec, t_shell *shell)
 	if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
-		run_builtin(exec, shell);
+		run_builtin(exec, shell);	
 	free_and_exit(shell);
 }
 

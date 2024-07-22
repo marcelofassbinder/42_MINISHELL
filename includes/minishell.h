@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 13:41:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:19:15 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <errno.h>
 
 # define PIPE '|'
 # define DOLLAR '$'
@@ -118,6 +119,7 @@ typedef struct		s_shell{
 	char			**envp;
 	char			*line;
 	char			*old_pwd;
+	char			*path;
 	int				*fd_heredoc;
 	int				exit_status;
 	int				pid;
@@ -147,6 +149,9 @@ int				is_type_word(char c);
 void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
 void			print_token_list(t_token_list *token_list);
 void			find_files(t_token_list *token_list);
+void			prepare_tokens(t_token_list *token_list, t_shell *shell);
+void			token_redir_pipe(t_token_list *token_list);
+void			repeated_quotes(t_token_list *token_list);
 
 //APPEND.C
 int				append_word(t_token_list *token_list, char *line, enum e_status status, int i);
@@ -213,6 +218,7 @@ t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
 t_pipe			*build_pipe(void *left, void *right);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
+bool			is_local_variable(t_token *token);
 bool			last_redir(t_token *token);
 bool			is_builtin(char *str);
 bool			has_word(t_token *token);
@@ -220,6 +226,7 @@ void			*parse(t_token *token, t_shell *shell);
 void			*build_exec(t_token *token, t_shell *shell);
 void			*build_redir(void *down, t_token *token, t_shell *shell);
 void			define_redir_file(t_redir *redir, t_token *token);
+t_token			*get_next_token(t_token *token);
 
 
 //PRINT_TREE.C
@@ -244,17 +251,29 @@ void			run(void *root, t_shell *shell);
 //BUILTINS
 int				check_option_n(char **cmd_args);
 int				str_is_digit(char *str);
-char			*get_variable_name(char *environment);
-char			*remove_plus(char *environment);
 void			echo(char **cmd_args, t_shell *shell);
 void			env(char **cmd_args, t_shell *shell);
-void			export(char **cmd_args, t_shell *shell);
 void			pwd(t_shell *shell);
 void			unset(char **cmd_args, t_shell *shell);
 void			cd(char **cmd_args, t_shell *shell);
 void			cd_home(char **cmd_args, t_shell *shell);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
+
+//EXPORT
+char			**export_error(t_shell *shell, char *var_name, char *environment);
+char			*remove_plus(char *environment);
+char			*get_variable_name(char *environment);
+char			*do_replace(char *environment, char *envp, int mode);
+char			**replace_env(char *environment, t_shell *shell, int mode);
+char			**set_new_env(char *environment, t_shell *shell, int mode);
+char			**add_envp(char *environment, t_shell *shell);
+char			**ordered_envs(t_shell *shell, int size);
+int				add_mode(char *environmenent);
+bool			env_exist(char *var_name, char **env);
+void			export(char **cmd_args, t_shell *shell);
+void			swap(char **envs, int j);
+void			print_env_x(t_shell *shell);
 
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);
