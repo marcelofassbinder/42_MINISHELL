@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/20 16:25:48 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:47:38 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**replace_env(char *environment, t_shell *shell, int mode)
 				var_value = get_var_value(environment);
 				shell->envp[i] = ft_strjoin(shell->envp[i], var_value);
 				free(var_value);
-			}	
+			}
 			else
 			{
 				free(shell->envp[i]);
