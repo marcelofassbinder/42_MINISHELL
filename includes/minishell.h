@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 18:19:15 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:15:36 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,12 @@ void			exit_line(t_shell *shell);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE
+int				return_parent_error(t_shell *shell, char *str, int error);
 void			free_tree(void *root);
 void			free_envs(char **envp);
 void			free_and_exit(t_shell *shell);
 void			shell_error(t_shell *shell, char *str, int error, bool exit_flag);
+
 
 //EXPAND.C & EXPAND_UTILS.C && EXPAND_CASES.C
 void			handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell);
@@ -251,12 +253,19 @@ void			run(void *root, t_shell *shell);
 //BUILTINS
 int				check_option_n(char **cmd_args);
 int				str_is_digit(char *str);
+int				cd_old_dir(char *old_pwd_env, char *update_old, t_shell *shell);
+char			*get_variable_name(char *environment);
+char			*remove_plus(char *environment);
+char			**replace_env(char *environment, t_shell *shell, int mode);
+char			**set_new_env(char *environment, t_shell *shell, int mode);
+bool			env_exist(char *var_name, char **env);
 void			echo(char **cmd_args, t_shell *shell);
 void			env(char **cmd_args, t_shell *shell);
 void			pwd(t_shell *shell);
 void			unset(char **cmd_args, t_shell *shell);
 void			cd(char **cmd_args, t_shell *shell);
 void			cd_home(char **cmd_args, t_shell *shell);
+void			update_old_pwd(char *update_old, t_shell *shell);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
 
