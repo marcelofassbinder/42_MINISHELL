@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:38:33 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 12:40:17 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:20:59 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,15 @@ char	*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell)
 {
 	char	*new;
 	char	*to_free;
+	char	*env;
 	
-	to_free = ft_strdup(ft_get_env(to_expand, shell));
+	env = ft_get_env(to_expand, shell);
+	to_free = ft_strdup(env);
 	new = ft_strjoin(to_free, rest);
-	free_strings(data, to_expand, rest);
+	free(data);
+	free(to_expand);
+	free(rest);
+	free(env);
 	return (new);
 }
 
