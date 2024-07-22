@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 20:56:24 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/22 12:20:03 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	free(path);
 	if (error == -1)
 	{
+		printf("%i", error);
 		free_envs(envs);
 		shell->exit_status = 126;
 		shell_error(shell, exec->cmd_args[0], 3, true);
@@ -296,6 +297,8 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 
 void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 {
+	int i;
+
 	if (init)
 	{
 		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
@@ -304,6 +307,7 @@ void	add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
 		shell->fd_heredoc[shell->count_hd] = -1;
 		return ;
 	}
+	i = 0;
 	shell->fd_heredoc[pos] = fd_here_doc;
 }
 

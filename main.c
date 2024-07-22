@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 20:48:20 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/22 12:15:56 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	g_received_signal;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
+	start_sig();
 	shell->process = CHILD;
 	shell->line = NULL;
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
@@ -168,12 +169,12 @@ int	get_status(int status)
 			return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 	{
-		if (WIFSIGNALED(status == SIGINT))
+		if (WTERMSIG(status) == SIGINT)
 		{
 			ft_printf(1, "\n");
 			return (130);
 		}
-		else if (WIFSIGNALED(status == SIGQUIT))
+		else if (WTERMSIG(status) == SIGQUIT)
 		{
 			ft_printf(1, "Quit (core dumped)\n");
 			return (131);
@@ -223,7 +224,6 @@ int	main(int ac, char **av, char **envp)
 	shell = init_shell(ac, av, envp);
 	while (1)
 	{
-		start_sig();
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
