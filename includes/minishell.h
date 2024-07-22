@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 20:47:39 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/22 12:47:12 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,14 +173,27 @@ void			free_envs(char **envp);
 void			free_and_exit(t_shell *shell);
 void			shell_error(t_shell *shell, char *str, int error, bool exit_flag);
 
-//EXPAND.C
+//EXPAND.C & EXPAND_UTILS.C && EXPAND_CASES.C
+void			handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell);
 void			check_dollar(t_token_list *token_list, t_shell *shell);
 char			*expand(char *data, t_shell *shell);
+char			*expand_mode(char *data, t_shell *shell);
+char			*expand_normal(char *data, t_shell *shell);
+char			*expand_digit(char *data);
+char			*expand_minishell(char *data);
+char			*expand_special(char *data);
 char			find_special(char *data);
 int				count_special(char *data, char special);
-char			*ft_get_env(char *data, t_shell *shell);
-char			*get_var_value(char *env);
+char			*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell);
+bool			is_special(int c);
 char			**copy_envs(t_shell *shell, char **envp);
+
+//GETVALUES.C
+char			*get_var_value(char *env);
+char			*ft_get_env(char *data, t_shell *shell);
+void			insert_token(char *data, t_token **token);
+void			split_env(t_token_list *token_list, t_token **token);
+int 			ft_get_pid(t_shell *shell);
 
 //JOIN.C
 void			join_spaces(t_token_list *token_list);
