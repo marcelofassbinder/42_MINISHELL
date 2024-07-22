@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/21 17:42:46 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:27:30 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@ char	*write_here_doc(t_redir *redir, t_shell *shell)
 	dup2(STDERR_FILENO, STDIN_FILENO);
 	while(1)
 	{
-		line = readline(">");
+		line = readline("> ");
+		if (!line)
+		{
+			ft_printf(STDERR_FILENO, "minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", redir->file);
+			break ;
+		}
 		line = add_backslash_n(line, shell);
 		if (redir->file_status == GENERAL)
 			line = expand_here_doc(line, shell);
@@ -58,6 +63,7 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	char *buffer;
 	int fd[2];
 
+	sig_heredoc();
 	buffer = write_here_doc(redir, shell);
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);	

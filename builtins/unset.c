@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 14:59:51 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:20:26 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	unset(char **cmd_args, t_shell *shell)
 	}
 	while (cmd_args[i])
 	{
+/* 		if (ft_strcmp("PATH", cmd_args[i]))
+			shell->path = NULL; */
 		shell->envp = delete_envp(cmd_args[i], shell);
 		i++;
 	}
