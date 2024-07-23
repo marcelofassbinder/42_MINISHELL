@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 19:15:36 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:07:12 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,8 +239,13 @@ void			 printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
 
 
 //RUN
+int				redirect_in(t_shell *shell, t_redir *redir, int exit_flag);
+int				redirect_out(t_shell *shell, t_redir *redir, int exit_flag);
 int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
+int				has_pipe(t_shell *shell);
+int				return_parent_error(t_shell *shell, char *str, int error);
 char 			**get_path(char *path_from_env);
+bool			has_no_file(t_shell *shell, t_redir *redir, int exit_flag);
 void			run_execve(t_exec *exec, t_shell *shell);
 void			run_exec(t_exec *exec, t_shell *shell);
 void			run_redir(t_redir *redir, t_shell *shell);

@@ -1,0 +1,15 @@
+builtins
+clean
+execution
+filetest
+heredoc
+includes
+main.c
+Makefile
+minishell
+oi
+parse
+safety
+signals
+syntax
+tokens
