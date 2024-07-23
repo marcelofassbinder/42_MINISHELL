@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 16:36:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/22 16:09:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:16:22 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	cd(char **cmd_args, t_shell *shell)
 {
-	char *update_old;
-	char *old_pwd_env;
+	char	*update_old;
+	char	*old_pwd_env;
 
 	if (cmd_args[1])
 	{
@@ -55,6 +55,7 @@ void	cd_home(char **cmd_args, t_shell *shell)
 		safe_chdir(home, shell, 1);
 	}
 }
+
 int	cd_old_dir(char *old_pwd_env, char *update_old, t_shell *shell)
 {
 	if (old_pwd_env)
@@ -71,9 +72,10 @@ int	cd_old_dir(char *old_pwd_env, char *update_old, t_shell *shell)
 		return (0);
 	}
 }
+
 void	update_old_pwd(char *update_old, t_shell *shell)
 {
-	char *old_pwd_str;
+	char	*old_pwd_str;
 
 	old_pwd_str = ft_strdup("OLDPWD=");
 	old_pwd_str = ft_strjoin(old_pwd_str, update_old);
