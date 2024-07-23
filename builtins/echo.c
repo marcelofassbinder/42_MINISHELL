@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/21 18:48:22 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:14:58 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 int	check_option_n(char **cmd_args)
 {
-	int j;
-	int i;
-	int count;
+	int	j;
+	int	i;
+	int	count;
 
 	count = 0;
 	i = 1;
-	while(cmd_args[i] && cmd_args[i][0] == '-')
+	while (cmd_args[i] && cmd_args[i][0] == '-')
 	{
 		if (cmd_args[i][0] == '-')
 		{
-			j = 1; // -nnn
-			while(cmd_args[i][j] == 'n')
+			j = 1;
+			while (cmd_args[i][j] == 'n')
 				j++;
 			if (j == ft_strlen(cmd_args[i]))
 				count++;
@@ -38,8 +38,8 @@ int	check_option_n(char **cmd_args)
 void	echo(char **cmd_args, t_shell *shell)
 {
 	int	i;
-	int n_option;
-	
+	int	n_option;
+
 	i = 0;
 	n_option = 0;
 	if (!cmd_args[1])
@@ -50,7 +50,7 @@ void	echo(char **cmd_args, t_shell *shell)
 	}
 	if (cmd_args[1][0] == '-')
 		n_option = check_option_n(cmd_args);
-	i+= n_option;
+	i += n_option;
 	i++;
 	while (cmd_args[i])
 	{
