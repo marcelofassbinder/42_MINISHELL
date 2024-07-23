@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 15:11:22 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:41:05 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	special_char(char *str)
 {
-	char	*special = "();&!";
+	char	*special = "();!&#*\\";
 	enum 	e_status	status;
 
 	status = GENERAL;

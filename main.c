@@ -6,17 +6,14 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 18:20:30 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:21:13 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
+void	print_error_msg(char *str, int error)
 {
-	int status;
-
-	status = shell->exit_status;
 	if (error == 1) // erro de comando
 		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
 	else if (error == 2) // erro de arquivo ou diretorio
@@ -27,6 +24,14 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		ft_printf(STDERR_FILENO, "minishell: ambiguous redirect\n", str);
 	else
 		ft_printf(STDERR_FILENO, "%s\n", str);
+}
+
+void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
+{
+	int status;
+
+	status = shell->exit_status;
+	print_error_msg(str, error);
 	if (shell->envp)
 		free_envs(shell->envp);
 	if (shell->token_list)
@@ -88,7 +93,6 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->pid = ft_get_pid(shell);
 	shell->fd_in = STDIN_FILENO;
 	shell->fd_out = STDOUT_FILENO;
-	//shell->path = getenv("PATH");
 	return (shell);
 }
 
@@ -186,6 +190,16 @@ int	get_status(int status)
 	return (0);
 }
 
+void	prepare_new_prompt(t_shell *shell)
+{
+	create_new_redir(NULL, NULL, NULL, 1);
+	free_tree(shell->root);
+	free(shell->line);
+	free_token_list(shell->token_list);
+	free(shell->token_list);
+	free(shell->fd_heredoc);
+}
+
 void	start_minishell(t_shell *shell)
 {	
 	tokenizer(shell->token_list, shell->line, shell);
@@ -209,12 +223,7 @@ void	start_minishell(t_shell *shell)
 		wait(&shell->exit_status);
 		shell->exit_status = get_status(shell->exit_status);
 	}
-	create_new_redir(NULL, NULL, NULL, 1);
-	free_tree(shell->root);
-	free(shell->line);
-	free_token_list(shell->token_list);
-	free(shell->token_list);
-	free(shell->fd_heredoc);
+	prepare_new_prompt(shell);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -227,7 +236,8 @@ int	main(int ac, char **av, char **envp)
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
-			shell->exit_status = EXIT_SYNTAX;
+			if (shell->line[0])
+				shell->exit_status = EXIT_SYNTAX;
 			free(shell->token_list);
 			free(shell->line);
 			continue ;
