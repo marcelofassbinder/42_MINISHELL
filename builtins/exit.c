@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:46:53 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/14 17:29:56 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:50:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	exit_cmd(char **cmd_args, t_shell *shell)
 	else
 	{
 		shell->exit_status = EXIT_SYNTAX;
-		ft_printf(STDERR_FILENO, "minishell: exit: %s: numeric argument recquired\n", cmd_args[1]);
+		ft_printf(STDERR_FILENO, "minishell: exit: %s: numeric argument required\n", cmd_args[1]);
 		free_and_exit(shell);
 	}
 }

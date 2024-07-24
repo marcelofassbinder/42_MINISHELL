@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 19:17:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:08:12 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,43 +61,57 @@ char	**filter_envs(char **envp)
 
 void	run_execve(t_exec *exec, t_shell *shell)
 {	
-	char	**path;
-	char	*path_cmd;
 	int		i;
-	int		error;
+	int		execve_ret;
+	char	**path;
 	char	**envs;
+	char	*path_cmd;
 
-	error = 0;
+	execve_ret = 0;
 	if (!exec->cmd_args[0])
 		return ;
-	path = get_path(ft_get_env("PATH", shell));
-	i = 0;
+	envs = filter_envs(shell->envp);
 	if (access(exec->cmd_args[0], F_OK) == 0)
-	{
-		envs = filter_envs(shell->envp);
-		error = execve(exec->cmd_args[0], exec->cmd_args, envs);
-	}
+		execve_ret = execve(exec->cmd_args[0], exec->cmd_args, envs);
+	path = get_path(ft_get_env("PATH", shell));
 	if (!path)
 		shell_error(shell, exec->cmd_args[0], 2, true);
+	i = 0;
 	while(path[i])
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
 		if (access(path_cmd, F_OK) == 0)
-		{
-			envs = filter_envs(shell->envp);
-			error = execve(path_cmd, exec->cmd_args, envs);
-		}
+			execve_ret = execve(path_cmd, exec->cmd_args, envs);
 		free(path_cmd);
 		i++;
 	}
-	shell->exit_status = EXIT_CMD;
 	free(path);
-	if (error == -1)
+	free_envs(envs);
+	handle_exec_error(execve_ret, exec, shell);
+}
+
+void	handle_exec_error(int execve_ret, t_exec *exec, t_shell *shell)
+{
+	shell->exit_status = EXIT_CMD;
+	if (execve_ret == -1)
 	{
-		free_envs(envs);
-		shell->exit_status = 126;
-		shell_error(shell, exec->cmd_args[0], 3, true);
+		if (access(exec->cmd_args[0], F_OK) == 0)
+		{
+			if ((exec->cmd_args[0][0] == '.' && exec->cmd_args[0][1] == '/')
+				|| exec->cmd_args[0][0] == '/')
+			{
+				shell->exit_status = 126;
+				shell_error(shell, exec->cmd_args[0], 5, true);
+			}
+			else
+				shell_error(shell, exec->cmd_args[0], 1, true);
+		}
+		else
+			shell_error(shell, exec->cmd_args[0], 3, true);
 	}
+	if ((exec->cmd_args[0][0] == '.' && exec->cmd_args[0][1] == '/')
+			|| exec->cmd_args[0][0] == '/')
+		shell_error(shell, exec->cmd_args[0], 2, true);
 	shell_error(shell, exec->cmd_args[0], 1, true);
 }
 
@@ -180,7 +194,8 @@ int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 	else
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-	{
+	{	
+		shell->exit_status = EXIT_FAILURE;
 		if (shell->process == CHILD)
 			shell_error(shell, redir->file, 3, exit_flag);
 		else
@@ -209,6 +224,7 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 	fd = open(redir->file, O_RDONLY);
 	if (fd == -1)
 	{
+		shell->exit_status = EXIT_FAILURE;
 		if (shell->process == CHILD)
 			shell_error(shell, redir->file, 3, exit_flag);
 		else
@@ -271,7 +287,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
-		exit(0);
+		//exit(0);
 	}
 	pid[1] = safe_fork(shell);
 	if (pid[1] == 0)
@@ -279,7 +295,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		run(pipe_str->right, shell);
-		exit(0);
+		//exit(0);
 	}
 	close(fd[0]);
 	close(fd[1]);

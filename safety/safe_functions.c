@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   safe_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 18:42:54 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/08 19:55:07 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:16:19 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ void safe_chdir(char *chdir_arg, t_shell *shell, int flag)
 		if (flag == 1)
 			ft_printf(2, "minishell: cd: HOME not set\n");
 		else
-			ft_printf(2, "minishell: cd: %s: no such file or directory\n", chdir_arg);
+			ft_printf(2, "minishell: cd: %s: No such file or directory\n", chdir_arg);
 		shell->exit_status = EXIT_FAILURE;
+		return ;
 	}
+	shell->exit_status = EXIT_SUCCESS;
 }
 
 char *safe_getcwd(char *buf, size_t size, t_shell *shell)

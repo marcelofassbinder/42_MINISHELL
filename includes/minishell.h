@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 19:15:36 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:31:07 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,8 @@ void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
 void			run(void *root, t_shell *shell);
+void			handle_exec_error(int execve_ret, t_exec *exec, t_shell *shell);
+
 
 
 //BUILTINS
@@ -291,7 +293,7 @@ void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 
 //teste
 int 			ft_get_pid(t_shell *shell);
-int 			has_here_doc(t_shell *shell);
+int 			count_here_doc(t_shell *shell);
 
 //	HEREDOC
 int				run_here_doc(t_redir *redir, t_shell *shell);

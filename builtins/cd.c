@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 16:36:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/22 16:09:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:48:43 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	cd(char **cmd_args, t_shell *shell)
 	else
 		safe_chdir(cmd_args[1], shell, 0);
 	update_old_pwd(update_old, shell);
-	shell->exit_status = EXIT_SUCCESS;
+	//shell->exit_status = EXIT_SUCCESS;
 }
 
 void	cd_home(char **cmd_args, t_shell *shell)
