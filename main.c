@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 18:20:30 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:40:16 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
 	else if (error == 4) // redirect para nao expandivel
 		ft_printf(STDERR_FILENO, "minishell: ambiguous redirect\n", str);
+	else if (error == 5) // redirect para nao expandivel
+		ft_printf(STDERR_FILENO, "minishell: %s: Is a directory\n", str);
 	else
 		ft_printf(STDERR_FILENO, "%s\n", str);
 	if (shell->envp)
@@ -125,7 +127,7 @@ bool	is_pipe_root(void *root)
 	return (false);
 }
 
-int has_here_doc(t_shell *shell)
+int count_here_doc(t_shell *shell)
 {
 	t_token *token;
 	int count;
@@ -174,12 +176,12 @@ int	get_status(int status)
 	{
 		if (WTERMSIG(status) == SIGINT)
 		{
-			ft_printf(1, "\n");
+			ft_printf(STDOUT_FILENO, "\n");
 			return (130);
 		}
 		else if (WTERMSIG(status) == SIGQUIT)
 		{
-			ft_printf(1, "Quit (core dumped)\n");
+			ft_printf(STDOUT_FILENO, "Quit (core dumped)\n");
 			return (131);
 		}
 	}
@@ -189,7 +191,7 @@ int	get_status(int status)
 void	start_minishell(t_shell *shell)
 {	
 	tokenizer(shell->token_list, shell->line, shell);
-	shell->count_hd = has_here_doc(shell);
+	shell->count_hd = count_here_doc(shell);
 	add_here_doc_fd(shell, 0, 0, true);
 	shell->root = parse(shell->token_list->first, shell);
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
@@ -227,7 +229,10 @@ int	main(int ac, char **av, char **envp)
 		shell = ft_read_line(shell);
 		if (!check_syntax(shell->line) || !shell->line[0])
 		{
-			shell->exit_status = EXIT_SYNTAX;
+			if (!shell->line[0])
+				shell->exit_status = EXIT_SUCCESS;
+			else
+				shell->exit_status = EXIT_SYNTAX;
 			free(shell->token_list);
 			free(shell->line);
 			continue ;
