@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/23 16:41:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:18:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	special_char(char *str)
 		if (ft_strchr(special, *str) && status == GENERAL)
 		{
 			ft_printf(STDERR_FILENO,
-				"minishell: syntax error unexpected token `%c'\n", *str);
+				"minishell: syntax error near unexpected token `%c'\n", *str);
 			return (true);
 		}
 		str++;
@@ -61,7 +61,7 @@ bool	unclosed_quotes(char *str)
 			str++;
 	}
 	if (flag == true)
-		ft_printf (STDERR_FILENO, "minishell: syntax error unclosed quotes\n");
+		ft_printf (STDERR_FILENO, "minishell: syntax error near unclosed quotes\n");
 	return (flag);
 }
 
