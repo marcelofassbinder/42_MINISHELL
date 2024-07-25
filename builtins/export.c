@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/23 19:13:39 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:37:37 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	swap(char **envs, int j)
 	cur_var_j = get_variable_name(envs[j + 1]);
 	if (ft_strcmp(cur_var_i, cur_var_j) > 0)
 	{
-	    temp = envs[j];
-        envs[j] = envs[j + 1];
-        envs[j + 1] = temp;
+		temp = envs[j];
+		envs[j] = envs[j + 1];
+		envs[j + 1] = temp;
 	}
 	free(cur_var_i);
 	free(cur_var_j);
@@ -39,16 +39,16 @@ char	**ordered_envs(t_shell *shell, int size)
 	ordered = copy_envs(shell, shell->envp);
 	i = 0;
 	j = 0;
-    while (i < size - 1)
-    {
-        j = 0;
-        while (j < size - i - 1)
-        {
+	while (i < size - 1)
+	{
+		j = 0;
+		while (j < size - i - 1)
+		{
 			swap(ordered, j);
-            j++;
-        }
-        i++;
-    }
+			j++;
+		}
+		i++;
+	}
 	return (ordered);
 }
 
@@ -63,7 +63,7 @@ void	print_env_x(t_shell *shell)
 	i = 0;
 	size = 0;
 	while (shell->envp[size])
-        size++;
+		size++;
 	ordered = ordered_envs(shell, size);
 	while (ordered[i])
 	{
@@ -93,15 +93,9 @@ void	export(char **cmd_args, t_shell *shell)
 	{
 		if (cmd_args[i][0] == '-')
 		{
-			ft_printf(2, "minishell: export '%s': not a valid identifier\n", cmd_args[i]);
+			ft_printf(2, "minishell: export '%s': not a valid identifier\n",
+				cmd_args[i]);
 			shell->exit_status = 2;
-			i++;
-			continue ;			
-		}
-		if (ft_isdigit(cmd_args[i][0]))
-		{
-			ft_printf(2, "minishell: export '%s': not a valid identifier\n", cmd_args[i]);
-			shell->exit_status = 1;
 			i++;
 			continue ;
 		}

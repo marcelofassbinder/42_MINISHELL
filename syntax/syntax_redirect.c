@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_utils.c                                     :+:      :+:    :+:   */
+/*   syntax_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 17:18:49 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/07/25 21:13:17 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/07/25 22:49:20 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 bool	special_char(char *str)
 {
-	char	*special = "();!&#*\\";
+	char	*special;
 	enum 	e_status	status;
 
+	special = "();!&#*\\";
 	status = GENERAL;
 	while (*str)
 	{

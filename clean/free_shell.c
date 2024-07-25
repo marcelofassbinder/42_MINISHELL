@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 15:12:02 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:51:58 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_envs(char **envp)
 	int	i;
 
 	i = 0;
-	while(envp[i])
+	while (envp[i])
 	{
 		free(envp[i]);
 		i++;
@@ -27,14 +27,15 @@ void	free_envs(char **envp)
 
 void	free_and_exit(t_shell *shell)
 {
-	int status;
+	int	status;
 
 	status = shell->exit_status;
 	if (shell->token_list)
 	{
 		if (shell->token_list->first)
 			free_token_list(shell->token_list);
-		free(shell->token_list);
+		if (shell->token_list)
+			free(shell->token_list);
 	}
 	if (shell->root)
 		free_tree(shell->root);
