@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/19 09:39:59 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:56:52 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,25 @@
 bool	check_redir(char *str)
 {
 	char	redir_type;
+	char	*save_str;
 
 	redir_type = *str;
 	str++;
 	if (*str == redir_type)
 		str++;
-	if (exceeded_token(str, redir_type) || empty_line(str))
+	save_str = str;
+	if (empty_line(str))
 	{
 		ft_printf(STDERR_FILENO,
-		"minishell: syntax error unexpected token '%c'\n",
-		redir_type);
+		"minishell: syntax error near unexpected token `newline'\n");
 		return (true);
+	}
+	str = save_str;
+	if (exceeded_token(str, redir_type))
+	{
+		ft_printf(STDERR_FILENO,
+		"minishell: syntax error near unexpected token `%c'\n", redir_type);
+		return (true);	
 	}
 	return (false);
 }
@@ -49,7 +57,7 @@ bool	check_pipe(char *str)
 		|| previous_is_redir(str) || first_pipe(str))
 	{
 		ft_printf(STDERR_FILENO,
-		"minishell: syntax error unexpected token |\n");
+		"minishell: syntax error near unexpected token `|'\n");
 		return (true);
 	}
 	return (false);
