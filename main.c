@@ -6,74 +6,11 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 21:53:50 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
-int	get_status(int status)
-{
-	if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-		{
-			ft_printf(1, "\n");
-			return (130);
-		}
-		else if (WTERMSIG(status) == SIGQUIT)
-		{
-			ft_printf(1, "Quit (core dumped)\n");
-			return (131);
-		}
-	}
-	return (0);
-}
-
-char	**copy_envs(t_shell *shell, char **envp)
-{
-	int		i;
-	char	**env_copy;
-
-	i = 0;
-	if (!envp)
-		return (NULL);
-	while (envp[i])
-		i++;
-	env_copy = ft_calloc(sizeof(char *), i + 1);
-	if (!env_copy)
-		shell_error(shell, "Calloc Error: envp copy\n", 0, true);
-	i = 0;
-	while (envp[i])
-	{
-		env_copy[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	return (env_copy);
-}
-
-t_shell	*init_shell(int ac, char **av, char **envp)
-{
-	t_shell	*shell;
-	(void)av;
-
-	shell = ft_calloc(sizeof(t_shell), 1);
-	if (!shell)
-		shell_error(shell, "Calloc Error: shell struct\n", 0, true);
-	if (ac != 1)
-	{
-		shell->exit_status = EXIT_CMD;
-		shell_error(shell, av[1], 2, true);
-	}
-	shell->envp = copy_envs(shell, envp);
-	shell->exit_status = 0;
-	shell->pid = ft_get_pid(shell);
-	shell->fd_in = STDIN_FILENO;
-	shell->fd_out = STDOUT_FILENO;
-	return (shell);
-}
 
 int	g_received_signal;
 
@@ -96,17 +33,6 @@ t_shell	*ft_read_line(t_shell *shell)
 	return (shell);
 }
 
-bool	is_pipe_root(void *root)
-{
-	enum e_type	node_type;
-
-	if (!root)
-		return (false);
-	node_type = *(enum e_type *)root;
-	if (node_type == PIPELINE)
-		return (true);
-	return (false);
-}
 
 void	prepare_new_prompt(t_shell *shell)
 {
@@ -115,18 +41,18 @@ void	prepare_new_prompt(t_shell *shell)
 	free(shell->line);
 	free_token_list(shell->token_list);
 	free(shell->token_list);
-	free(shell->fd_heredoc);
+	free(shell->array_fd_here_doc);
 	shell->root = NULL;
 	shell->line = NULL;
 	shell->token_list = NULL;
-	shell->fd_heredoc = NULL;
+	shell->array_fd_here_doc = NULL;
 }
 
-void	start_minishell(t_shell *shell)
+void	minishell(t_shell *shell)
 {	
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = count_here_doc(shell);
-	save_here_doc_fd(shell, 0, 0, true);
+	shell->array_fd_here_doc = create_here_doc_array(shell);
 	shell->root = parse(shell->token_list->first, shell);
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);
@@ -166,6 +92,6 @@ int	main(int ac, char **av, char **envp)
 			free(shell->line);
 			continue ;
 		}
-		start_minishell(shell);
+		minishell(shell);
 	}
 }

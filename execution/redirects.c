@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:56:14 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 21:44:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:47:53 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 	if (redir->type == HERE_DOC)
 	{
 		success = 1;
-		dup2(shell->fd_heredoc[redir->id], STDIN_FILENO);
+		dup2(shell->array_fd_here_doc[redir->id], STDIN_FILENO);
 	}
 	else if (redir->type == REDIR_OUT || redir->type == D_REDIR_OUT)
 		success = redirect_out(shell, redir, exit_flag);

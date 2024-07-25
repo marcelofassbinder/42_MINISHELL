@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 21:15:01 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,19 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	wait(NULL);
 	free(buffer);
 	close(fd[1]);
-	save_here_doc_fd(shell, fd[0], redir->id, false);
+	shell->array_fd_here_doc[redir->id] = fd[0];
 	return (1);
 }
 
-void	save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
+int	*create_here_doc_array(t_shell *shell)
 {
-	if (init)
-	{
-		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
-		if (!shell->fd_heredoc)
-			shell_error(shell, "Calloc error: heredoc", 0, true);
-		shell->fd_heredoc[shell->count_hd] = -1;
-		return ;
-	}
-	shell->fd_heredoc[pos] = fd_here_doc;
+	int *array_fd_here_doc;
+
+	array_fd_here_doc = ft_calloc(sizeof(int), shell->count_hd + 1);
+	if (!array_fd_here_doc)
+		shell_error(shell, "Calloc error: heredoc", 0, true);
+	array_fd_here_doc[shell->count_hd] = -1;
+	return(array_fd_here_doc);
 }
 
 int count_here_doc(t_shell *shell)

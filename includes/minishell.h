@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 21:59:24 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ typedef struct		s_shell{
 	char			**envp;
 	char			*line;
 	char			*path;
-	int				*fd_heredoc;
+	int				*array_fd_here_doc;
 	int				exit_status;
 	int				pid;
 	int				process;
@@ -297,7 +297,9 @@ int 			ft_get_pid(t_shell *shell);
 int 			count_here_doc(t_shell *shell);
 
 //	HEREDOC
+void			open_all_heredocs(void *root, t_shell *shell);
 int				run_here_doc(t_redir *redir, t_shell *shell);
+int				*create_here_doc_array(t_shell *shell);
 char			*open_here_doc(t_redir *redir, t_shell *shell);
 char			*write_here_doc(char *buffer, t_redir *redir, t_shell *shell);
 char			*expand_here_doc(char *line, t_shell *shell);
@@ -305,8 +307,8 @@ char			*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
 char 			*copy_before_doll(char *line, char *after_doll, t_shell *shell);
 char 			*copy_after_doll(char *new_line, char *line, char *after_doll);
 char			*add_backslash_n(char *line, t_shell *shell);
-void			save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
-void			open_all_heredocs(void *root, t_shell *shell);
+
+t_shell	*init_shell(int ac, char **av, char **envp);
 
 
 #endif

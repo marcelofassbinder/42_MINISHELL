@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 21:59:24 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:13:57 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
+		free_and_exit(shell);
 	}
 	pid[1] = safe_fork(shell);
 	if (pid[1] == 0)
@@ -73,6 +74,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		run(pipe_str->right, shell);
+		free_and_exit(shell);
 	}
 	manage_pipe_exit(fd, pid, shell);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getvalues.c                                        :+:      :+:    :+:   */
+/*   get_values.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:27 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 20:31:57 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,3 @@ void	split_env(t_token_list *token_list, t_token **token)
 	free (splited);
 }
 
-int ft_get_pid(t_shell *shell)
-{
-	int pid;
-
-	pid = fork();
-	if (pid == 0)
-		free_and_exit(shell);
-	wait(NULL);
-	pid = pid - 1;
-	return(pid);
-}
