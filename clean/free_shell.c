@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 21:13:16 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:47:53 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	free_all_allocated_memory(t_shell *shell)
 		free_tree(shell->root);
 	if (shell->line)
 		free(shell->line);
-	if (shell->fd_heredoc)
-		free(shell->fd_heredoc);
+	if (shell->array_fd_here_doc)
+		free(shell->array_fd_here_doc);
 	if (shell)
 		free(shell);
 }

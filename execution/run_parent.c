@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/25 21:44:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:21:36 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,8 @@ void	run_in_parent(void *root, t_shell *shell)
 int	return_parent_error(t_shell *shell, char *str, int error)
 {
 	shell->exit_status = EXIT_FAILURE;
-	if (error == 1) // erro de comando
-	{
+	if (error == 1)
 		shell->exit_status = EXIT_CMD;
-		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
-	} 
-	else if (error == 2) // erro de arquivo ou diretorio
-		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
-	else if (error == 3) // erro de permissao
-		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-	else if (error == 4) // erro de permissao
-		ft_printf(STDERR_FILENO, "minishell: %s: ambiguous redirect\n", str);
-	else
-		ft_printf(STDERR_FILENO, "%s\n", str);
+	error_message(error, str);
 	return (0);
 }
