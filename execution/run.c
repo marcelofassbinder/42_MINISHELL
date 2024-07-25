@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/24 20:08:12 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:12:28 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	char	*path_cmd;
 
 	execve_ret = 0;
-	if (!exec->cmd_args[0])
-		return ;
 	envs = filter_envs(shell->envp);
 	if (access(exec->cmd_args[0], F_OK) == 0)
 		execve_ret = execve(exec->cmd_args[0], exec->cmd_args, envs);
@@ -278,30 +276,58 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 {
 	int	fd[2];
 	int	pid[2];
+	int exit_code[2];
 	
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);
+	sig_ignore();
 	pid[0] = safe_fork(shell);
 	if (pid[0] == 0)
 	{
+		sig_default();
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
-		//exit(0);
 	}
 	pid[1] = safe_fork(shell);
 	if (pid[1] == 0)
 	{
+		sig_default();
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		run(pipe_str->right, shell);
-		//exit(0);
 	}
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(pid[0], &shell->exit_status, 0);
-	waitpid(pid[1], &shell->exit_status, 0);
-	shell->exit_status = get_status(shell->exit_status);
+	waitpid(pid[0], &exit_code[0], 0);
+	waitpid(pid[1], &exit_code[1], 0);
+	shell->exit_status = check_exit_sig(exit_code);
+	//shell->exit_status = get_status(shell->exit_status);
+	exit(shell->exit_status);
+}
+
+int	check_exit_sig(int *exit_code)
+{
+	int exit_status_0;
+	int exit_status_1;
+
+	if (WIFSIGNALED(exit_code[0]) || WIFSIGNALED(exit_code[1]))
+	{
+		exit_status_0 = WTERMSIG(exit_code[0]);
+		exit_status_1 = WTERMSIG(exit_code[1]);
+		if (exit_status_0 == SIGINT || exit_status_1 == SIGINT)
+			ft_printf(STDOUT_FILENO, "\n");
+		else if (exit_status_0 == SIGQUIT || exit_status_1 == SIGQUIT)
+			ft_printf(STDOUT_FILENO, "Quit (core dumped)\n");
+		if (WIFSIGNALED(exit_code[1]))
+		{
+			if (exit_status_1 == SIGINT)
+				return (130);
+			else if (exit_status_1 == SIGQUIT)
+				return (131);
+		}
+	}
+	return (WEXITSTATUS(exit_code[1]));
 }
 
 void	run(void *root, t_shell *shell)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_nodes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 15:22:22 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:21:13 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ t_redir *define_redir(void *down, t_token *token, t_shell *shell)
 		node_type = *(enum e_type *)down;
 		if (node_type == WORD)
 			redir->down = (t_exec *)down;
-		else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
+		else if (node_type == REDIR_IN || node_type == REDIR_OUT ||
+			node_type == D_REDIR_OUT || node_type == HERE_DOC)
 			redir->down = (t_redir *)down;
 	}
 	else
@@ -107,5 +108,3 @@ t_token	*get_next_token(t_token *token)
 	}
 	return (token);
 }
-
-
