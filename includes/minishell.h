@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/07/25 23:01:34 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -27,6 +28,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <errno.h>
 # include <errno.h>
 
 # define PIPE '|'
@@ -101,6 +103,7 @@ typedef struct		s_exec{
 typedef struct		s_redir{
 	enum e_type		type;
 	enum e_status	file_status;
+	enum e_status	file_status;
 	char			*file;
 	void			*down;
 	int 			id;
@@ -147,7 +150,13 @@ bool			is_redir(t_token *token);
 int				is_type_word(char c);
 void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
 void			print_token_list(t_token_list *token_list);
+int				is_type_word(char c);
+void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
+void			print_token_list(t_token_list *token_list);
 void			find_files(t_token_list *token_list);
+void			prepare_tokens(t_token_list *token_list, t_shell *shell);
+void			token_redir_pipe(t_token_list *token_list);
+void			repeated_quotes(t_token_list *token_list);
 void			prepare_tokens(t_token_list *token_list, t_shell *shell);
 void			token_redir_pipe(t_token_list *token_list);
 void			repeated_quotes(t_token_list *token_list);
@@ -156,8 +165,10 @@ void			repeated_quotes(t_token_list *token_list);
 int				append_word(t_token_list *token_list, char *line, enum e_status status, int i);
 int				append_redir(t_token_list *token_list, char *line, enum e_status status, int i);
 void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
+void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
 
 //SIGNALS.C
+bool			check_syntax(char *line);
 bool			check_syntax(char *line);
 void			start_sig(void);
 void			signal_handler(int signal);
@@ -173,6 +184,7 @@ void			free_token_list(t_token_list *token_list);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE
+int				return_parent_error(t_shell *shell, char *str, int error);
 int				return_parent_error(t_shell *shell, char *str, int error);
 void			free_tree(void *root);
 void			free_envs(char **envp);
@@ -191,8 +203,19 @@ char			*expand_normal(char *data, t_shell *shell);
 char			*expand_digit(char *data);
 char			*expand_minishell(char *data);
 char			*expand_special(char *data);
+char			*expand_mode(char *data, t_shell *shell);
+char			*expand_normal(char *data, t_shell *shell);
+char			*expand_digit(char *data);
+char			*expand_minishell(char *data);
+char			*expand_special(char *data);
 char			find_special(char *data);
 int				count_special(char *data, char special);
+char			*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell);
+bool			is_special(int c);
+char			**copy_envs(t_shell *shell, char **envp);
+
+//GETVALUES.C
+char			*get_var_value(char *env);
 char			*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell);
 bool			is_special(int c);
 char			**copy_envs(t_shell *shell, char **envp);
@@ -203,9 +226,13 @@ char			*ft_get_env(char *data, t_shell *shell);
 void			insert_token(char *data, t_token **token);
 void			split_env(t_token_list *token_list, t_token **token);
 int 			ft_get_pid(t_shell *shell);
+void			insert_token(char *data, t_token **token);
+void			split_env(t_token_list *token_list, t_token **token);
+int 			ft_get_pid(t_shell *shell);
 
 //JOIN.C
 t_token			*join_nodes(t_token_list *token_list, t_token *token);
+void			join_spaces(t_token_list *token_list);
 void			join_spaces(t_token_list *token_list);
 void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
@@ -217,8 +244,12 @@ t_token			*get_previous_redir(t_token *token);
 t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
 t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
 t_pipe			*build_pipe(void *left, void *right);
+t_pipe			*build_pipe(void *left, void *right);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
+bool			is_local_variable(t_token *token);
+bool			last_redir(t_token *token);
+bool			is_builtin(char *str);
 bool			is_local_variable(t_token *token);
 bool			last_redir(t_token *token);
 bool			is_builtin(char *str);
@@ -263,14 +294,26 @@ char			*remove_plus(char *environment);
 char			**replace_env(char *environment, t_shell *shell, int mode);
 char			**set_new_env(char *environment, t_shell *shell, int mode);
 bool			env_exist(char *var_name, char **env);
+int				check_option_n(char **cmd_args);
+int				str_is_digit(char *str);
+int				cd_old_dir(char *old_pwd_env, char *update_old, t_shell *shell);
+char			*get_variable_name(char *environment);
+char			*remove_plus(char *environment);
+char			**replace_env(char *environment, t_shell *shell, int mode);
+char			**set_new_env(char *environment, t_shell *shell, int mode);
+bool			env_exist(char *var_name, char **env);
 void			echo(char **cmd_args, t_shell *shell);
 void			pwd(t_shell *shell);
 void			unset(char **cmd_args, t_shell *shell);
 void			cd(char **cmd_args, t_shell *shell);
 void			cd_home(char **cmd_args, t_shell *shell);
 void			update_old_pwd(char *update_old, t_shell *shell);
+void			update_old_pwd(char *update_old, t_shell *shell);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
+
+//EXPORT
+char			**export_error(t_shell *shell, char *var_name, char *environment);
 
 //EXPORT
 char			**export_error(t_shell *shell, char *var_name, char *environment);
@@ -286,9 +329,21 @@ bool			env_exist(char *var_name, char **env);
 void			export(char **cmd_args, t_shell *shell);
 void			swap(char **envs, int j);
 void			print_env_x(t_shell *shell);
+char			*get_variable_name(char *environment);
+char			*do_replace(char *environment, char *envp, int mode);
+char			**replace_env(char *environment, t_shell *shell, int mode);
+char			**set_new_env(char *environment, t_shell *shell, int mode);
+char			**add_envp(char *environment, t_shell *shell);
+char			**ordered_envs(t_shell *shell, int size);
+int				add_mode(char *environmenent);
+bool			env_exist(char *var_name, char **env);
+void			export(char **cmd_args, t_shell *shell);
+void			swap(char **envs, int j);
+void			print_env_x(t_shell *shell);
 
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);
+char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 

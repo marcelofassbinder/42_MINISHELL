@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:13:57 by mfassbin         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/07/25 23:00:24 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -60,6 +61,9 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	sig_ignore();
 	pid[0] = safe_fork(shell);
 	if (pid[0] == 0)
+	sig_ignore();
+	pid[0] = safe_fork(shell);
+	if (pid[0] == 0)
 	{
 		sig_default();
 		close(fd[0]);
@@ -67,6 +71,8 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 		run(pipe_str->left, shell);
 		free_and_exit(shell);
 	}
+	pid[1] = safe_fork(shell);
+	if (pid[1] == 0)
 	pid[1] = safe_fork(shell);
 	if (pid[1] == 0)
 	{
