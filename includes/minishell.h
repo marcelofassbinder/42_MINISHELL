@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/24 19:31:07 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:15:34 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,8 +249,7 @@ void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
 void			run(void *root, t_shell *shell);
 void			handle_exec_error(int execve_ret, t_exec *exec, t_shell *shell);
-
-
+int				check_exit_sig(int *exit_code);
 
 //BUILTINS
 int				check_option_n(char **cmd_args);
@@ -303,6 +302,6 @@ char			*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
 char 			*copy_before_doll(char *line, char *after_doll,/*  char *expanded, */ t_shell *shell);
 char 			*copy_after_doll(char *new_line, char *line, char *after_doll);
 char			*add_backslash_n(char *line, t_shell *shell);
-void			add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
+void			save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
 
 #endif

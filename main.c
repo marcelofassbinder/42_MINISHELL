@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/24 18:40:16 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:26:21 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 	shell->pid = ft_get_pid(shell);
 	shell->fd_in = STDIN_FILENO;
 	shell->fd_out = STDOUT_FILENO;
-	//shell->path = getenv("PATH");
 	return (shell);
 }
 
@@ -192,7 +191,7 @@ void	start_minishell(t_shell *shell)
 {	
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = count_here_doc(shell);
-	add_here_doc_fd(shell, 0, 0, true);
+	save_here_doc_fd(shell, 0, 0, true);
 	shell->root = parse(shell->token_list->first, shell);
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);
