@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/07/25 22:57:20 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "includes/minishell.h"
 
@@ -16,6 +17,7 @@ int	g_received_signal;
 
 t_shell	*ft_read_line(t_shell *shell)
 {
+	start_sig();
 	start_sig();
 	shell->process = CHILD;
 	shell->line = NULL;
@@ -46,6 +48,26 @@ void	prepare_new_prompt(t_shell *shell)
 	shell->line = NULL;
 	shell->token_list = NULL;
 	shell->array_fd_here_doc = NULL;
+}
+
+int	get_status(int status)
+{
+	if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+		{
+			ft_printf(STDOUT_FILENO, "\n");
+			return (130);
+		}
+		else if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_printf(STDOUT_FILENO, "Quit (core dumped)\n");
+			return (131);
+		}
+	}
+	return (0);
 }
 
 void	minishell(t_shell *shell)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/23 19:14:58 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:58:32 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ void	echo(char **cmd_args, t_shell *shell)
 
 	i = 0;
 	n_option = 0;
+	n_option = 0;
 	if (!cmd_args[1])
 	{
 		ft_printf(STDOUT_FILENO, "\n");
+		shell->exit_status = EXIT_SUCCESS;
 		shell->exit_status = EXIT_SUCCESS;
 		return ;
 	}
@@ -56,9 +58,12 @@ void	echo(char **cmd_args, t_shell *shell)
 	{
 		ft_printf(STDOUT_FILENO, "%s", cmd_args[i]);
 		i++;
+		ft_printf(STDOUT_FILENO, "%s", cmd_args[i]);
+		i++;
 		if (cmd_args[i])
 			ft_printf(STDOUT_FILENO, " ");
 	}
+	if (n_option == 0)
 	if (n_option == 0)
 		ft_printf(STDOUT_FILENO, "\n");
 	shell->exit_status = EXIT_SUCCESS;
