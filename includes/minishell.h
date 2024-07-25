@@ -6,9 +6,10 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 20:27:48 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:24:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -27,6 +28,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <errno.h>
 # include <errno.h>
 
 # define PIPE '|'
@@ -118,9 +120,8 @@ typedef struct		s_shell{
 	void			*root;
 	char			**envp;
 	char			*line;
-	char			*old_pwd;
 	char			*path;
-	int				*fd_heredoc;
+	int				*array_fd_here_doc;
 	int				exit_status;
 	int				pid;
 	int				process;
@@ -128,6 +129,9 @@ typedef struct		s_shell{
 	int				fd_out;
 	int				count_hd;
 }					t_shell;
+
+//SHELL STRUCT
+bool			is_pipe_root(void *root);
 
 //SYNTAX
 bool			check_redir(char *str);
@@ -148,7 +152,13 @@ bool			is_redir(t_token *token);
 int				is_type_word(char c);
 void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
 void			print_token_list(t_token_list *token_list);
+int				is_type_word(char c);
+void			tokenizer(t_token_list *token_list, char *line, t_shell *shell);
+void			print_token_list(t_token_list *token_list);
 void			find_files(t_token_list *token_list);
+void			prepare_tokens(t_token_list *token_list, t_shell *shell);
+void			token_redir_pipe(t_token_list *token_list);
+void			repeated_quotes(t_token_list *token_list);
 void			prepare_tokens(t_token_list *token_list, t_shell *shell);
 void			token_redir_pipe(t_token_list *token_list);
 void			repeated_quotes(t_token_list *token_list);
@@ -157,8 +167,10 @@ void			repeated_quotes(t_token_list *token_list);
 int				append_word(t_token_list *token_list, char *line, enum e_status status, int i);
 int				append_redir(t_token_list *token_list, char *line, enum e_status status, int i);
 void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
+void			append_token(t_token_list *token_list, char *str, enum e_status status, enum e_type type);
 
 //SIGNALS.C
+bool			check_syntax(char *line);
 bool			check_syntax(char *line);
 void			start_sig(void);
 void			signal_handler(int signal);
@@ -167,26 +179,32 @@ void			sig_default(void);
 void			sig_ignore(void);
 void			sig_heredoc(void);
 void			sig_default(void);
-void			heredoc_handler(int signal);
 int				get_status(int status);
 
 //FREE tokens
 void			free_token_list(t_token_list *token_list);
-void			exit_line(t_shell *shell);
 void			delete_node(t_token_list *token_list, t_token *tmp);
 
 //FREE
+int				return_parent_error(t_shell *shell, char *str, int error);
 int				return_parent_error(t_shell *shell, char *str, int error);
 void			free_tree(void *root);
 void			free_envs(char **envp);
 void			free_and_exit(t_shell *shell);
 void			shell_error(t_shell *shell, char *str, int error, bool exit_flag);
+void			error_message(int error, char *str);
+void			free_all_allocated_memory(t_shell *shell, int free_shell);
 
 
 //EXPAND.C & EXPAND_UTILS.C && EXPAND_CASES.C
 void			handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell);
 void			check_dollar(t_token_list *token_list, t_shell *shell);
 char			*expand(char *data, t_shell *shell);
+char			*expand_mode(char *data, t_shell *shell);
+char			*expand_normal(char *data, t_shell *shell);
+char			*expand_digit(char *data);
+char			*expand_minishell(char *data);
+char			*expand_special(char *data);
 char			*expand_mode(char *data, t_shell *shell);
 char			*expand_normal(char *data, t_shell *shell);
 char			*expand_digit(char *data);
@@ -200,13 +218,23 @@ char			**copy_envs(t_shell *shell, char **envp);
 
 //GETVALUES.C
 char			*get_var_value(char *env);
+char			*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell);
+bool			is_special(int c);
+char			**copy_envs(t_shell *shell, char **envp);
+
+//GETVALUES.C
+char			*get_var_value(char *env);
 char			*ft_get_env(char *data, t_shell *shell);
+void			insert_token(char *data, t_token **token);
+void			split_env(t_token_list *token_list, t_token **token);
+int 			ft_get_pid(t_shell *shell);
 void			insert_token(char *data, t_token **token);
 void			split_env(t_token_list *token_list, t_token **token);
 int 			ft_get_pid(t_shell *shell);
 
 //JOIN.C
 t_token			*join_nodes(t_token_list *token_list, t_token *token);
+void			join_spaces(t_token_list *token_list);
 void			join_spaces(t_token_list *token_list);
 void			join_quotes(t_token_list *token_list);
 void			join_words(t_token_list *token_list);
@@ -218,8 +246,12 @@ t_token			*get_previous_redir(t_token *token);
 t_redir 		*create_new_redir(void *down, t_token *token, t_shell *shell, int flag);
 t_redir			*define_redir(void *down, t_token *token, t_shell *shell);
 t_pipe			*build_pipe(void *left, void *right);
+t_pipe			*build_pipe(void *left, void *right);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
+bool			is_local_variable(t_token *token);
+bool			last_redir(t_token *token);
+bool			is_builtin(char *str);
 bool			is_local_variable(t_token *token);
 bool			last_redir(t_token *token);
 bool			is_builtin(char *str);
@@ -230,13 +262,11 @@ void			*build_redir(void *down, t_token *token, t_shell *shell);
 void			define_redir_file(t_redir *redir, t_token *token);
 t_token			*get_next_token(t_token *token);
 
-
 //PRINT_TREE.C
 void 			print_tree(void *node, const char *prefix, bool isLeft);
 void 			printExec(t_exec *exec, const char *prefix, bool isLeft);
 void		 	printRedir(t_redir *redir, const char *prefix, bool isLeft);
 void			 printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
-
 
 //RUN
 int				redirect_in(t_shell *shell, t_redir *redir, int exit_flag);
@@ -266,15 +296,26 @@ char			*remove_plus(char *environment);
 char			**replace_env(char *environment, t_shell *shell, int mode);
 char			**set_new_env(char *environment, t_shell *shell, int mode);
 bool			env_exist(char *var_name, char **env);
+int				check_option_n(char **cmd_args);
+int				str_is_digit(char *str);
+int				cd_old_dir(char *old_pwd_env, char *update_old, t_shell *shell);
+char			*get_variable_name(char *environment);
+char			*remove_plus(char *environment);
+char			**replace_env(char *environment, t_shell *shell, int mode);
+char			**set_new_env(char *environment, t_shell *shell, int mode);
+bool			env_exist(char *var_name, char **env);
 void			echo(char **cmd_args, t_shell *shell);
-void			env(char **cmd_args, t_shell *shell);
 void			pwd(t_shell *shell);
 void			unset(char **cmd_args, t_shell *shell);
 void			cd(char **cmd_args, t_shell *shell);
 void			cd_home(char **cmd_args, t_shell *shell);
 void			update_old_pwd(char *update_old, t_shell *shell);
+void			update_old_pwd(char *update_old, t_shell *shell);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
+
+//EXPORT
+char			**export_error(t_shell *shell, char *var_name, char *environment);
 
 //EXPORT
 char			**export_error(t_shell *shell, char *var_name, char *environment);
@@ -290,9 +331,21 @@ bool			env_exist(char *var_name, char **env);
 void			export(char **cmd_args, t_shell *shell);
 void			swap(char **envs, int j);
 void			print_env_x(t_shell *shell);
+char			*get_variable_name(char *environment);
+char			*do_replace(char *environment, char *envp, int mode);
+char			**replace_env(char *environment, t_shell *shell, int mode);
+char			**set_new_env(char *environment, t_shell *shell, int mode);
+char			**add_envp(char *environment, t_shell *shell);
+char			**ordered_envs(t_shell *shell, int size);
+int				add_mode(char *environmenent);
+bool			env_exist(char *var_name, char **env);
+void			export(char **cmd_args, t_shell *shell);
+void			swap(char **envs, int j);
+void			print_env_x(t_shell *shell);
 
 //SAFE_FUNCTIONS.C
 int				safe_fork(t_shell *shell);
+char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 void 			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 
@@ -301,13 +354,18 @@ int 			ft_get_pid(t_shell *shell);
 int 			count_here_doc(t_shell *shell);
 
 //	HEREDOC
+void			open_all_heredocs(void *root, t_shell *shell);
 int				run_here_doc(t_redir *redir, t_shell *shell);
-char			*write_here_doc(t_redir *redir, t_shell *shell);
+int				*create_here_doc_array(t_shell *shell);
+char			*open_here_doc(t_redir *redir, t_shell *shell);
+char			*write_here_doc(char *buffer, t_redir *redir, t_shell *shell);
 char			*expand_here_doc(char *line, t_shell *shell);
 char			*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
-char 			*copy_before_doll(char *line, char *after_doll,/*  char *expanded, */ t_shell *shell);
+char 			*copy_before_doll(char *line, char *after_doll, t_shell *shell);
 char 			*copy_after_doll(char *new_line, char *line, char *after_doll);
 char			*add_backslash_n(char *line, t_shell *shell);
-void			save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
+
+t_shell	*init_shell(int ac, char **av, char **envp);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/25 20:08:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:05:54 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,13 @@ void	run_in_parent(void *root, t_shell *shell)
 		run_builtin_p((t_exec *)root, shell);
 	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
 		run_redir_p((t_redir *)root, shell);
+}
+
+int	return_parent_error(t_shell *shell, char *str, int error)
+{
+	shell->exit_status = EXIT_FAILURE;
+	if (error == 1)
+		shell->exit_status = EXIT_CMD;
+	error_message(error, str);
+	return (0);
 }

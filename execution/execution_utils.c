@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 20:16:33 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 20:25:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:05:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,26 @@ int	has_pipe(t_shell *shell)
 		if (token->type == PIPELINE)
 			return (1);
 		token = token->next;
+	}
+	return (0);
+}
+
+int	get_status(int status)
+{
+	if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+		{
+			ft_printf(1, "\n");
+			return (130);
+		}
+		else if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_printf(1, "Quit (core dumped)\n");
+			return (131);
+		}
 	}
 	return (0);
 }
