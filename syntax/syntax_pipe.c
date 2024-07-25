@@ -1,46 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax.c                                           :+:      :+:    :+:   */
+/*   syntax_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:46:16 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/07/25 21:11:58 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/07/25 22:46:27 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-bool	check_redir(char *str)
+bool	first_pipe(char *str)
 {
-	char	redir_type;
-	char	*save_str;
-
-	redir_type = *str;
-	str++;
-	if (*str == redir_type)
-		str++;
-	save_str = str;
-	if (empty_line(str))
+	str = str - 2;
+	while (*str)
 	{
-		ft_printf(STDERR_FILENO,
-			"minishell: syntax error near unexpected token `newline'\n");
-		return (true);
+		if (!ft_isspace(*str))
+			return (false);
+		str--;
 	}
-	str = save_str;
-	if (exceeded_token(str, redir_type))
+	return (true);
+}
+
+bool	check_pipe(char *str)
+{
+	str++;
+	if (empty_line(str) || exceeded_token(str, PIPE)
+		|| previous_is_redir(str) || first_pipe(str))
 	{
 		ft_printf(STDERR_FILENO,
-			"minishell: syntax error near unexpected token `%c'\n", redir_type);
+			"minishell: syntax error near unexpected token `|'\n");
 		return (true);
 	}
 	return (false);
 }
 
-bool	redir_error(char *str)
+bool	pipe_error(char *str)
 {
-	enum e_status	status;	
+	enum e_status	status;
 
 	status = GENERAL;
 	while (*str)
@@ -53,28 +52,12 @@ bool	redir_error(char *str)
 			status = GENERAL;
 		else if (*str == D_QTE && status == IN_D_QUOTE)
 			status = GENERAL;
-		if ((*str == R_OUT || *str == R_IN) && (status == GENERAL))
+		if (*str == PIPE && status == GENERAL)
 		{
-			if (check_redir(str))
+			if (check_pipe(str))
 				return (true);
-			else
-				str++;
 		}
-		else
-			str++;
+		str++;
 	}
 	return (false);
-}
-
-bool	check_syntax(char *line)
-{
-	if (unclosed_quotes(line))
-		return (false);
-	if (redir_error(line))
-		return (false);
-	if (pipe_error(line))
-		return (false);
-	if (special_char(line))
-		return (false);
-	return (true);
 }

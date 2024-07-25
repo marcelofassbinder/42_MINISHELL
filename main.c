@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 20:52:27 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:54:35 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,6 @@ int	get_status(int status)
 void	prepare_new_prompt(t_shell *shell)
 {
 	create_new_redir(NULL, NULL, NULL, 1);
-	free_tree(shell->root);
 	free(shell->line);
 	free_token_list(shell->token_list);
 	free(shell->token_list);

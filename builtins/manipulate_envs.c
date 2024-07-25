@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 17:15:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 17:26:10 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:39:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,18 @@ char	*get_variable_name(char *environment)
 			while (environment[i] && environment[i] != '=')
 				i++;
 			var_name = ft_substr(environment, 0, i);
-			return (var_name);		
+			return (var_name);
 		}
 	}
 	var_name = ft_substr(environment, 0, i);
 	return (var_name);
 }
 
-
 char	*do_replace(char *environment, char *envp, int mode)
 {
 	char	*var_value;
 	char	*new_env;
-	
+
 	if (mode == 1)
 	{
 		var_value = get_var_value(environment);
@@ -107,7 +106,8 @@ char	**add_envp(char *environment, t_shell *shell)
 	int		mode;
 
 	var_name = get_variable_name(environment);
-	if (find_special(var_name) || ft_strchr(var_name, ' ') || !var_name[0])
+	if (find_special(var_name) || ft_strchr(var_name, ' ') || !var_name[0]
+		|| ft_isdigit(var_name[0]))
 		return (export_error(shell, var_name, environment));
 	mode = add_mode(environment);
 	if (env_exist(var_name, shell->envp))

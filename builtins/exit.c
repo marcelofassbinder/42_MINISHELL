@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:46:53 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 20:52:09 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:42:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int	str_is_digit(char *str)
 {
 	if (*str == '+' || *str == '-')
 		str++;
-	while(*str)
+	while (*str)
 	{
 		if (!ft_isdigit(*str))
-			return(0);
+			return (0);
 		str++;
 	}
 	return (1);
@@ -38,14 +38,15 @@ void	exit_cmd(char **cmd_args, t_shell *shell)
 	else
 	{
 		shell->exit_status = EXIT_SYNTAX;
-		ft_printf(STDERR_FILENO, "minishell: exit: %s: numeric argument required\n", cmd_args[1]);
+		ft_printf(STDERR_FILENO,
+			"minishell: exit: %s: numeric argument required\n", cmd_args[1]);
 		free_and_exit(shell);
 	}
 }
 
 void	exit_number(char **cmd_args, t_shell *shell)
 {
-	int status;
+	int	status;
 
 	status = 0;
 	if (cmd_args[2])
@@ -59,8 +60,8 @@ void	exit_number(char **cmd_args, t_shell *shell)
 		status = ft_atoi(cmd_args[1]);
 		if (status >= INT_MIN || status <= INT_MAX)
 		{
-			while(status < 0)
-				status+=256;
+			while (status < 0)
+				status += 256;
 			status = status % 256;
 			shell->exit_status = status;
 			free_and_exit(shell);
