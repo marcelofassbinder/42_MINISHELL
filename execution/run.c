@@ -6,9 +6,10 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:11:00 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:06:35 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -60,12 +61,18 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	sig_ignore();
 	pid[0] = safe_fork(shell);
 	if (pid[0] == 0)
+	sig_ignore();
+	pid[0] = safe_fork(shell);
+	if (pid[0] == 0)
 	{
 		sig_default();
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		run(pipe_str->left, shell);
+		free_and_exit(shell);
 	}
+	pid[1] = safe_fork(shell);
+	if (pid[1] == 0)
 	pid[1] = safe_fork(shell);
 	if (pid[1] == 0)
 	{
@@ -73,6 +80,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		run(pipe_str->right, shell);
+		free_and_exit(shell);
 	}
 	manage_pipe_exit(fd, pid, shell);
 }

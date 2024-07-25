@@ -6,21 +6,27 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 17:26:21 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:00:32 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*write_here_doc(t_redir *redir, t_shell *shell)
+char	*open_here_doc(t_redir *redir, t_shell *shell)
 {
 	char *buffer;
-	char *line;
 
 	buffer = ft_calloc(sizeof(char), 1);
 	if (!buffer)
 		shell_error(shell, "Calloc Error: here_doc", 0, true);
 	dup2(STDERR_FILENO, STDIN_FILENO);
+	return(write_here_doc(buffer, redir, shell));
+}
+
+char	*write_here_doc(char *buffer, t_redir *redir, t_shell *shell)
+{
+	char *line;
+
 	while(1)
 	{
 		line = readline("> ");
@@ -40,7 +46,7 @@ char	*write_here_doc(t_redir *redir, t_shell *shell)
 		buffer = ft_strjoin(buffer, line);
 		free(line);
 	}
-	return (buffer);
+	return(buffer);
 }
 
 char	*add_backslash_n(char *line, t_shell *shell)
@@ -64,7 +70,7 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	int fd[2];
 
 	sig_heredoc();
-	buffer = write_here_doc(redir, shell);
+	buffer = open_here_doc(redir, shell);
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);	
 	if (safe_fork(shell) == 0)
@@ -79,19 +85,59 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 	wait(NULL);
 	free(buffer);
 	close(fd[1]);
-	save_here_doc_fd(shell, fd[0], redir->id, false);
+	shell->array_fd_here_doc[redir->id] = fd[0];
 	return (1);
 }
 
-void	save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
+int	*create_here_doc_array(t_shell *shell)
 {
-	if (init)
+	int *array_fd_here_doc;
+
+	array_fd_here_doc = ft_calloc(sizeof(int), shell->count_hd + 1);
+	if (!array_fd_here_doc)
+		shell_error(shell, "Calloc error: heredoc", 0, true);
+	array_fd_here_doc[shell->count_hd] = -1;
+	return(array_fd_here_doc);
+}
+
+int count_here_doc(t_shell *shell)
+{
+	t_token *token;
+	int count;
+
+	token = shell->token_list->first;
+	count = 0;
+	while(token)
 	{
-		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
-		if (!shell->fd_heredoc)
-			shell_error(shell, "Calloc error: heredoc", 0, true);
-		shell->fd_heredoc[shell->count_hd] = -1;
-		return ;
+		if (token->type == HERE_DOC)
+			count++;
+		token = token->next;
 	}
-	shell->fd_heredoc[pos] = fd_here_doc;
+	return (count);
+}
+
+void	open_all_heredocs(void *root, t_shell *shell)
+{
+	enum e_type node_type;
+	t_pipe		*pipe;
+	t_redir		*redir;
+
+	if (!root)
+		return ;
+	node_type = *(enum e_type *)root;
+	if (node_type == PIPELINE)
+	{
+		pipe = (t_pipe *)root;
+		open_all_heredocs(pipe->left, shell);
+		open_all_heredocs(pipe->right, shell);
+	}
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
+	{
+		redir = (t_redir *)root;
+		if (node_type == HERE_DOC)
+			run_here_doc(redir, shell);
+		open_all_heredocs(redir->down, shell);
+	}
+	else if (node_type == WORD)
+		return ;
 }

@@ -6,9 +6,10 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:46:53 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 22:42:46 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:03:27 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
