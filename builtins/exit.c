@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:46:53 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/24 16:50:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:52:09 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	str_is_digit(char *str)
 void	exit_cmd(char **cmd_args, t_shell *shell)
 {
 	ft_printf(1, "exit\n");
-	if (!cmd_args[1])
+	if (!cmd_args || !cmd_args[1])
 	{
 		shell->exit_status = EXIT_SUCCESS;
 		free_and_exit(shell);

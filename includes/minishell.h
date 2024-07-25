@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 17:22:31 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:27:48 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,7 @@ void			 printPipe(t_pipe *pipe, const char *prefix, bool isLeft);
 //RUN
 int				redirect_in(t_shell *shell, t_redir *redir, int exit_flag);
 int				redirect_out(t_shell *shell, t_redir *redir, int exit_flag);
+int				check_exit_sig(int *exit_code);
 int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
 int				has_pipe(t_shell *shell);
 int				return_parent_error(t_shell *shell, char *str, int error);
@@ -254,8 +255,7 @@ void			run_builtin(t_exec *exec, t_shell *shell);
 void			run_in_parent(void *root, t_shell *shell);
 void			run(void *root, t_shell *shell);
 void			handle_exec_error(int execve_ret, t_exec *exec, t_shell *shell);
-
-
+void			manage_pipe_exit(int *fd, int *pid, t_shell *shell);
 
 //BUILTINS
 int				check_option_n(char **cmd_args);
@@ -308,6 +308,6 @@ char			*replace_expanded_var(char *line, char *after_doll, t_shell *shell);
 char 			*copy_before_doll(char *line, char *after_doll,/*  char *expanded, */ t_shell *shell);
 char 			*copy_after_doll(char *new_line, char *line, char *after_doll);
 char			*add_backslash_n(char *line, t_shell *shell);
-void			add_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
+void			save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init);
 
 #endif

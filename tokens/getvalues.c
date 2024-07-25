@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:27 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 12:36:02 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:31:57 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	*ft_get_env(char *data, t_shell *shell)
 	char	*cur_env;
 
 	i = 0;
+	if (!shell->envp)
+		return (NULL);
 	while (shell->envp[i])
 	{
 		cur_env = get_variable_name(shell->envp[i]);

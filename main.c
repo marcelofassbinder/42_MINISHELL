@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 17:22:42 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:52:27 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ char	**copy_envs(t_shell *shell, char **envp)
 	char	**env_copy;
 
 	i = 0;
+	if (!envp)
+		return (NULL);
 	while (envp[i])
 		i++;
 	env_copy = ft_calloc(sizeof(char *), i + 1);
@@ -108,7 +110,7 @@ t_shell	*ft_read_line(t_shell *shell)
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
 	if (!shell->line)
-		exit_line(shell);
+		exit_cmd(NULL, shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
 	if (!shell->token_list)
 		shell_error(shell, "Calloc Error: tokens\n", 0, true);
@@ -200,13 +202,17 @@ void	prepare_new_prompt(t_shell *shell)
 	free_token_list(shell->token_list);
 	free(shell->token_list);
 	free(shell->fd_heredoc);
+	shell->root = NULL;
+	shell->line = NULL;
+	shell->token_list = NULL;
+	shell->fd_heredoc = NULL;
 }
 
 void	start_minishell(t_shell *shell)
 {	
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = count_here_doc(shell);
-	add_here_doc_fd(shell, 0, 0, true);
+	save_here_doc_fd(shell, 0, 0, true);
 	shell->root = parse(shell->token_list->first, shell);
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);

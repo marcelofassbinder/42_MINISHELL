@@ -6,11 +6,30 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:56:14 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/23 15:57:35 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:19:33 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	return_parent_error(t_shell *shell, char *str, int error)
+{
+	shell->exit_status = EXIT_FAILURE;
+	if (error == 1) // erro de comando
+	{
+		shell->exit_status = EXIT_CMD;
+		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
+	} 
+	else if (error == 2) // erro de arquivo ou diretorio
+		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
+	else if (error == 3) // erro de permissao
+		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+	else if (error == 4) // erro de permissao
+		ft_printf(STDERR_FILENO, "minishell: %s: ambiguous redirect\n", str);
+	else
+		ft_printf(STDERR_FILENO, "%s\n", str);
+	return (0);
+}
 
 int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 {
