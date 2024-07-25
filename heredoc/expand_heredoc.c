@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:13:32 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/21 17:32:18 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:31:46 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ char	*expand_here_doc(char *line, t_shell *shell)
 		copy_line++;
 		while(copy_line[i] != ' ' && copy_line[i] != '\n' && copy_line[i] != S_QTE  && copy_line[i] != D_QTE)
 			i++;
-		if (i == 0)
+		if (i == 0)	
 			continue ;
 		after_doll = ft_substr(copy_line, 0, i);
 		line = replace_expanded_var(line, after_doll, shell);
+		copy_line = line;
 	}
 	free(to_free);
 	return(line);
@@ -56,57 +57,32 @@ char	*replace_expanded_var(char *line, char *after_doll, t_shell *shell)
 	return(new_line);
 }
 
-char *copy_after_doll(char *new_line, char *line, char *after_doll)
-{
-	int j;
-	int i;
-	int copy;
-
-	i = -1;
-	while(line[++i])
-	{
-		if (line[i] == DOLLAR && line[i + 1] == after_doll[0])
-		{
-			i++;
-			j = 0;
-			while(line[i] == after_doll[j])
-			{
-				i++;
-				j++;
-			}
-			if (j == ft_strlen(after_doll))
-				copy = i;
-		}
-	}
-	new_line = ft_strjoin(new_line, &line[copy]);
-	return(new_line);
-}
-
 char *copy_before_doll(char *line, char *after_doll, t_shell *shell)
 {
 	char	*new;
-	int		i;
-	int		j;
+	int		start;
+	int		len;
 
-	new = ft_calloc(sizeof(char), ft_strlen(line) - ft_strlen(after_doll));
+	start = 0;
+	while(line[start] != DOLLAR ||
+		ft_strncmp(&line[start + 1], after_doll, ft_strlen(after_doll)))
+		start ++;
+	len = start;
+	new = ft_substr(line, 0, len);
 	if (!new)
-		shell_error(shell, "Calloc Error : here_doc expansion", 0, true);
-	i = -1;
-	while(line[++i])
-	{
-		if (line[i] == DOLLAR && line[i + 1] == after_doll[0])
-		{
-			i++;
-			j = 0;
-			while(line[i] == after_doll[j])
-			{
-				i++;
-				j++;
-			}
-			if (j == ft_strlen(after_doll))
-				j = i - j;
-		}
-	}
-	ft_memcpy(new, line, j - 1);
+		shell_error(shell, "Calloc Error: expansion in heredoc", 0, true);
 	return (new);
+}
+
+char *copy_after_doll(char *new_line, char *line, char *after_doll)
+{
+	int start;
+
+	start = 0;
+	while(line[start] != DOLLAR ||
+		ft_strncmp(&line[start + 1], after_doll, ft_strlen(after_doll)))
+		start ++;
+	start += ft_strlen(after_doll) + 1;
+	new_line = ft_strjoin(new_line, &line[start]);
+	return(new_line);
 }
