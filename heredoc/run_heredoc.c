@@ -1,0 +1,145 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_heredoc.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
+/*   Updated: 2024/07/25 21:15:01 by mfassbin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/minishell.h"
+
+char	*open_here_doc(t_redir *redir, t_shell *shell)
+{
+	char *buffer;
+
+	buffer = ft_calloc(sizeof(char), 1);
+	if (!buffer)
+		shell_error(shell, "Calloc Error: here_doc", 0, true);
+	dup2(STDERR_FILENO, STDIN_FILENO);
+	return(write_here_doc(buffer, redir, shell));
+}
+
+char	*write_here_doc(char *buffer, t_redir *redir, t_shell *shell)
+{
+	char *line;
+
+	while(1)
+	{
+		line = readline("> ");
+		if (!line)
+		{
+			ft_printf(STDERR_FILENO, "minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", redir->file);
+			break ;
+		}
+		line = add_backslash_n(line, shell);
+		if (redir->file_status == GENERAL)
+			line = expand_here_doc(line, shell);
+		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
+		{
+			free(line);
+			break ;
+		}
+		buffer = ft_strjoin(buffer, line);
+		free(line);
+	}
+	return(buffer);
+}
+
+char	*add_backslash_n(char *line, t_shell *shell)
+{
+	char	*new_line;
+	int 	len;
+
+	len = ft_strlen(line);
+	new_line = ft_calloc(sizeof(char), ft_strlen(line) + 2);
+	if (!new_line)
+		shell_error(shell, "Calloc Error: here_doc expansion", 0, true);
+	ft_memcpy(new_line, line, len);
+	new_line[len] = '\n';
+	free(line);
+	return(new_line);
+}
+
+int	run_here_doc(t_redir *redir, t_shell *shell)
+{
+	char *buffer;
+	int fd[2];
+
+	sig_heredoc();
+	buffer = open_here_doc(redir, shell);
+	if (pipe(fd) == -1)
+		shell_error(shell, "Pipe error\n", 0, true);	
+	if (safe_fork(shell) == 0)
+	{
+		close(fd[0]);
+		write(fd[1], buffer, ft_strlen(buffer));
+		free(buffer);
+		dup2(fd[1], shell->fd_out);
+		close(fd[1]);
+		free_and_exit(shell);
+	}
+	wait(NULL);
+	free(buffer);
+	close(fd[1]);
+	save_here_doc_fd(shell, fd[0], redir->id, false);
+	return (1);
+}
+
+void	save_here_doc_fd(t_shell *shell, int fd_here_doc, int pos, bool init)
+{
+	if (init)
+	{
+		shell->fd_heredoc = ft_calloc(sizeof(int), shell->count_hd + 1);
+		if (!shell->fd_heredoc)
+			shell_error(shell, "Calloc error: heredoc", 0, true);
+		shell->fd_heredoc[shell->count_hd] = -1;
+		return ;
+	}
+	shell->fd_heredoc[pos] = fd_here_doc;
+}
+
+int count_here_doc(t_shell *shell)
+{
+	t_token *token;
+	int count;
+
+	token = shell->token_list->first;
+	count = 0;
+	while(token)
+	{
+		if (token->type == HERE_DOC)
+			count++;
+		token = token->next;
+	}
+	return (count);
+}
+
+void	open_all_heredocs(void *root, t_shell *shell)
+{
+	enum e_type node_type;
+	t_pipe		*pipe;
+	t_redir		*redir;
+
+	if (!root)
+		return ;
+	node_type = *(enum e_type *)root;
+	if (node_type == PIPELINE)
+	{
+		pipe = (t_pipe *)root;
+		open_all_heredocs(pipe->left, shell);
+		open_all_heredocs(pipe->right, shell);
+	}
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
+	{
+		redir = (t_redir *)root;
+		if (node_type == HERE_DOC)
+			run_here_doc(redir, shell);
+		open_all_heredocs(redir->down, shell);
+	}
+	else if (node_type == WORD)
+		return ;
+}

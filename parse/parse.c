@@ -6,11 +6,23 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/19 16:16:33 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:20:07 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+
+bool	has_word(t_token *token)
+{
+	while (token && token->type != PIPELINE)
+	{
+		if (token->type == WORD || token->type == T_NULL)
+			return (true);
+		token = token->next;
+	}
+	return (false);
+}
 
 void	*build_redir(void *down, t_token *token, t_shell *shell)
 {
@@ -31,17 +43,6 @@ void	*build_redir(void *down, t_token *token, t_shell *shell)
 	if (!root)
 		return (down);
 	return (root);
-}
-
-bool	has_word(t_token *token)
-{
-	while (token && token->type != PIPELINE)
-	{
-		if (token->type == WORD || token->type == T_NULL)
-			return (true);
-		token = token->next;
-	}
-	return (false);
 }
 
 void	*build_exec(t_token *token, t_shell *shell)
