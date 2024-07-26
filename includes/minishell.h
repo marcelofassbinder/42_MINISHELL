@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:24:49 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/26 15:48:11 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,8 @@ void			update_old_pwd(char *update_old, t_shell *shell);
 void			update_old_pwd(char *update_old, t_shell *shell);
 void			exit_cmd(char **cmd_args, t_shell *shell);
 void			exit_number(char **cmd_args, t_shell *shell);
+void			exit_line(t_shell *shell);
+
 
 //EXPORT
 char			**export_error(t_shell *shell, char *var_name, char *environment);

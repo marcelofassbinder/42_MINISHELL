@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirects.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:56:14 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:03:15 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:02:00 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	redirect_out(t_shell *shell, t_redir *redir, int exit_flag)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
+		shell->exit_status = EXIT_FAILURE;
 		if (shell->process == CHILD)
 			shell_error(shell, redir->file, 3, exit_flag);
 		else
@@ -52,6 +53,7 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 	fd = open(redir->file, O_RDONLY);
 	if (fd == -1)
 	{
+		shell->exit_status = EXIT_FAILURE;
 		if (shell->process == CHILD)
 			shell_error(shell, redir->file, 3, exit_flag);
 		else

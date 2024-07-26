@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:25:39 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/26 15:51:31 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_shell	*ft_read_line(t_shell *shell)
 	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	add_history(shell->line);
 	if (!shell->line)
-		exit_cmd(NULL, shell);
+		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
 	if (!shell->token_list)
 		shell_error(shell, "Calloc Error: tokens\n", 0, true);
@@ -36,17 +36,19 @@ t_shell	*ft_read_line(t_shell *shell)
 }
 
 
-void	prepare_new_prompt(t_shell *shell, int flag)
+void	prepare_new_prompt(t_shell *shell)
 {
 	create_new_redir(NULL, NULL, NULL, 1);
-	free_all_allocated_memory(shell, 0);
-	if (flag)
-	{
-		shell->root = NULL;
-		shell->line = NULL;
-		shell->token_list = NULL;
-		shell->array_fd_here_doc = NULL;
-	}
+	free_tree(shell->root);
+	free(shell->line);
+	free_token_list(shell->token_list);
+	free(shell->token_list);
+	free(shell->array_fd_here_doc);
+	create_new_redir(NULL, NULL, NULL, 1);
+	shell->root = NULL;
+	shell->line = NULL;
+	shell->token_list = NULL;
+	shell->array_fd_here_doc = NULL;
 }
 
 void	minishell(t_shell *shell)
@@ -72,24 +74,26 @@ void	minishell(t_shell *shell)
 		wait(&shell->exit_status);
 		shell->exit_status = get_status(shell->exit_status);
 	}
-	prepare_new_prompt(shell, 1);
+	prepare_new_prompt(shell);
 }
+
 
 int	main(int ac, char **av, char **envp)
 {
 	t_shell		*shell;
+	bool		syntax;
 
 	shell = init_shell(ac, av, envp);
 	while (1)
 	{
 		shell = ft_read_line(shell);
-		if (!check_syntax(shell->line) || !shell->line[0])
+		syntax = check_syntax(shell->line);
+		if (!syntax || !shell->line[0])
 		{
-			if (!shell->line[0])
-				shell->exit_status = EXIT_SUCCESS;
-			else
+			if (!syntax)
 				shell->exit_status = EXIT_SYNTAX;
-			prepare_new_prompt(shell, 0);
+			free(shell->token_list);
+			free(shell->line);
 			continue ;
 		}
 		minishell(shell);

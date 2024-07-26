@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:31:30 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:46:16 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/26 15:37:47 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ bool	check_syntax(char *line)
 {
 	if (unclosed_quotes(line))
 		return (false);
-	if (redir_error(line))
+	else if (redir_error(line))
 		return (false);
-	if (pipe_error(line))
+	else if (pipe_error(line))
 		return (false);
-	if (special_char(line))
+	else if (special_char(line))
 		return (false);
 	return (true);
 }

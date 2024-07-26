@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 22:35:15 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/26 15:52:28 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_shell	*init_shell(int ac, char **av, char **envp)
 		shell_error(shell, av[1], 2, true);
 	}
 	shell->envp = copy_envs(shell, envp);
-	shell->exit_status = 0;
+	shell->exit_status = EXIT_SUCCESS;
 	shell->pid = ft_get_pid(shell);
 	shell->fd_in = STDIN_FILENO;
 	shell->fd_out = STDOUT_FILENO;
