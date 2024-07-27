@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:28:36 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:05:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 22:25:47 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	export(char **cmd_args, t_shell *shell)
+{
+	int	i;
+
+	shell->exit_status = EXIT_SUCCESS;
+	i = 1;
+	if (!cmd_args[1])
+		print_env_x(shell);
+	while (cmd_args[i])
+	{
+		if (cmd_args[i][0] == '-')
+		{
+			ft_printf(2, "minishell: export '%s': not a valid identifier\n",
+				cmd_args[i]);
+			shell->exit_status = 2;
+			i++;
+			continue ;
+		}
+		shell->envp = add_envp(cmd_args[i], shell);
+		i++;
+	}
+}
 
 void	swap(char **envs, int j)
 {
@@ -79,27 +102,4 @@ void	print_env_x(t_shell *shell)
 		i++;
 	}
 	free_envs(ordered);
-}
-
-void	export(char **cmd_args, t_shell *shell)
-{
-	int	i;
-
-	shell->exit_status = EXIT_SUCCESS;
-	i = 1;
-	if (!cmd_args[1])
-		print_env_x(shell);
-	while (cmd_args[i])
-	{
-		if (cmd_args[i][0] == '-')
-		{
-			ft_printf(2, "minishell: export '%s': not a valid identifier\n",
-				cmd_args[i]);
-			shell->exit_status = 2;
-			i++;
-			continue ;
-		}
-		shell->envp = add_envp(cmd_args[i], shell);
-		i++;
-	}
 }

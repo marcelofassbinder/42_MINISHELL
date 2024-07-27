@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:50:22 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 20:37:43 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 21:46:57 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ t_token	*get_eof_status(t_token *tmp)
 	return (tmp);
 }
 
-int	is_type_word(char c)
+bool	is_type_word(char c)
 {
 	if (!ft_isspace(c) && c != S_QTE && c != D_QTE && c != PIPE
 		&& c != DOLLAR && c != R_IN && c != R_OUT && c)
-		return (1);
-	return (0);
+		return (true);
+	return (false);
 }
 
 bool	is_redir(t_token *token)

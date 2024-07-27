@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 21:37:40 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:05:21 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 22:38:55 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	unset(char **cmd_args, t_shell *shell)
+{
+	int	i;
+
+	i = 1;
+	shell->exit_status = EXIT_SUCCESS;
+	if (!cmd_args[i])
+		return ;
+	if (cmd_args[i][0] == '-')
+	{
+		ft_printf(STDERR_FILENO,
+			"minishell: unset '%s': not a valid identifier\n", cmd_args[i]);
+		shell->exit_status = 2;
+		i++;
+		return ;
+	}
+	while (cmd_args[i])
+	{
+		shell->envp = delete_envp(cmd_args[i], shell);
+		i++;
+	}
+}
 
 char	**prepare_to_delete(t_shell *shell, int	*k, int *i, int *j)
 {
@@ -77,27 +100,4 @@ char	**delete_envp(char *environment, t_shell *shell)
 		i++;
 	}
 	return (shell->envp);
-}
-
-void	unset(char **cmd_args, t_shell *shell)
-{
-	int	i;
-
-	i = 1;
-	shell->exit_status = EXIT_SUCCESS;
-	if (!cmd_args[i])
-		return ;
-	if (cmd_args[i][0] == '-')
-	{
-		ft_printf(STDERR_FILENO,
-			"minishell: unset '%s': not a valid identifier\n", cmd_args[i]);
-		shell->exit_status = 2;
-		i++;
-		return ;
-	}
-	while (cmd_args[i])
-	{
-		shell->envp = delete_envp(cmd_args[i], shell);
-		i++;
-	}
 }
