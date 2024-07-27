@@ -6,17 +6,17 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:50:22 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 14:51:41 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 17:54:02 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+ #include "../includes/minishell.h"
 
 void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 {
+	join_spaces(token_list);
 	check_dollar(token_list, shell);
 	g_received_signal = 0;
-	join_spaces(token_list);
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
@@ -33,6 +33,8 @@ int is_type_word(char c)
 
 bool	is_redir(t_token *token)
 {
+	if (!token)
+		return (false);
 	if (token->type == REDIR_IN || token->type == REDIR_OUT || token->type == D_REDIR_OUT || token->type == HERE_DOC)
 		return (true);
 	return (false);

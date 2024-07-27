@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 16:29:37 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 17:57:35 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ char	*write_here_doc(char *buffer, t_redir *redir, t_shell *shell)
 			break ;
 		}
 		line = add_backslash_n(line, shell);
-		if (redir->file_status == GENERAL)
-			line = expand_here_doc(line, shell);
 		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
 		{
 			free(line);
 			break ;
 		}
+		if (redir->file_status == GENERAL)
+			line = expand_here_doc(line, shell);
 		buffer = ft_strjoin(buffer, line);
 		free(line);
 	}
@@ -81,6 +81,8 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		dup2(fd[1], shell->fd_out);
 		close(fd[1]);
 		free_and_exit(shell);
+
+		
 	}
 	wait(NULL);
 	free(buffer);
