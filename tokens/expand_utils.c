@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:38:33 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 13:20:59 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:29:33 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+bool	not_expand_heredoc_eof(t_token **tmp)
+{
+	if ((*tmp)->prev && (*tmp)->prev->type == W_SPACE)
+	{
+		*tmp = (*tmp)->prev;
+		if ((*tmp)->prev && (*tmp)->prev->type == HERE_DOC)
+		{
+			(*tmp)->next->type = WORD;
+			*tmp = (*tmp)->next->next->next;
+			return (true);
+		}
+		*tmp = (*tmp)->next;
+	}
+	else if ((*tmp)->prev && (*tmp)->prev->type == HERE_DOC)
+	{
+		(*tmp)->type = WORD;
+		*tmp = (*tmp)->next->next;
+		return (true);
+	}
+	return (false);
+}
 
 char	find_special(char *data)
 {
@@ -49,7 +71,7 @@ char	*expand_aux(char *data, char *to_expand, char *rest, t_shell *shell)
 	char	*new;
 	char	*to_free;
 	char	*env;
-	
+
 	env = ft_get_env(to_expand, shell);
 	to_free = ft_strdup(env);
 	new = ft_strjoin(to_free, rest);

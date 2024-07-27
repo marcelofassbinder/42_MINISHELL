@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 20:16:33 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 14:41:03 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:08:33 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	check_exit_sig(int *exit_code)
 {
-	int exit_status_0;
-	int exit_status_1;
+	int	exit_status_0;
+	int	exit_status_1;
 
 	if (WIFSIGNALED(exit_code[0]) || WIFSIGNALED(exit_code[1]))
 	{
@@ -38,7 +38,7 @@ int	check_exit_sig(int *exit_code)
 
 void	manage_pipe_exit(int *fd, int *pid, t_shell *shell)
 {
-	int exit_code[2];
+	int	exit_code[2];
 	int	exit_status;
 
 	close(fd[0]);
@@ -70,10 +70,10 @@ bool	has_no_file(t_shell *shell, t_redir *redir, int exit_flag)
 
 int	has_pipe(t_shell *shell)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = shell->token_list->first;
-	while(token)
+	while (token)
 	{
 		if (token->type == PIPELINE)
 			return (1);
@@ -85,7 +85,7 @@ int	has_pipe(t_shell *shell)
 int	get_status(int status)
 {
 	if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
+		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)

@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:06:16 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/26 15:57:34 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:05:54 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 
@@ -40,7 +39,7 @@ void	run_exec(t_exec *exec, t_shell *shell)
 	if (!exec->is_builtin)
 		run_execve(exec, shell);
 	else if (exec->is_builtin)
-		run_builtin(exec, shell);	
+		run_builtin(exec, shell);
 	free_and_exit(shell);
 }
 
@@ -55,7 +54,7 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 {
 	int	fd[2];
 	int	pid[2];
-	
+
 	if (pipe(fd) == -1)
 		shell_error(shell, "Pipe error\n", 0, true);
 	sig_ignore();
@@ -80,7 +79,6 @@ void	run_pipe(t_pipe *pipe_str, t_shell *shell)
 	manage_pipe_exit(fd, pid, shell);
 }
 
-
 void	run(void *root, t_shell *shell)
 {
 	enum e_type	node_type;
@@ -96,7 +94,8 @@ void	run(void *root, t_shell *shell)
 		exec = (t_exec *)root;
 		run_exec(exec, shell);
 	}
-	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT || node_type == REDIR_OUT || node_type == HERE_DOC)
+	else if (node_type == REDIR_IN || node_type == D_REDIR_OUT
+		|| node_type == REDIR_OUT || node_type == HERE_DOC)
 	{
 		redir = (t_redir *)root;
 		run_redir(redir, shell);

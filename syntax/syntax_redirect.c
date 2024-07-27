@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:21:43 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:06:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:19:53 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 bool	special_char(char *str)
 {
-	char	*special = "();&!";
-	enum 	e_status	status;
+	char			*special;
+	enum e_status	status;
 
+	special = "();&!*\\";
 	status = GENERAL;
 	while (*str)
 	{
@@ -36,7 +37,7 @@ bool	special_char(char *str)
 		}
 		str++;
 	}
-	return (false);	
+	return (false);
 }
 
 bool	unclosed_quotes(char *str)
@@ -61,7 +62,8 @@ bool	unclosed_quotes(char *str)
 			str++;
 	}
 	if (flag == true)
-		ft_printf (STDERR_FILENO, "minishell: syntax error near unclosed quotes\n");
+		ft_printf (STDERR_FILENO,
+			"minishell: syntax error near unclosed quotes\n");
 	return (flag);
 }
 

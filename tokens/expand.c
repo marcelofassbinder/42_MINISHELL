@@ -6,37 +6,16 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 16:58:34 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:30:29 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-bool	not_expand_heredoc_eof(t_token **tmp)
+void	handle_expansion(t_token_list *token_list, t_token **tmp,
+	t_shell *shell)
 {
-	if ((*tmp)->prev && (*tmp)->prev->type == W_SPACE)
-	{
-		*tmp = (*tmp)->prev;
-		if ((*tmp)->prev && (*tmp)->prev->type == HERE_DOC)
-		{
-			(*tmp)->next->type = WORD;
-			*tmp = (*tmp)->next->next->next;
-			return (true) ;
-		}
-		*tmp = (*tmp)->next;
-	}
-	else if ((*tmp)->prev && (*tmp)->prev->type == HERE_DOC)
-	{
-		(*tmp)->type = WORD;
-		*tmp = (*tmp)->next->next;
-		return (true);
-	}
-	return (false);
-}
-
-void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
-{
-	t_token *to_free;
+	t_token	*to_free;
 
 	if (not_expand_heredoc_eof(tmp))
 		return ;
@@ -48,7 +27,8 @@ void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 		((*tmp)->data = NULL);
 		((*tmp)->type = T_NULL);
 	}
-	else if (ft_strchr((*tmp)->next->data, ' ') && (*tmp)->next->status == GENERAL)
+	else if (ft_strchr((*tmp)->next->data, ' ')
+		&& (*tmp)->next->status == GENERAL)
 		split_env(token_list, tmp);
 	else
 	{
@@ -59,25 +39,25 @@ void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 	}
 }
 
-void check_dollar(t_token_list *token_list, t_shell *shell)
+void	check_dollar(t_token_list *token_list, t_shell *shell, t_token *tmp)
 {
-	t_token *tmp = token_list->first;
-	t_token *to_free;
+	t_token	*to_free;
 
 	while (tmp)
 	{
-		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next &&
-			(tmp->next->type == WORD || tmp->next->type == ENV))
+		if (tmp->type == ENV && tmp->status != IN_S_QUOTE && tmp->next
+			&& (tmp->next->type == WORD || tmp->next->type == ENV))
 		{
 			handle_expansion(token_list, &tmp, shell);
-			continue;
+			continue ;
 		}
-		if ((tmp->type == ENV && tmp->status == IN_S_QUOTE) || (tmp->type
-			== ENV && (!tmp->next || (tmp->next->type != WORD
-				&& tmp->next->type != S_QUOTE && tmp->next->type != D_QUOTE))))
+		if ((tmp->type == ENV && tmp->status == IN_S_QUOTE)
+			|| (tmp->type == ENV && (!tmp->next || (tmp->next->type != WORD
+						&& tmp->next->type != S_QUOTE
+						&& tmp->next->type != D_QUOTE))))
 			tmp->type = WORD;
-		else if (tmp->type == ENV && tmp->status == GENERAL && tmp->next &&
-			(tmp->next->type == S_QUOTE || tmp->next->type == D_QUOTE))
+		else if (tmp->type == ENV && tmp->status == GENERAL && tmp->next
+			&& (tmp->next->type == S_QUOTE || tmp->next->type == D_QUOTE))
 		{
 			to_free = tmp;
 			tmp = tmp->next;
@@ -85,7 +65,7 @@ void check_dollar(t_token_list *token_list, t_shell *shell)
 		}
 		else
 			tmp = tmp->next;
-    }
+	}
 }
 
 char	*expand_mode(char *data, t_shell *shell)
@@ -93,7 +73,7 @@ char	*expand_mode(char *data, t_shell *shell)
 	char	*new_data;
 	char	*number;
 	char	*to_free;
-	
+
 	to_free = data;
 	if (data[0] == '?' || data[0] == '$')
 	{
@@ -118,13 +98,13 @@ char	*expand_normal(char *data, t_shell *shell)
 	char	*env;
 	char	*expanded;
 	char	*to_free;
-	
+
 	to_free = data;
 	env = ft_get_env(data, shell);
 	if (!env)
 	{
 		free(to_free);
-		return (NULL);	
+		return (NULL);
 	}
 	expanded = ft_strdup(env);
 	free(env);

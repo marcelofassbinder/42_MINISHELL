@@ -6,12 +6,11 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 16:04:12 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:13:01 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 bool	has_word(t_token *token)
 {
@@ -60,7 +59,7 @@ void	*build_exec(t_token *token, t_shell *shell)
 	else
 		exec = NULL;
 	root = build_redir(exec, token, shell);
-	return(root);
+	return (root);
 }
 
 t_pipe	*build_pipe(void *left, void *right)

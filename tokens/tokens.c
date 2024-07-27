@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 18:40:22 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:40:52 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,11 @@ void	repeated_quotes(t_token_list *token_list)
 	tmp = token_list->first;
 	while (tmp)
 	{
-		if ((tmp->status == GENERAL) && (tmp->type == D_QUOTE || tmp->type == S_QUOTE))
+		if ((tmp->status == GENERAL) && (tmp->type == D_QUOTE
+				|| tmp->type == S_QUOTE))
 		{
-			if ((tmp->next && tmp->next->status == GENERAL) && (tmp->next->type == D_QUOTE || tmp->next->type == S_QUOTE))
+			if ((tmp->next && tmp->next->status == GENERAL)
+				&& (tmp->next->type == D_QUOTE || tmp->next->type == S_QUOTE))
 			{
 				tmp->data = ft_strdup("");
 				tmp->type = T_NULL;
@@ -70,18 +72,18 @@ void	repeated_quotes(t_token_list *token_list)
 
 void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
 {
-	enum e_status 	status;
-	int i;
+	enum e_status	status;
+	int				i;
 
 	status = GENERAL;
 	i = 0;
-	while(line[i])
+	while (line[i])
 	{
 		if (is_type_word(line[i]))
 		{
 			i = append_word(token_list, &line[i], status, i);
 			if (!line[i])
-				break;
+				break ;
 		}
 		status = append_quotes(token_list, line[i], status);
 		if (ft_isspace(line[i]))
@@ -95,37 +97,12 @@ void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
 		i++;
 	}
 	prepare_tokens(token_list, shell);
-	//print_token_list(token_list);
 }
 
-void print_token_list(t_token_list *token_list)
+enum e_status	change_status(t_token_list *token_list,
+	char c, enum e_status status, enum e_type type)
 {
-	int i;
-	t_token *ptr;
-	char *s[] = {"GENERAL", "IN_S_QUOTE", "IN_D_QUOTE", "W_SPACE", "WORD", "PIPELINE", "ENV", "REDIR_IN", "REDIR_OUT", "D_REDIR_OUT", "HERE_DOC", "S_QUOTE", "D_QUOTE", "FILE", "NULL"};
-
-	ptr = token_list->first;
-	i = 1;
-	printf("| %-3s | %-20s | %-3s | %-15s | %-15s |\n", "ID", "TOKEN", "LEN", "STATUS", "TYPE");
-    printf("|-----|----------------------|-----|-----------------|-----------------|\n");
-	while (ptr != NULL)
-	{
-		if (ptr->data == NULL)
-		{
-			printf("here has NULL token\n");
-			ptr = ptr->next;
-			continue ;
-		}
-		printf("| %-3d | %-20s | %-3d | %-15s | %-15s |\n", i, ptr->data, ft_strlen(ptr->data), s[ptr->status], s[ptr->type]);
-		printf("|-----|----------------------|-----|-----------------|-----------------|\n");
-		ptr = ptr->next;	
-		i++;
-	}
-}
-
-enum e_status change_status(t_token_list *token_list, char c, enum e_status status, enum e_type type)
-{
-	enum e_status new_status;
+	enum e_status	new_status;
 
 	if (type == S_QUOTE)
 		new_status = IN_S_QUOTE;
@@ -143,5 +120,5 @@ enum e_status change_status(t_token_list *token_list, char c, enum e_status stat
 	}
 	else
 		append_token(token_list, &c, status, type);
-	return (status);	
+	return (status);
 }

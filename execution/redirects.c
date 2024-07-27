@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirects.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:56:14 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/26 16:09:02 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:00:36 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	fd;
 
-	fd = 0;	
+	fd = 0;
 	if (!has_no_file(shell, redir, exit_flag))
 		return (0);
 	if (access(redir->file, F_OK) != 0)
@@ -50,7 +50,7 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 			shell_error(shell, redir->file, 2, true);
 		else
 			return (return_parent_error(shell, redir->file, 2));
-	}	
+	}
 	fd = open(redir->file, O_RDONLY);
 	if (fd == -1)
 	{
@@ -68,7 +68,7 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 int	redirect(t_shell *shell, t_redir *redir, int exit_flag)
 {
 	int	success;
-	
+
 	success = 0;
 	if (redir->type == HERE_DOC)
 	{

@@ -6,28 +6,28 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 20:13:42 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 20:39:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:02:18 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char **get_path(char *path_from_env)
+char	**get_path(char *path_from_env)
 {
-	char **path;
-	int	i;
+	char	**path;
+	int		i;
 
 	if (!path_from_env)
 		return (NULL);
-	path = ft_split(path_from_env,':');
+	path = ft_split(path_from_env, ':');
 	i = 0;
-	while(path[i])
+	while (path[i])
 	{
 		path[i] = ft_strjoin(path[i], "/");
-		i++;		
+		i++;
 	}
 	free(path_from_env);
-	return(path);
+	return (path);
 }
 
 char	**filter_envs(char **envp)
@@ -85,7 +85,7 @@ void	handle_exec_error(int execve_ret, t_exec *exec, t_shell *shell)
 }
 
 void	run_execve(t_exec *exec, t_shell *shell)
-{	
+{
 	int		i;
 	int		execve_ret;
 	char	**path;
@@ -100,7 +100,7 @@ void	run_execve(t_exec *exec, t_shell *shell)
 	if (!path)
 		shell_error(shell, exec->cmd_args[0], 2, true);
 	i = 0;
-	while(path[i])
+	while (path[i])
 	{
 		path_cmd = ft_strjoin(path[i], exec->cmd_args[0]);
 		if (access(path_cmd, F_OK) == 0)

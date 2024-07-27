@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:05:21 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/05 12:40:27 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:46:49 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_strdup(const char *src)
 	int		size;
 
 	if (src == NULL)
-		return(ft_calloc(sizeof(char), 1));
+		return (ft_calloc(sizeof(char), 1));
 	s = (char *)src;
 	size = ft_strlen(s) + 1;
 	d = (char *) ft_calloc(sizeof(char), size);

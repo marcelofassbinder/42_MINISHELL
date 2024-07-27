@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_nodes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 17:59:44 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:10:54 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ void	define_redir_file(t_redir *redir, t_token *token)
 	}
 }
 
-t_redir *define_redir(void *down, t_token *token, t_shell *shell)
+t_redir	*define_redir(void *down, t_token *token, t_shell *shell)
 {
-	t_redir *redir;
+	t_redir		*redir;
 	enum e_type	node_type;
 
 	redir = ft_calloc(sizeof(t_redir), 1);
@@ -73,8 +73,8 @@ t_redir *define_redir(void *down, t_token *token, t_shell *shell)
 		node_type = *(enum e_type *)down;
 		if (node_type == WORD)
 			redir->down = (t_exec *)down;
-		else if (node_type == REDIR_IN || node_type == REDIR_OUT ||
-			node_type == D_REDIR_OUT || node_type == HERE_DOC)
+		else if (node_type == REDIR_IN || node_type == REDIR_OUT
+			|| node_type == D_REDIR_OUT || node_type == HERE_DOC)
 			redir->down = (t_redir *)down;
 	}
 	else
@@ -82,7 +82,7 @@ t_redir *define_redir(void *down, t_token *token, t_shell *shell)
 	return (redir);
 }
 
-t_redir *create_new_redir(void *down, t_token *token, t_shell *shell, int flag)
+t_redir	*create_new_redir(void *down, t_token *token, t_shell *shell, int flag)
 {
 	t_redir		*redir;
 	static int	id = 0;

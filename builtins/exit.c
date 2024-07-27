@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:46:53 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/26 15:53:20 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 18:57:55 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 
@@ -31,7 +30,7 @@ void	exit_cmd(char **cmd_args, t_shell *shell)
 
 void	exit_line(t_shell *shell)
 {
-	int status;
+	int	status;
 
 	status = shell->exit_status;
 	free_envs(shell->envp);
@@ -40,7 +39,6 @@ void	exit_line(t_shell *shell)
 	ft_printf(STDOUT_FILENO, "exit\n");
 	exit(status);
 }
-
 
 void	exit_number(char **cmd_args, t_shell *shell)
 {
