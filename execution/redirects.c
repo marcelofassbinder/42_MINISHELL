@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:56:14 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/26 16:02:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:09:02 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	redirect_in(t_shell *shell, t_redir *redir, int exit_flag)
 		return (0);
 	if (access(redir->file, F_OK) != 0)
 	{
+		shell->exit_status = EXIT_FAILURE;
 		if (shell->process == CHILD)
 			shell_error(shell, redir->file, 2, true);
 		else

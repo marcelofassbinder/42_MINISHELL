@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:17:02 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 17:21:13 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 16:29:37 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ bool	is_builtin(char *str)
 
 void	define_redir_file(t_redir *redir, t_token *token)
 {
-	if (token->next->type == W_SPACE)
+	if (!token->next)
+	{
+		redir->file = NULL;
+		redir->file_status = GENERAL;
+	}
+	else if (token->next->type == W_SPACE)
 	{
 		if (!token->next->next)
 		{

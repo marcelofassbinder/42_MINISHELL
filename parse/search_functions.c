@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   search_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:13:59 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/17 19:04:47 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:29:41 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,18 @@ t_token	*find_last_or_pipe(t_token *token, int flag)
 t_token	*get_previous_redir(t_token *token)
 {
 	if (token && token->prev)
-		token = token->prev;
-	else
-		return (NULL);
-	while (token && token->type != PIPELINE)
 	{
-		if (token->type == REDIR_IN || token->type == D_REDIR_OUT || token->type == REDIR_OUT || token->type == HERE_DOC)
-			return (token);
 		token = token->prev;
+		while (token && token->type != PIPELINE)
+		{
+			if (is_redir(token))
+				return (token);
+			token = token->prev;
+		}
 	}
+	/* else if (is_redir(token) && !token->prev)
+		return (token); */
+	else	
+		return (NULL);
 	return (NULL);
 }
