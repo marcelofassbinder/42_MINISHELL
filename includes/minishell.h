@@ -6,14 +6,14 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 22:43:00 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 22:48:39 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// ------------------------------------- INCLUDES -------------------------------------  
+// ------------------------------------- INCLUDES -----------------------------
 
 # include "./ft_printf/libft/libft.h"
 # include "./ft_printf/ft_printf.h"
@@ -29,7 +29,7 @@
 # include <fcntl.h>
 # include <limits.h>
 
-// ------------------------------------- CHAR DEFINES -------------------------------------  
+// ------------------------------------- CHAR DEFINES -------------------------
 
 # define PIPE '|'
 # define DOLLAR '$'
@@ -38,28 +38,28 @@
 # define S_QTE 39
 # define D_QTE 34
 
-// ------------------------------------- PROCESS DEFINES -------------------------------------  
+// ------------------------------------- PROCESS DEFINES ----------------------
 
 # define PARENT 1
 # define CHILD 2
 
-// ------------------------------------- EXIT CODES -------------------------------------  
+// ------------------------------------- EXIT CODES ---------------------------
 
 # define EXIT_SYNTAX 2
 # define EXIT_CMD 127
 
-// ------------------------------------- COLOR DEFINES -------------------------------------  
+// ------------------------------------- COLOR DEFINES ------------------------
 
 # define RED "\e[1;3;31m"
 # define GREEN "\e[1;3;32m"
 # define YELLOW "\e[1;3;93m"
 # define RESET "\e[0m"
 
-// ------------------------------------- GLOBAL VARIABLE -------------------------------------  
+// ------------------------------------- GLOBAL VARIABLE ----------------------
 
 extern int	g_received_signal;
 
-// ------------------------------------- STATUS -------------------------------------  
+// ------------------------------------- STATUS -------------------------------
 
 enum e_status
 {
@@ -68,7 +68,7 @@ enum e_status
 	IN_D_QUOTE,
 };
 
-// ------------------------------------- TOKEN TYPES -------------------------------------  
+// ------------------------------------- TOKEN TYPES --------------------------
 
 enum e_type
 {
@@ -86,7 +86,7 @@ enum e_type
 	T_NULL
 };
 
-// ------------------------------------- TOKEN STRUCTS -------------------------------------  
+// ------------------------------------- TOKEN STRUCTS ------------------------
 
 typedef struct s_token
 {
@@ -103,7 +103,7 @@ typedef struct s_token_list
 	t_token		*last;
 }				t_token_list;
 
-// ------------------------------------- PARSING STRUCTS -------------------------------------  
+// ------------------------------------- PARSING STRUCTS ----------------------
 
 typedef struct s_exec
 {
@@ -128,7 +128,7 @@ typedef struct s_pipe
 	void			*right;
 }					t_pipe;
 
-// ------------------------------------- SHELL STRUCTURE -------------------------------------  
+// ------------------------------------- SHELL STRUCTURE ----------------------
 
 typedef struct s_shell
 {
@@ -146,7 +146,7 @@ typedef struct s_shell
 	char			*path;
 }					t_shell;
 
-// ------------------------------------- BUILTINS -------------------------------------  
+// ------------------------------------- BUILTINS -----------------------------
 
 //	CD.C 
 void			cd(char **cmd_args, t_shell *shell);
@@ -193,7 +193,7 @@ char			**prepare_to_delete(t_shell *shell, int	*k, int *i, int *j);
 char			**remove_env(char *to_remove, t_shell *shell);
 char			**delete_envp(char *environment, t_shell *shell);
 
-// ------------------------------------- FREE -------------------------------------  
+// ------------------------------------- FREE ---------------------------------
 
 //	FREE_SHELL.C
 void			free_and_exit(t_shell *shell);
@@ -213,7 +213,7 @@ void			free_exec(t_exec *exec);
 void			free_redir(t_redir *redir);
 void			free_pipe(t_pipe *pipe);
 
-// ------------------------------------- HEREDOC -------------------------------------  
+// ------------------------------------- HEREDOC ------------------------------
 
 //	HEREDOC_EXPAND.C
 char			*expand_here_doc(char *line, t_shell *shell);
@@ -233,7 +233,7 @@ char			*add_backslash_n(char *line, t_shell *shell);
 int				count_here_doc(t_shell *shell);
 int				*create_here_doc_array(t_shell *shell);
 
-// ------------------------------------- PARSE -------------------------------------  
+// ------------------------------------- PARSE --------------------------------
 
 //	CMD_ARGS.C
 bool			is_local_variable(t_token *token);
@@ -261,7 +261,7 @@ t_token			*find_last_or_pipe(t_token *token, int flag);
 t_token			*get_previous_redir(t_token *token);
 bool			last_redir(t_token *token);
 
-// ------------------------------------- RUN -------------------------------------  
+// ------------------------------------- RUN ----------------------------------
 
 //	REDIRECTS.C
 int				redirect(t_shell *shell, t_redir *redir, int exit_flag);
@@ -294,14 +294,14 @@ void			run_redir(t_redir *redir, t_shell *shell);
 void			run_pipe(t_pipe *pipe_str, t_shell *shell);
 void			run_builtin(t_exec *exec, t_shell *shell);
 
-// ------------------------------------- SAFETY -------------------------------------  
+// ------------------------------------- SAFETY -------------------------------
 
 //	SAFE_FUNCTIONS.C 
 void			safe_chdir(char *chdir_arg, t_shell *shell, int flag);
 int				safe_fork(t_shell *shell);
 char			*safe_getcwd(char *buf, size_t size, t_shell *shell);
 
-// ------------------------------------- SHELL_STRUCT -------------------------------------  
+// ------------------------------------- SHELL_STRUCT -------------------------
 
 //	INIT.C
 t_shell			*init_shell(int ac, char **av, char **envp);
@@ -309,7 +309,7 @@ bool			is_pipe_root(void *root);
 int				ft_get_pid(t_shell *shell);
 char			**copy_envs(t_shell *shell, char **envp);
 
-// ------------------------------------- SIGNALS -------------------------------------  
+// ------------------------------------- SIGNALS ------------------------------
 
 //	SIGNAL_CALLS.C
 void			start_sig(void);
@@ -318,7 +318,7 @@ void			sig_default(void);
 void			sig_ignore(void);
 void			sig_heredoc(void);
 
-// ------------------------------------- SYNTAX -------------------------------------  
+// ------------------------------------- SYNTAX -------------------------------
 
 //	SYNTAX_PIPE.C
 bool			first_pipe(char *str);
@@ -337,7 +337,7 @@ bool			check_redir(char *str);
 bool			redir_error(char *str);
 bool			check_syntax(char *line);
 
-// ------------------------------------- TOKENS -------------------------------------  
+// ------------------------------------- TOKENS -------------------------------
 
 //	APPEND.C
 void			append_token(t_token_list *token_list,
