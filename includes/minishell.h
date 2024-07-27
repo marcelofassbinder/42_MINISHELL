@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 18:32:40 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 21:01:06 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@
 # define CHILD 2
 
 //	COLORS DEFINES
-# define RED "\033[1;3;31m"
-# define GREEN "\033[1;3;32m"
-# define YELLOW "\033[1;3;93m"
-# define RESET "\033[0m"
+# define RED "\e[1;3;31m"
+# define GREEN "\e[1;3;32m"
+# define YELLOW "\e[1;3;93m"
+# define RESET "\e[0m"
 
 //	EXIT CODES
 # define EXIT_SYNTAX 2
