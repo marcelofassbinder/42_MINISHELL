@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 22:35:15 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/26 15:52:28 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:15:28 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_shell	*init_shell(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
-	(void)av;
 
+	(void)av;
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (!shell)
 		shell_error(shell, "Calloc Error: shell struct\n", 0, true);
@@ -55,16 +55,16 @@ char	**copy_envs(t_shell *shell, char **envp)
 	return (env_copy);
 }
 
-int ft_get_pid(t_shell *shell)
+int	ft_get_pid(t_shell *shell)
 {
-	int pid;
+	int	pid;
 
 	pid = fork();
 	if (pid == 0)
 		free_and_exit(shell);
 	wait(NULL);
 	pid = pid - 1;
-	return(pid);
+	return (pid);
 }
 
 bool	is_pipe_root(void *root)

@@ -6,10 +6,9 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 14:20:04 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:43:05 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "includes/minishell.h"
 
@@ -35,7 +34,6 @@ t_shell	*ft_read_line(t_shell *shell)
 	return (shell);
 }
 
-
 void	prepare_new_prompt(t_shell *shell)
 {
 	create_new_redir(NULL, NULL, NULL, 1);
@@ -52,7 +50,7 @@ void	prepare_new_prompt(t_shell *shell)
 }
 
 void	minishell(t_shell *shell)
-{	
+{
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = count_here_doc(shell);
 	shell->array_fd_here_doc = create_here_doc_array(shell);
@@ -70,13 +68,12 @@ void	minishell(t_shell *shell)
 			run(shell->root, shell);
 			free_and_exit(shell);
 		}
- 		sig_ignore();
+		sig_ignore();
 		wait(&shell->exit_status);
 		shell->exit_status = get_status(shell->exit_status);
 	}
 	prepare_new_prompt(shell);
 }
-
 
 int	main(int ac, char **av, char **envp)
 {

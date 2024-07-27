@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:41:35 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:52 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:20:26 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*expand_digit(char *data)
 {
 	char	*new_data;
 	char	*to_free;
-	
+
 	to_free = data;
 	if (data[1])
 	{

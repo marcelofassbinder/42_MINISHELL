@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_values.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:27 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 22:54:35 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:31:06 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,3 @@ void	split_env(t_token_list *token_list, t_token **token)
 	i = 0;
 	free (splited);
 }
-

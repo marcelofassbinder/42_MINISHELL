@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/25 23:05:54 by vivaccar         ###   ########.fr       */
+/*   Created: 2024/07/27 19:02:40 by vivaccar          #+#    #+#             */
+/*   Updated: 2024/07/27 19:04:29 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	run_builtin_p(t_exec *exec, t_shell *shell)
 
 void	run_redir_p(t_redir *redir, t_shell *shell)
 {
-	int saved_stdout;
-	int saved_stdin;
+	int	saved_stdout;
+	int	saved_stdin;
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
@@ -52,7 +52,7 @@ void	run_redir_p(t_redir *redir, t_shell *shell)
 
 void	run_in_parent(void *root, t_shell *shell)
 {
-	enum e_type node_type;
+	enum e_type	node_type;
 
 	if (!root)
 		return ;
@@ -60,7 +60,8 @@ void	run_in_parent(void *root, t_shell *shell)
 	shell->process = PARENT;
 	if (node_type == WORD)
 		run_builtin_p((t_exec *)root, shell);
-	else if (node_type == REDIR_IN || node_type == REDIR_OUT || node_type == D_REDIR_OUT || node_type == HERE_DOC)
+	else if (node_type == REDIR_IN || node_type == REDIR_OUT
+		|| node_type == D_REDIR_OUT || node_type == HERE_DOC)
 		run_redir_p((t_redir *)root, shell);
 }
 

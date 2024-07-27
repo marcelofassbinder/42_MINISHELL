@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:25:21 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 18:59:08 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_and_exit(t_shell *shell)
 {
-	int status;
+	int	status;
 
 	status = shell->exit_status;
 	free_all_allocated_memory(shell, 1);
@@ -23,13 +23,13 @@ void	free_and_exit(t_shell *shell)
 
 void	shell_error(t_shell *shell, char *str, int error, bool exit_flag)
 {
-	int status;
+	int	status;
 
 	status = shell->exit_status;
 	error_message(error, str);
 	free_all_allocated_memory(shell, 1);
 	if (exit_flag)
-		exit(status);	
+		exit(status);
 }
 
 void	free_all_allocated_memory(t_shell *shell, int free_shell)
@@ -57,7 +57,8 @@ void	error_message(int error, char *str)
 	if (error == 1)
 		ft_printf(STDERR_FILENO, "%s: command not found\n", str);
 	else if (error == 2)
-		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n", str);
+		ft_printf(STDERR_FILENO, "minishell: %s: No such file or directory\n",
+			str);
 	else if (error == 3)
 		ft_printf(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
 	else if (error == 4)
