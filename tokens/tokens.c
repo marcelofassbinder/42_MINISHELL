@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:48:24 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 15:02:08 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 18:40:22 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	tokenizer(t_token_list *token_list, char *line, t_shell *shell)
 		i++;
 	}
 	prepare_tokens(token_list, shell);
+	//print_token_list(token_list);
 }
 
 void print_token_list(t_token_list *token_list)
@@ -109,6 +110,12 @@ void print_token_list(t_token_list *token_list)
     printf("|-----|----------------------|-----|-----------------|-----------------|\n");
 	while (ptr != NULL)
 	{
+		if (ptr->data == NULL)
+		{
+			printf("here has NULL token\n");
+			ptr = ptr->next;
+			continue ;
+		}
 		printf("| %-3d | %-20s | %-3d | %-15s | %-15s |\n", i, ptr->data, ft_strlen(ptr->data), s[ptr->status], s[ptr->type]);
 		printf("|-----|----------------------|-----|-----------------|-----------------|\n");
 		ptr = ptr->next;	

@@ -6,10 +6,9 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 16:29:37 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 18:32:40 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -247,9 +246,6 @@ void			define_redir_file(t_redir *redir, t_token *token);
 bool			is_local_variable(t_token *token);
 bool			last_redir(t_token *token);
 bool			is_builtin(char *str);
-bool			is_local_variable(t_token *token);
-bool			last_redir(t_token *token);
-bool			is_builtin(char *str);
 bool			has_word(t_token *token);
 int				count_args(t_token *token);
 char			**define_cmd_args(t_token *token);
@@ -299,15 +295,8 @@ char			*get_variable_name(char *environment);
 char			*remove_plus(char *environment);
 char			**replace_env(char *environment, t_shell *shell, int mode);
 char			**set_new_env(char *environment, t_shell *shell, int mode);
-char			*get_variable_name(char *environment);
-char			*remove_plus(char *environment);
-char			**replace_env(char *environment, t_shell *shell, int mode);
-char			**set_new_env(char *environment, t_shell *shell, int mode);
 
 //EXPORT
-void			export(char **cmd_args, t_shell *shell);
-void			swap(char **envs, int j);
-void			print_env_x(t_shell *shell);
 void			export(char **cmd_args, t_shell *shell);
 void			swap(char **envs, int j);
 void			print_env_x(t_shell *shell);
