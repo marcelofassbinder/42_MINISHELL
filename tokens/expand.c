@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/22 13:00:14 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:22:19 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 	if (!(*tmp)->next->data)
 	{
 		delete_node(token_list, (*tmp)->next);
-		to_free = *tmp;
-		*tmp = (*tmp)->next;
-		delete_node(token_list, to_free);
+		free((*tmp)->data);
+		((*tmp)->data = NULL);
+		((*tmp)->type = T_NULL);
 	}
 	else if (ft_strchr((*tmp)->next->data, ' ') && (*tmp)->next->status == GENERAL)
 		split_env(token_list, tmp);

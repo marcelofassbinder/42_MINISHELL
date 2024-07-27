@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_heredoc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 23:00:32 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:32:24 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	run_here_doc(t_redir *redir, t_shell *shell)
 		dup2(fd[1], shell->fd_out);
 		close(fd[1]);
 		free_and_exit(shell);
+
+		
 	}
 	wait(NULL);
 	free(buffer);

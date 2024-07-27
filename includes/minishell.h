@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/26 15:48:11 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/26 17:52:03 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ void			repeated_quotes(t_token_list *token_list);
 void			prepare_tokens(t_token_list *token_list, t_shell *shell);
 void			token_redir_pipe(t_token_list *token_list);
 void			repeated_quotes(t_token_list *token_list);
+void			check_env_null(t_token_list *token_list, t_shell *shell, t_token **tmp);
 
 //APPEND.C
 int				append_word(t_token_list *token_list, char *line, enum e_status status, int i);
