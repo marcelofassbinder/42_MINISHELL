@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 20:16:33 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/25 23:05:49 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 14:41:03 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ int	check_exit_sig(int *exit_code)
 void	manage_pipe_exit(int *fd, int *pid, t_shell *shell)
 {
 	int exit_code[2];
+	int	exit_status;
 
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid[0], &exit_code[0], 0);
 	waitpid(pid[1], &exit_code[1], 0);
 	shell->exit_status = check_exit_sig(exit_code);
-	exit(shell->exit_status);
+	exit_status = shell->exit_status;
+	free_all_allocated_memory(shell, 1);
+	exit(exit_status);
 }
 
 bool	has_no_file(t_shell *shell, t_redir *redir, int exit_flag)

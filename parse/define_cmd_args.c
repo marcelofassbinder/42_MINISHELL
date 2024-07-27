@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_args.c                                        :+:      :+:    :+:   */
+/*   define_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:21:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/22 15:22:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 13:34:46 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ char	**define_cmd_args(t_token *token)
 		}
 		else if (token->type == WORD || token->type == T_NULL)
 		{
+			if (token->type == T_NULL && !token->data)
+			{
+				token = token->next;
+				flag = 1;
+				continue ;	
+			}
 			cmd_args[i] = ft_strdup(token->data);
 			i++;
 		}

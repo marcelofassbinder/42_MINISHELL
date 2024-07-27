@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/18 21:37:02 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 13:51:51 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ void	join_words(t_token_list *token_list)
 	tmp = token_list->first;
 	while (tmp && tmp->next)
 	{
-		if (tmp->type == WORD && (tmp->next->type == WORD || tmp->next->type == T_NULL))
+		if (tmp->type == WORD && (tmp->next->type == WORD ||
+			tmp->next->type == T_NULL) && (tmp->next->data))
 		{
 			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
 			delete_node(token_list, tmp->next);
 		}
-		else if (tmp->type == T_NULL && (tmp->next->type == T_NULL || tmp->next->type == WORD))
+		else if ((tmp->type == T_NULL) && (tmp->next->type == T_NULL
+			|| tmp->next->type == WORD) && (tmp->data && tmp->next->data))
 		{
 			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
 			delete_node(token_list, tmp->next);
