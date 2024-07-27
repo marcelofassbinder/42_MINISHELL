@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:11 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 15:32:24 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 16:42:50 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ char	*write_here_doc(char *buffer, t_redir *redir, t_shell *shell)
 			break ;
 		}
 		line = add_backslash_n(line, shell);
-		if (redir->file_status == GENERAL)
-			line = expand_here_doc(line, shell);
 		if (!ft_strncmp(line, redir->file, ft_strlen(redir->file)) && ft_strlen(line) == ft_strlen(redir->file) + 1)
 		{
 			free(line);
 			break ;
 		}
+		if (redir->file_status == GENERAL)
+			line = expand_here_doc(line, shell);
 		buffer = ft_strjoin(buffer, line);
 		free(line);
 	}

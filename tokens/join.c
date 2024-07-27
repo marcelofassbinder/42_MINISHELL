@@ -6,11 +6,18 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 13:51:51 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 17:51:41 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_token	*get_eof_status(t_token *tmp)
+{
+	if (tmp->status != GENERAL || tmp->next->status != GENERAL)
+		tmp->status = IN_S_QUOTE;
+	return (tmp);
+}
 
 void	join_words(t_token_list *token_list)
 {
@@ -22,12 +29,14 @@ void	join_words(t_token_list *token_list)
 		if (tmp->type == WORD && (tmp->next->type == WORD ||
 			tmp->next->type == T_NULL) && (tmp->next->data))
 		{
+			tmp = get_eof_status(tmp);
 			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
 			delete_node(token_list, tmp->next);
 		}
 		else if ((tmp->type == T_NULL) && (tmp->next->type == T_NULL
 			|| tmp->next->type == WORD) && (tmp->data && tmp->next->data))
 		{
+			tmp = get_eof_status(tmp);
 			tmp->data = ft_strjoin(tmp->data, tmp->next->data);
 			delete_node(token_list, tmp->next);
 			tmp->type = WORD;
@@ -89,6 +98,7 @@ t_token	*join_nodes(t_token_list *token_list, t_token *token)
 t_token	*create_null_token(t_token *token, t_token_list *token_list)
 {
 	token->type = T_NULL;
+	token->status = IN_S_QUOTE;
 	free(token->data);
 	token->data = ft_strdup("");
 	delete_node(token_list, token->next);

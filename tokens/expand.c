@@ -6,16 +6,40 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 20:05:52 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 15:22:19 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 16:58:34 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+bool	not_expand_heredoc_eof(t_token **tmp)
+{
+	if ((*tmp)->prev && (*tmp)->prev->type == W_SPACE)
+	{
+		*tmp = (*tmp)->prev;
+		if ((*tmp)->prev && (*tmp)->prev->type == HERE_DOC)
+		{
+			(*tmp)->next->type = WORD;
+			*tmp = (*tmp)->next->next->next;
+			return (true) ;
+		}
+		*tmp = (*tmp)->next;
+	}
+	else if ((*tmp)->prev && (*tmp)->prev->type == HERE_DOC)
+	{
+		(*tmp)->type = WORD;
+		*tmp = (*tmp)->next->next;
+		return (true);
+	}
+	return (false);
+}
+
 void handle_expansion(t_token_list *token_list, t_token **tmp, t_shell *shell)
 {
 	t_token *to_free;
 
+	if (not_expand_heredoc_eof(tmp))
+		return ;
 	(*tmp)->next->data = expand((*tmp)->next->data, shell);
 	if (!(*tmp)->next->data)
 	{

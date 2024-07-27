@@ -6,21 +6,21 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:50:22 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 13:18:59 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 17:54:02 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+ #include "../includes/minishell.h"
 
 void	prepare_tokens(t_token_list *token_list, t_shell *shell)
 {
-	token_redir_pipe(token_list);
+	join_spaces(token_list);
 	check_dollar(token_list, shell);
 	g_received_signal = 0;
-	join_spaces(token_list);
 	join_quotes(token_list);
 	join_words(token_list);
 	find_files(token_list);
+	token_redir_pipe(token_list);
 }
 
 int is_type_word(char c)
