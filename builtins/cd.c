@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 16:36:03 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/25 23:04:37 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/27 16:15:39 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	cd(char **cmd_args, t_shell *shell)
 
 	if (cmd_args[1])
 	{
+		if (!cmd_args[1][0])
+			return ;
 		if (cmd_args[2])
 			return (safe_chdir(NULL, shell, 2));
 	}

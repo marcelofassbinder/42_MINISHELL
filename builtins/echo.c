@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/26 15:17:25 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 16:18:07 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	echo(char **cmd_args, t_shell *shell)
 		shell->exit_status = EXIT_SUCCESS;
 		return ;
 	}
-	if (cmd_args[1][0] == '-')
+	if (cmd_args[1][0] == '-' && cmd_args[1][1] == 'n')
 		n_option = check_option_n(cmd_args);
 	i += n_option;
 	i++;
