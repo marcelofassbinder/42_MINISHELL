@@ -6,34 +6,11 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:18:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 16:18:07 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/27 22:23:14 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	check_option_n(char **cmd_args)
-{
-	int	j;
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 1;
-	while (cmd_args[i] && cmd_args[i][0] == '-')
-	{
-		if (cmd_args[i][0] == '-')
-		{
-			j = 1;
-			while (cmd_args[i][j] == 'n')
-				j++;
-			if (j == ft_strlen(cmd_args[i]))
-				count++;
-		}
-		i++;
-	}
-	return (count);
-}
 
 void	echo(char **cmd_args, t_shell *shell)
 {
@@ -62,4 +39,27 @@ void	echo(char **cmd_args, t_shell *shell)
 	if (n_option == 0)
 		ft_printf(STDOUT_FILENO, "\n");
 	shell->exit_status = EXIT_SUCCESS;
+}
+
+int	check_option_n(char **cmd_args)
+{
+	int	j;
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 1;
+	while (cmd_args[i] && cmd_args[i][0] == '-')
+	{
+		if (cmd_args[i][0] == '-')
+		{
+			j = 1;
+			while (cmd_args[i][j] == 'n')
+				j++;
+			if (j == ft_strlen(cmd_args[i]))
+				count++;
+		}
+		i++;
+	}
+	return (count);
 }

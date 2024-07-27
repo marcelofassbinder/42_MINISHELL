@@ -1,8 +1,8 @@
-SRCS =  main.c signals/sig_calls.c syntax/syntax.c syntax/syntax_pipe.c syntax/syntax_redirect.c tokens/tokens.c tokens/append.c tokens/expand_cases.c\
-		tokens/expand_utils.c tokens/get_values.c  tokens/tokens_utils.c clean/free_shell.c clean/free_tokens.c clean/free_tree.c tokens/expand.c \
-		tokens/join.c parse/parse.c parse/search_functions.c parse/fill_nodes.c parse/define_cmd_args.c execution/run.c builtins/cd.c builtins/echo.c\
-		builtins/export.c builtins/pwd.c builtins/unset.c builtins/export_utils.c builtins/exit.c builtins/manipulate_envs.c execution/run_parent.c shell_struct/init.c\
-		safety/safe_functions.c heredoc/heredoc_expand.c heredoc/heredoc_run.c heredoc/heredoc_utils.c execution/redirects.c execution/execution_utils.c execution/run_execve.c
+SRCS =  main.c signals/signal_calls.c syntax/syntax.c syntax/syntax_pipe.c syntax/syntax_redirect.c tokens/tokens.c tokens/append.c tokens/expand_cases.c\
+		tokens/expand_utils.c tokens/get_values.c  tokens/tokens_utils.c free/free_shell.c free/free_tokens.c free/free_tree.c tokens/expand.c \
+		tokens/join.c parse/parse.c parse/search_functions.c parse/fill_nodes.c parse/cmd_args.c run/run.c builtins/cd.c builtins/echo.c\
+		builtins/export.c builtins/pwd.c builtins/unset.c builtins/export_utils.c builtins/exit.c builtins/manipulate_envs.c run/run_parent.c shell_struct/init.c\
+		safety/safe_functions.c heredoc/heredoc_expand.c heredoc/heredoc_run.c heredoc/heredoc_utils.c run/redirects.c run/run_utils.c run/run_execve.c
 
 OBJS = $(SRCS:.c=.o)
 
