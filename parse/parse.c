@@ -6,7 +6,7 @@
 /*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:57:50 by mfassbin          #+#    #+#             */
-/*   Updated: 2024/07/27 20:13:01 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:36:21 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	*build_exec(t_token *token, t_shell *shell)
 	if (has_word(token))
 	{
 		exec = ft_calloc(sizeof(t_exec), 1);
-		exec->cmd_args = define_cmd_args(token);
+		exec->cmd_args = define_cmd_args(token, 0);
 		exec->is_builtin = is_builtin(exec->cmd_args[0]);
 		exec->type = WORD;
 	}
