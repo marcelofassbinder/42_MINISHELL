@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:32:18 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 22:48:39 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:36:31 by vivaccar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,7 @@ int				*create_here_doc_array(t_shell *shell);
 //	CMD_ARGS.C
 bool			is_local_variable(t_token *token);
 int				count_args(t_token *token);
-char			**define_cmd_args(t_token *token);
+char			**define_cmd_args(t_token *token, int flag);
 
 //	FILL_NODES.C
 t_token			*get_next_token(t_token *token);
