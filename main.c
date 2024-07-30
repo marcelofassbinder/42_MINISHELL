@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 20:43:05 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:01:01 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_shell	*ft_read_line(t_shell *shell)
 	start_sig();
 	shell->process = CHILD;
 	shell->line = NULL;
-	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
+	shell->line = readline("GAUSHELL--> ");
 	add_history(shell->line);
 	if (!shell->line)
 		exit_line(shell);
