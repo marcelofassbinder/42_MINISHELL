@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:47:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 20:35:25 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:49:52 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_token	*join_nodes(t_token_list *token_list, t_token *token)
 	delete_node(token_list, to_delete);
 	while (token)
 	{
-		if (token->next->status != GENERAL && token->next->type != T_NULL)
+		if (token->next->status != GENERAL)
 		{
 			token->data = ft_strjoin(token->data, token->next->data);
 			to_delete = token->next;

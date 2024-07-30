@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:21:09 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/29 15:36:07 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:53:43 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**define_cmd_args(t_token *token, int flag)
 		}
 		else if (token->type == WORD || token->type == T_NULL)
 		{
-			if (token->type != T_NULL && token->data)
+			if (token->data)
 				cmd_args[i++] = ft_strdup(token->data);
 			flag = 1;
 		}
@@ -54,7 +54,7 @@ int	count_args(t_token *token)
 			token = get_next_token(token->next);
 			continue ;
 		}
-		else if (token->type == WORD || token->type == T_NULL)
+		else if (token->type == WORD || (token->type == T_NULL && token->data))
 			count++;
 		token = token->next;
 		flag = 1;
