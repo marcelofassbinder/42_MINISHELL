@@ -6,7 +6,7 @@
 /*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/30 20:01:01 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/30 20:38:41 by vinivaccari      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_shell	*ft_read_line(t_shell *shell)
 	shell->process = CHILD;
 	shell->line = NULL;
 	shell->line = readline("GAUSHELL--> ");
-	add_history(shell->line);
+	//add_history(shell->line);
 	if (!shell->line)
 		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
@@ -51,6 +51,7 @@ void	prepare_new_prompt(t_shell *shell)
 
 void	minishell(t_shell *shell)
 {
+	add_history(shell->line);
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = count_here_doc(shell);
 	shell->array_fd_here_doc = create_here_doc_array(shell);
@@ -88,7 +89,10 @@ int	main(int ac, char **av, char **envp)
 		if (!syntax || !shell->line[0])
 		{
 			if (!syntax)
+			{
+				add_history(shell->line);	
 				shell->exit_status = EXIT_SYNTAX;
+			}
 			free(shell->token_list);
 			free(shell->line);
 			continue ;
