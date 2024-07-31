@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaccar <vivaccar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 11:17:12 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/27 18:59:08 by vivaccar         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:46:10 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	error_message(int error, char *str)
 		ft_printf(STDERR_FILENO, "minishell: ambiguous redirect\n", str);
 	else if (error == 5)
 		ft_printf(STDERR_FILENO, "minishell: %s: Is a directory\n", str);
+	else if (error == 6)
+		ft_printf(STDERR_FILENO, "minishell: %s: Not a directory\n", str);
 	else
 		ft_printf(STDERR_FILENO, "%s\n", str);
 }

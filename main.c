@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vinivaccari <vinivaccari@student.42.fr>    +#+  +:+       +#+        */
+/*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/30 20:38:41 by vinivaccari      ###   ########.fr       */
+/*   Updated: 2024/07/31 16:57:29 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_shell	*ft_read_line(t_shell *shell)
 	shell->process = CHILD;
 	shell->line = NULL;
 	shell->line = readline("GAUSHELL--> ");
-	//add_history(shell->line);
 	if (!shell->line)
 		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
@@ -90,7 +89,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			if (!syntax)
 			{
-				add_history(shell->line);	
+				add_history(shell->line);
 				shell->exit_status = EXIT_SYNTAX;
 			}
 			free(shell->token_list);
