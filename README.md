@@ -96,4 +96,17 @@ make
 - Run `./minishell`
 - Once you are inside minishell, you can use it as it was a normal bash. Enjoy! :D
 - Feel free to make the tests you want, here are a [list](https://github.com/marcelofassbinder/42_MINISHELL/blob/main/GAUSHELL.pdf) of some hard edge cases we handle in our minishell.  
-  
+
+# Grade  <p><img height="30px" src="https://img.shields.io/badge/-101%20%2F%20100-success" /></p>
+
+# Norminette 💂🏻
+At 42 School, we need to follow some strict rules when writing our code. These rules are described in the Norm and checked by the formidable `norminette`. Here are some of them:
+```
+- No for, do...while, switch, case, goto, ternary operators and variable-length arrays are allowed
+- Each function must be maximum 25 lines
+- One single variable declaration per line
+- You can’t declare more than 5 variables per function
+- You can't write more than 5 functions per file
+...
+```
+[Click here](https://github.com/42School/norminette/blob/master/pdf/en.norm.pdf) to review the complete Norm document.
