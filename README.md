@@ -19,12 +19,11 @@ We also check the status of each token, defined by three types: `GENERAL` (no qu
 
 To better understand, let's demonstrate what the tokenizer does with the following command-line example:
 
-`` ls -l | grep "Makefile" > file1.txt``
-
-This is how our tokenizer will split the command:
-
 <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/tokenizer2.png"/>
 
+Before advancing to the Parser, we go through another crucial part of this project: the EXPANSION of environment variables. In this step, we replace the `ENV` token and its subsequent value with the corresponding value stored in the environment variables. If the token doesn't match any environment variable, it becomes NULL. Additionally, we handle certain edge cases exactly as Bash does. Here are some examples with the `echo` command that illustrate some different expansions:
+
+<img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/expand.png"/>
 
 
 
