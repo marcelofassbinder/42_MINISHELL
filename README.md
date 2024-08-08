@@ -3,7 +3,7 @@
 </h1>
 
 <div align=center>
-  As beautiful as Shell.
+  As beautiful as a shell.
 </div>
 
 # About ✍
