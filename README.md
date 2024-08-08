@@ -23,7 +23,7 @@ To better understand, let's demonstrate what the tokenizer does with the followi
 
 This is how our tokenizer will split the command:
 
-<img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/tokenizer.png"/>
+<img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/tokenizer2.png"/>
 
 
 
