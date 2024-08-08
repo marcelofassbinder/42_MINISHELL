@@ -7,7 +7,7 @@
 </div>
 
 # About ✍
-Being part of the Rank 03 of the 42 Common Core curriculum, the Minishell project is essentially about creating a simple shell—yes, our own little bash—which my peer [Vinícius Vaccari](https://github.com/vivaccar) and I affectionately nicknamed GAUSHELL. Our program replicates the shell environment, prompting a command-line, executing commands with pipes and redirects, manipulating environment variables, handling signals, and supporting various other shell features.
+Being part of the Rank 03 of the 42 Common Core curriculum, the Minishell project is essentially about creating a simple shell—yes, our own little bash—which my peer [Vinícius Vaccari](https://github.com/vivaccar) and I affectionately nicknamed **GAUSHELL**. Our program replicates the shell environment, prompting a command-line, executing commands with pipes and redirects, manipulating environment variables, handling signals, and supporting various other shell features.
 
 #  Walkthrough 🧩
 The project was divided in three big parts: Tokenizer, Parser and Execution.
