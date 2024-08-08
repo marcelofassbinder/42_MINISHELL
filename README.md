@@ -21,9 +21,39 @@ To better understand, let's demonstrate what the tokenizer does with the followi
 
 <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/tokenizer2.png"/>
 
-Before advancing to the Parser, we go through another crucial part of this project: the EXPANSION of environment variables. In this step, we replace the `ENV` token and its subsequent value with the corresponding value stored in the environment variables. If the token doesn't match any environment variable, it becomes NULL. Additionally, we handle certain edge cases exactly as Bash does. Here are some examples with the `echo` command that illustrate some different expansions:
+Before advancing to the Parser, we go through another crucial part of this project: the EXPANSION of environment variables. In this step, we replace the `ENV` token and its subsequent value with the corresponding value stored in the environment variables. If the token doesn't match any environment variable, it becomes NULL. Additionally, we handle certain edge cases exactly as Bash does. 
+
+Here are some examples with the `echo` command that illustrate some different expansions:
 
 <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/expand.png"/>
 
 
+`$` - Does not expand;
+
+`$abc` and `$JFHDSKF` - Expand to NULL;
+
+`$USER` - Expands to the current USER;
+
+`$PWD` - Expands to the current working directory;
+
+`$$` - Expands to the PID (Process ID);
+
+`$0` - Expands to the bash name;
+
+`$?` - Expands to the exit status of the last command executed.
+
+### Parser
+After tokenizing the input, it's time for the parser to do its job, which involves preparing the program for execution by arranging the commands in the correct "order" to be executed. To achieve this, we chose to use a binary tree data structure, creating three distinct types of nodes: `EXEC`, `REDIR` and `PIPE`
+
+`EXEC` - Contains the exec type, the command and its arguments, and a boolean indicating if the command is builtin or not.
+
+`REDIR` - Contains the redir type, the file name it redirects for, a void pointer to the next node in the tree, and in case of type heredoc, the id and the status of the limiter string.
+
+`PIPE` - Contains the pipe type and two void pointers, one for the right and other for the left side of the pipe.
+
+To build the tree, we implemented the recursive descent parsing, inspired by the MIT's xv6 kernel project, which concept was totally explained in this [video](https://www.youtube.com/watch?v=ZjzMdsTWF0U&t=1155s). 
+
+Following the grammar rules using the previous example, we would build our tree as the illustration above: 
+
+<img src=https://github.com/marcelofassbinder/42_MINISHELL/blob/main/PIPE(1).png\>
 
