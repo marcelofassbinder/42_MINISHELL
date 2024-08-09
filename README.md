@@ -6,6 +6,10 @@
   As beautiful as a shell.
 </div>
 
+<div align=center>
+  <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/infos_readme/minishell.gif"/>
+</div>
+
 # About ✍
 Being part of the Rank 03 of the 42 Common Core curriculum, the Minishell project is essentially about creating a simple shell—yes, our own little bash—which my peer [Vinícius Vaccari](https://github.com/vivaccar) and I affectionately nicknamed **GAUSHELL**. Our program replicates the shell environment, prompting a command-line, executing commands with pipes and redirects, manipulating environment variables, handling signals, and supporting various other shell features.
 
