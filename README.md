@@ -20,7 +20,7 @@ We also check the status of each token, defined by three types: `GENERAL` (no qu
 To better understand, let's demonstrate what the tokenizer does with the following command-line example:
 
 <div align="center">
- <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/tokenizer2.png"/>
+ <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/infos_readme/tokenizer.png"/>
 </div>
 
 ### Expansion
@@ -28,7 +28,7 @@ Before advancing to the Parser, we go through another crucial part of this proje
 
 Here are some examples with the `echo` command that illustrate some different expansions:
 
- <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/expand.png" width=70%/>
+ <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/infos_readme/expand.png" width=70%/>
 
 
 `$` - Does not expand;
@@ -59,7 +59,7 @@ To build the tree, we implemented the recursive descent parsing, inspired by the
 Following the grammar rules using the previous example, we would build our tree as the illustration above: 
 
 <div align="center">
- <img align=center src=https://github.com/marcelofassbinder/42_MINISHELL/blob/main/PIPE(1).png width=40% height=40%\>
+ <img align=center src=https://github.com/marcelofassbinder/42_MINISHELL/blob/main/infos_readme/parser.png width=40% height=40%\>
 </div>
 
 ## Execution
@@ -95,7 +95,7 @@ make
 ```
 - Run `./minishell`
 - Once you are inside minishell, you can use it as it was a normal bash. Enjoy! :D
-- Feel free to make the tests you want, here are a [list](https://github.com/marcelofassbinder/42_MINISHELL/blob/main/GAUSHELL.pdf) of some hard edge cases we handle in our minishell.  
+- Feel free to make the tests you want, here are a [list](https://github.com/marcelofassbinder/42_MINISHELL/blob/main/infos_readme/tests_gaushell.pdf) of some hard edge cases we handle in our minishell.  
 
 # Grade  <p><img height="30px" src="https://img.shields.io/badge/-101%20%2F%20100-success" /></p>
 

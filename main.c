@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/07/31 16:57:29 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/08/03 14:01:39 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	minishell(t_shell *shell)
 	add_history(shell->line);
 	tokenizer(shell->token_list, shell->line, shell);
 	shell->count_hd = count_here_doc(shell);
-	shell->array_fd_here_doc = create_here_doc_array(shell);
+	if (shell->count_hd)
+		shell->array_fd_here_doc = create_here_doc_array(shell);
 	shell->root = parse(shell->token_list->first, shell);
 	if (!is_pipe_root(shell->root) && !shell->count_hd)
 		run_in_parent(shell->root, shell);
