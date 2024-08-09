@@ -5,7 +5,7 @@
 <div align=center>
   As beautiful as a shell.
 </div>
-
+<br />
 <div align=center>
   <img src="https://github.com/marcelofassbinder/42_MINISHELL/blob/main/infos_readme/minishell.gif"/>
 </div>
