@@ -6,7 +6,7 @@
 /*   By: mfassbin <mfassbin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:21:53 by vivaccar          #+#    #+#             */
-/*   Updated: 2024/08/03 14:01:39 by mfassbin         ###   ########.fr       */
+/*   Updated: 2024/08/09 15:46:48 by mfassbin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_shell	*ft_read_line(t_shell *shell)
 	start_sig();
 	shell->process = CHILD;
 	shell->line = NULL;
-	shell->line = readline("GAUSHELL--> ");
+	shell->line = readline(GREEN"GAU"RED"SHE"YELLOW"LL--> "RESET);
 	if (!shell->line)
 		exit_line(shell);
 	shell->token_list = ft_calloc(sizeof(t_token_list), 1);
